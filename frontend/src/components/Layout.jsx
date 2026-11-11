@@ -13,37 +13,41 @@ export default function Layout({ active, crumbs = [], title, subtitle, back, act
     <>
       <header className="topbar">
         <div className="container topbar-in">
-          <nav className="tabs">
+          <nav className="tabs" aria-label="Departamentos">
             {TABS.map(({ id, label, icon: Icon }) => (
-              <button key={id} className={`tab ${active === id ? 'on' : ''}`}>
+              <button
+                key={id}
+                className={`tab ${active === id ? 'on' : ''}`}
+                aria-current={active === id ? 'page' : undefined}
+              >
                 <Icon size={16} /> {label}
               </button>
             ))}
           </nav>
           <button className="icon-btn bell" aria-label="Notificaciones">
             <Bell size={16} />
-            <span className="dot" />
+            <span className="dot" aria-hidden="true" />
           </button>
-          <div className="user">
-            <span className="avatar">MR</span>
-            <div>
+          <button className="user" aria-haspopup="menu" aria-label="Menú de usuario">
+            <span className="avatar" aria-hidden="true">MR</span>
+            <span className="user-info">
               <strong>Marisol Ruiz</strong>
               <small>Almacén · Campus Nainari</small>
-            </div>
+            </span>
             <ChevronDown size={16} color="#6b7280" />
-          </div>
+          </button>
         </div>
       </header>
 
       <main className="container page">
-        <div className="crumbs">
+        <nav className="crumbs" aria-label="Ruta de navegación">
           {crumbs.map((c, i) => (
             <span key={c.label} className="crumb">
-              {c.to ? <Link to={c.to}>{c.label}</Link> : <b>{c.label}</b>}
-              {i < crumbs.length - 1 && <ChevronRight size={12} />}
+              {c.to ? <Link to={c.to}>{c.label}</Link> : <b aria-current="page">{c.label}</b>}
+              {i < crumbs.length - 1 && <ChevronRight size={12} aria-hidden="true" />}
             </span>
           ))}
-        </div>
+        </nav>
         <div className="page-head">
           <div className="page-title">
             {back && (
