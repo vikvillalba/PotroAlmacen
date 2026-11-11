@@ -13,7 +13,8 @@ import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoExcept
  * @author erika
  */
 public class Material {
-     public static final int NOMBRE_MAXIMO = 500;
+    
+    public static final int NOMBRE_MAXIMO = 500;
     public static final int CATEGORIA_MAXIMA = 120;
     public static final int UNIDAD_MEDIDA_MAXIMA = 60;
     public static final int PRESENTACION_MAXIMA = 80;
@@ -27,47 +28,52 @@ public class Material {
     private String presentacion;
     private String departamento;
     private BigDecimal precioUnitario;
+    private int cantidad;
+    private int stockMinimo;
     private FichaTecnica ficha;
  
     private Material(Integer id, CodigoMaterial codigo, String nombre, String categoria,
                      String unidadMedida, String presentacion, String departamento,
-                     BigDecimal precioUnitario, FichaTecnica ficha) {
+                     BigDecimal precioUnitario, int cantidad, int stockMinimo,
+                     FichaTecnica ficha) {
         this.id = id;
         this.codigo = Objects.requireNonNull(codigo, "El código es obligatorio");
         this.nombre = requerirTexto(nombre, "nombre", NOMBRE_MAXIMO);
         this.categoria = requerirTexto(categoria, "categoría", CATEGORIA_MAXIMA);
         this.unidadMedida = requerirTexto(unidadMedida, "unidad de medida", UNIDAD_MEDIDA_MAXIMA);
-        this.presentacion = requerirTexto(presentacion, "presentación", PRESENTACION_MAXIMA);
+        this.presentacion = requerirTexto(presentacion, "presentacion", PRESENTACION_MAXIMA);
         this.departamento = requerirTexto(departamento, "departamento", DEPARTAMENTO_MAXIMO);
         this.precioUnitario = validarPrecio(precioUnitario);
+        this.cantidad = validarNoNegativo(cantidad, " la cantidad");
+        this.stockMinimo = validarNoNegativo(stockMinimo, "el stock minimo");
         this.ficha = ficha == null ? FichaTecnica.vacia() : ficha;
     }
  
-    /** Crea un material nuevo (aún sin id; lo asigna la persistencia). */
     public static Material crear(CodigoMaterial codigo, String nombre, String categoria,
                                  String unidadMedida, String presentacion, String departamento,
-                                 BigDecimal precioUnitario, FichaTecnica ficha) {
-        return new Material(null, codigo, nombre, categoria, unidadMedida,
-                presentacion, departamento, precioUnitario, ficha);
+                                 BigDecimal precioUnitario, int stockMinimo, FichaTecnica ficha) {
+        return new Material(null, codigo, nombre, categoria, unidadMedida, presentacion,
+                departamento, precioUnitario, 0, stockMinimo, ficha);
     }
  
-    /** Reconstruye un material ya persistido. Lo usa el adaptador de persistencia. */
     public static Material reconstruir(Integer id, CodigoMaterial codigo, String nombre, String categoria,
                                        String unidadMedida, String presentacion, String departamento,
-                                       BigDecimal precioUnitario, FichaTecnica ficha) {
+                                       BigDecimal precioUnitario, int cantidad, int stockMinimo,
+                                       FichaTecnica ficha) {
         Objects.requireNonNull(id, "El id es obligatorio al reconstruir un material");
-        return new Material(id, codigo, nombre, categoria, unidadMedida,
-                presentacion, departamento, precioUnitario, ficha);
+        return new Material(id, codigo, nombre, categoria, unidadMedida, presentacion,
+                departamento, precioUnitario, cantidad, stockMinimo, ficha);
     }
  
     public Material conId(Integer nuevoId) {
-        return reconstruir(nuevoId, codigo, nombre, categoria, unidadMedida,
-                presentacion, departamento, precioUnitario, ficha);
+        return reconstruir(nuevoId, codigo, nombre, categoria, unidadMedida, presentacion,
+                departamento, precioUnitario, cantidad, stockMinimo, ficha);
     }
  
 
     public void actualizarDatos(String nombre, String categoria, String unidadMedida,
                                 String presentacion, String departamento) {
+        // valida todo primero para no dejar el objeto a medias si algo falla.
         String nuevoNombre = requerirTexto(nombre, "nombre", NOMBRE_MAXIMO);
         String nuevaCategoria = requerirTexto(categoria, "categoría", CATEGORIA_MAXIMA);
         String nuevaUnidad = requerirTexto(unidadMedida, "unidad de medida", UNIDAD_MEDIDA_MAXIMA);
@@ -80,7 +86,6 @@ public class Material {
         this.departamento = nuevoDepartamento;
     }
  
-
     public void actualizarFicha(FichaTecnica nuevaFicha) {
         this.ficha = nuevaFicha == null ? FichaTecnica.vacia() : nuevaFicha;
     }
@@ -88,6 +93,33 @@ public class Material {
     public void actualizarPrecio(BigDecimal nuevoPrecio) {
         this.precioUnitario = validarPrecio(nuevoPrecio);
     }
+ 
+ 
+    public void registrarEntrada(int cantidadRecibida) {
+        if (cantidadRecibida <= 0) {
+            throw new MaterialInvalidoException("La cantidad de entrada debe ser mayor a cero");
+        }
+        this.cantidad = Math.addExact(this.cantidad, cantidadRecibida);
+    }
+ 
+    public void registrarSalida(int cantidadSolicitada) {
+        if (cantidadSolicitada <= 0) {
+            throw new MaterialInvalidoException("La cantidad de salida debe ser mayor a cero");
+        }
+        if (cantidadSolicitada > cantidad) {
+            throw new MaterialInvalidoException("Cantidad solicitada excede las existencias disponibles");
+        }
+        this.cantidad -= cantidadSolicitada;
+    }
+ 
+    public void cambiarStockMinimo(int nuevoStockMinimo) {
+        this.stockMinimo = validarNoNegativo(nuevoStockMinimo, "El stock mínimo");
+    }
+ 
+    public boolean estaBajoMinimo() {
+        return cantidad < stockMinimo;
+    }
+ 
  
     private static String requerirTexto(String valor, String campo, int max) {
         if (valor == null || valor.isBlank()) {
@@ -108,6 +140,13 @@ public class Material {
         return precio;
     }
  
+    private static int validarNoNegativo(int valor, String campo) {
+        if (valor < 0) {
+            throw new MaterialInvalidoException(campo + " no puede ser negativo");
+        }
+        return valor;
+    }
+ 
     public Integer getId() { return id; }
     public CodigoMaterial getCodigo() { return codigo; }
     public String getNombre() { return nombre; }
@@ -116,6 +155,8 @@ public class Material {
     public String getPresentacion() { return presentacion; }
     public String getDepartamento() { return departamento; }
     public BigDecimal getPrecioUnitario() { return precioUnitario; }
+    public int getCantidad() { return cantidad; }
+    public int getStockMinimo() { return stockMinimo; }
     public FichaTecnica getFicha() { return ficha; }
  
     @Override
