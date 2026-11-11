@@ -1,0 +1,130 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package mx.itson.potroalmacen.materiales.domain;
+
+import java.math.BigDecimal;
+import java.util.Objects;
+import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoException;
+
+/**
+ *
+ * @author erika
+ */
+public class Material {
+     public static final int NOMBRE_MAXIMO = 500;
+    public static final int CATEGORIA_MAXIMA = 120;
+    public static final int UNIDAD_MEDIDA_MAXIMA = 60;
+    public static final int PRESENTACION_MAXIMA = 80;
+    public static final int DEPARTAMENTO_MAXIMO = 120;
+ 
+    private final Integer id;
+    private final CodigoMaterial codigo;
+    private String nombre;
+    private String categoria;
+    private String unidadMedida;
+    private String presentacion;
+    private String departamento;
+    private BigDecimal precioUnitario;
+    private FichaTecnica ficha;
+ 
+    private Material(Integer id, CodigoMaterial codigo, String nombre, String categoria,
+                     String unidadMedida, String presentacion, String departamento,
+                     BigDecimal precioUnitario, FichaTecnica ficha) {
+        this.id = id;
+        this.codigo = Objects.requireNonNull(codigo, "El código es obligatorio");
+        this.nombre = requerirTexto(nombre, "nombre", NOMBRE_MAXIMO);
+        this.categoria = requerirTexto(categoria, "categoría", CATEGORIA_MAXIMA);
+        this.unidadMedida = requerirTexto(unidadMedida, "unidad de medida", UNIDAD_MEDIDA_MAXIMA);
+        this.presentacion = requerirTexto(presentacion, "presentación", PRESENTACION_MAXIMA);
+        this.departamento = requerirTexto(departamento, "departamento", DEPARTAMENTO_MAXIMO);
+        this.precioUnitario = validarPrecio(precioUnitario);
+        this.ficha = ficha == null ? FichaTecnica.vacia() : ficha;
+    }
+ 
+    /** Crea un material nuevo (aún sin id; lo asigna la persistencia). */
+    public static Material crear(CodigoMaterial codigo, String nombre, String categoria,
+                                 String unidadMedida, String presentacion, String departamento,
+                                 BigDecimal precioUnitario, FichaTecnica ficha) {
+        return new Material(null, codigo, nombre, categoria, unidadMedida,
+                presentacion, departamento, precioUnitario, ficha);
+    }
+ 
+    /** Reconstruye un material ya persistido. Lo usa el adaptador de persistencia. */
+    public static Material reconstruir(Integer id, CodigoMaterial codigo, String nombre, String categoria,
+                                       String unidadMedida, String presentacion, String departamento,
+                                       BigDecimal precioUnitario, FichaTecnica ficha) {
+        Objects.requireNonNull(id, "El id es obligatorio al reconstruir un material");
+        return new Material(id, codigo, nombre, categoria, unidadMedida,
+                presentacion, departamento, precioUnitario, ficha);
+    }
+ 
+    public Material conId(Integer nuevoId) {
+        return reconstruir(nuevoId, codigo, nombre, categoria, unidadMedida,
+                presentacion, departamento, precioUnitario, ficha);
+    }
+ 
+
+    public void actualizarDatos(String nombre, String categoria, String unidadMedida,
+                                String presentacion, String departamento) {
+        String nuevoNombre = requerirTexto(nombre, "nombre", NOMBRE_MAXIMO);
+        String nuevaCategoria = requerirTexto(categoria, "categoría", CATEGORIA_MAXIMA);
+        String nuevaUnidad = requerirTexto(unidadMedida, "unidad de medida", UNIDAD_MEDIDA_MAXIMA);
+        String nuevaPresentacion = requerirTexto(presentacion, "presentación", PRESENTACION_MAXIMA);
+        String nuevoDepartamento = requerirTexto(departamento, "departamento", DEPARTAMENTO_MAXIMO);
+        this.nombre = nuevoNombre;
+        this.categoria = nuevaCategoria;
+        this.unidadMedida = nuevaUnidad;
+        this.presentacion = nuevaPresentacion;
+        this.departamento = nuevoDepartamento;
+    }
+ 
+
+    public void actualizarFicha(FichaTecnica nuevaFicha) {
+        this.ficha = nuevaFicha == null ? FichaTecnica.vacia() : nuevaFicha;
+    }
+ 
+    public void actualizarPrecio(BigDecimal nuevoPrecio) {
+        this.precioUnitario = validarPrecio(nuevoPrecio);
+    }
+ 
+    private static String requerirTexto(String valor, String campo, int max) {
+        if (valor == null || valor.isBlank()) {
+            throw new MaterialInvalidoException("El campo " + campo + " es obligatorio");
+        }
+        String limpio = valor.trim();
+        if (limpio.length() > max) {
+            throw new MaterialInvalidoException(
+                    "El campo " + campo + " no puede exceder " + max + " caracteres");
+        }
+        return limpio;
+    }
+ 
+    private static BigDecimal validarPrecio(BigDecimal precio) {
+        if (precio != null && precio.signum() < 0) {
+            throw new MaterialInvalidoException("El precio unitario no puede ser negativo");
+        }
+        return precio;
+    }
+ 
+    public Integer getId() { return id; }
+    public CodigoMaterial getCodigo() { return codigo; }
+    public String getNombre() { return nombre; }
+    public String getCategoria() { return categoria; }
+    public String getUnidadMedida() { return unidadMedida; }
+    public String getPresentacion() { return presentacion; }
+    public String getDepartamento() { return departamento; }
+    public BigDecimal getPrecioUnitario() { return precioUnitario; }
+    public FichaTecnica getFicha() { return ficha; }
+ 
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Material otro && codigo.equals(otro.codigo);
+    }
+ 
+    @Override
+    public int hashCode() {
+        return codigo.hashCode();
+    }
+}
