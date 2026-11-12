@@ -1,11 +1,10 @@
 package mx.itson.potroalmacen.materiales.adapter.out.persistence;
 
+import java.util.Optional;
 import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
 import mx.itson.potroalmacen.materiales.domain.Material;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public class MaterialPersistenceAdapter implements MaterialRepositoryPort {

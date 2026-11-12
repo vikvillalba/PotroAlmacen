@@ -13,4 +13,3 @@ public class MaterialInvalidoException extends RuntimeException {
         super(mensaje);
     }
 }
- 

@@ -22,6 +22,7 @@ public class MaterialMapper {
         entity.setCategoria(domain.getCategoria());
         entity.setUnidadMedida(domain.getUnidadMedida());
         entity.setPresentacion(domain.getPresentacion());
+        entity.setCampus(domain.getCampus());
         entity.setPrecioUnitario(domain.getPrecioUnitario());
         entity.setCantidad(domain.getCantidad());
         entity.setStockMinimo(domain.getStockMinimo());
@@ -48,7 +49,6 @@ public class MaterialMapper {
                 entity.getCantidad(),
                 entity.getStockMinimo(),
                 entity.getStockMaximo(),
-                entity.getUsoPrecauciones()
-        );
+                entity.getUsoPrecauciones());
     }
 }

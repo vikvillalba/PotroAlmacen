@@ -19,9 +19,6 @@ public class MaterialEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String codigo;
 
-    @Column(nullable = false, length = 80)
-    private String campus;
-
     @Column(nullable = false, length = 500)
     private String nombre;
 
@@ -34,7 +31,10 @@ public class MaterialEntity {
     @Column(nullable = false, length = 80)
     private String presentacion;
 
-    @Column(name = "precio_unitario")
+    @Column(length = 80, nullable = false)
+    private String campus;
+
+    @Column(name = "precio_unitario", precision = 10, scale = 2)
     private BigDecimal precioUnitario;
 
     @Column(nullable = false)
@@ -49,27 +49,13 @@ public class MaterialEntity {
     @Column(name = "uso_precauciones", columnDefinition = "TEXT")
     private String usoPrecauciones;
 
-    public MaterialEntity() {
-    }
+    @Version
+    @Column(nullable = false)
+    private Long version = 0L;
 
-    public MaterialEntity(Long id, String codigo, String campus, String nombre, String categoria,
-                          String unidadMedida, String presentacion, BigDecimal precioUnitario,
-                          int cantidad, int stockMinimo, Integer stockMaximo, String usoPrecauciones) {
-        this.id = id;
-        this.codigo = codigo;
-        this.campus = campus;
-        this.nombre = nombre;
-        this.categoria = categoria;
-        this.unidadMedida = unidadMedida;
-        this.presentacion = presentacion;
-        this.precioUnitario = precioUnitario;
-        this.cantidad = cantidad;
-        this.stockMinimo = stockMinimo;
-        this.stockMaximo = stockMaximo;
-        this.usoPrecauciones = usoPrecauciones;
-    }
+    public MaterialEntity() {}
 
-    // --- Getters y Setters ---
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -84,14 +70,6 @@ public class MaterialEntity {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
-    }
-
-    public String getCampus() {
-        return campus;
-    }
-
-    public void setCampus(String campus) {
-        this.campus = campus;
     }
 
     public String getNombre() {
@@ -124,6 +102,14 @@ public class MaterialEntity {
 
     public void setPresentacion(String presentacion) {
         this.presentacion = presentacion;
+    }
+
+    public String getCampus() {
+        return campus;
+    }
+
+    public void setCampus(String campus) {
+        this.campus = campus;
     }
 
     public BigDecimal getPrecioUnitario() {
@@ -164,5 +150,13 @@ public class MaterialEntity {
 
     public void setUsoPrecauciones(String usoPrecauciones) {
         this.usoPrecauciones = usoPrecauciones;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

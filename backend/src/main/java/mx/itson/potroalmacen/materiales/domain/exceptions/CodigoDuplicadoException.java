@@ -8,16 +8,16 @@ package mx.itson.potroalmacen.materiales.domain.exceptions;
  *
  * @author erika
  */
-public class CodigoDuplicadoException extends RuntimeException{
-    
+public class CodigoDuplicadoException extends RuntimeException {
+
     private final String codigo;
-    
+
     public CodigoDuplicadoException(String codigo) {
         super("Ya existe un material con el código " + codigo);
         this.codigo = codigo;
     }
- 
+
     public String getCodigo() {
         return codigo;
-    }  
+    }
 }
