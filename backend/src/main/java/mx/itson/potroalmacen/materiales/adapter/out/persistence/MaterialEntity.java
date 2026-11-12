@@ -1,10 +1,15 @@
 package mx.itson.potroalmacen.materiales.adapter.out.persistence;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "mat_ficha_tecnica")
+@Table(name = "mat_material")
 public class MaterialEntity {
 
     @Id
@@ -17,13 +22,13 @@ public class MaterialEntity {
     @Column(nullable = false, length = 500)
     private String nombre;
 
-    @Column(length = 120, nullable = false)
+    @Column(nullable = false, length = 120)
     private String categoria;
 
-    @Column(name = "unidad_medida", length = 60, nullable = false)
+    @Column(name = "unidad_medida", nullable = false, length = 60)
     private String unidadMedida;
 
-    @Column(length = 80, nullable = false)
+    @Column(nullable = false, length = 80)
     private String presentacion;
 
     @Column(length = 80, nullable = false)

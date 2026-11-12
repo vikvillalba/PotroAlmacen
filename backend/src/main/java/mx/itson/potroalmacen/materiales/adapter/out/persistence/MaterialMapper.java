@@ -17,6 +17,7 @@ public class MaterialMapper {
             entity.setCodigo(domain.getCodigo().toString());
         }
 
+        entity.setCampus(domain.getCampus());
         entity.setNombre(domain.getNombre());
         entity.setCategoria(domain.getCategoria());
         entity.setUnidadMedida(domain.getUnidadMedida());
