@@ -1,6 +1,8 @@
 package mx.itson.potroalmacen.materiales.adapter.out.persistence;
 
+import java.util.List;
 import java.util.Optional;
+import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
 import mx.itson.potroalmacen.materiales.domain.Material;
@@ -34,5 +36,13 @@ public class MaterialPersistenceAdapter implements MaterialRepositoryPort {
     public boolean existePorCodigo(CodigoMaterial codigo) {
         if (codigo == null) return false;
         return repository.existsByCodigo(codigo.toString());
+    }
+    
+    @Override
+    public List<Material> buscar(FiltroMateriales filtro) {
+        return repository.buscar(filtro.busqueda(), filtro.categoria())
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }
