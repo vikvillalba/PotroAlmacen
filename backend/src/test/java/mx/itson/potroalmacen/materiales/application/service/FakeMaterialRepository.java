@@ -5,16 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
-import mx.itson.potroalmacen.materiales.domain.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.domain.Material;
 
 /** Repositorio falso en memoria para pruebas unitarias sin Spring ni base de datos. */
 class FakeMaterialRepository implements MaterialRepositoryPort {
-
-    private static final Comparator<Material> POR_NOMBRE =
-            Comparator.comparing(Material::getNombre).thenComparing(m -> m.getCodigo().valor());
 
     private final Map<String, Material> storage = new LinkedHashMap<>();
     private int idSecuencia = 1;
@@ -38,13 +35,20 @@ class FakeMaterialRepository implements MaterialRepositoryPort {
         return storage.containsKey(codigo.toString());
     }
 
-    @Override
-    public List<Material> buscarTodos() {
-        return storage.values().stream().sorted(POR_NOMBRE).toList();
-    }
-
+    /** Misma semántica que la consulta JPQL de SpringDataMaterialRepository. */
     @Override
     public List<Material> buscar(FiltroMateriales filtro) {
-        return storage.values().stream().filter(filtro::aplicaA).sorted(POR_NOMBRE).toList();
+        return storage.values().stream()
+                .filter(m -> filtro.busqueda() == null
+                        || contiene(m.getNombre(), filtro.busqueda())
+                        || contiene(m.getCodigo().valor(), filtro.busqueda()))
+                .filter(m -> filtro.categoria() == null || m.getCategoria() == filtro.categoria())
+                .filter(m -> filtro.campus() == null || m.getCampus() == filtro.campus())
+                .sorted(Comparator.comparing(Material::getNombre))
+                .toList();
+    }
+
+    private static boolean contiene(String valor, String buscado) {
+        return valor.toLowerCase().contains(buscado.toLowerCase());
     }
 }

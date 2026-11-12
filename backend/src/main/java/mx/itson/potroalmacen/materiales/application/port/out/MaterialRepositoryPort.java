@@ -2,8 +2,8 @@ package mx.itson.potroalmacen.materiales.application.port.out;
 
 import java.util.List;
 import java.util.Optional;
+import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
-import mx.itson.potroalmacen.materiales.domain.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.domain.Material;
 
 public interface MaterialRepositoryPort {
@@ -36,15 +36,11 @@ public interface MaterialRepositoryPort {
     boolean existePorCodigo(CodigoMaterial codigo);
 
     /**
-     * @return todos los materiales, ordenados por nombre.
-     */
-    List<Material> buscarTodos();
-
-    /**
-     * Busca los materiales que cumplen el filtro, con la misma semántica que {@link FiltroMateriales#aplicaA}.
+     * Busca materiales cuyo nombre o código contenga el texto de búsqueda (sin distinguir mayúsculas) y que
+     * coincidan con la categoría y el campus indicados. Los campos nulos del filtro no se aplican.
      *
-     * @param filtro criterios de búsqueda.
-     * @return los materiales que coinciden, ordenados por nombre.
+     * @param filtro filtros opcionales de búsqueda, categoría y campus.
+     * @return los materiales que cumplen los filtros, ordenados por nombre; vacía si ninguno coincide.
      */
     List<Material> buscar(FiltroMateriales filtro);
 }

@@ -1,23 +1,17 @@
 package mx.itson.potroalmacen.materiales.adapter.out.persistence;
 
-import jakarta.persistence.criteria.Predicate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
-import mx.itson.potroalmacen.materiales.domain.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.domain.Material;
 import mx.itson.potroalmacen.materiales.domain.exceptions.CodigoDuplicadoException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class MaterialPersistenceAdapter implements MaterialRepositoryPort {
-
-    private static final Sort POR_NOMBRE = Sort.by("nombre").and(Sort.by("codigo"));
 
     private final SpringDataMaterialRepository repository;
     private final MaterialMapper mapper;
@@ -53,43 +47,10 @@ public class MaterialPersistenceAdapter implements MaterialRepositoryPort {
     }
 
     @Override
-    public List<Material> buscarTodos() {
-        return repository.findAll(POR_NOMBRE).stream().map(mapper::toDomain).toList();
-    }
-
-    @Override
     public List<Material> buscar(FiltroMateriales filtro) {
-        return repository.findAll(especificacion(filtro), POR_NOMBRE).stream()
+        String patron = filtro.busqueda() == null ? null : "%" + filtro.busqueda().toLowerCase() + "%";
+        return repository.buscar(patron, filtro.categoria(), filtro.campus()).stream()
                 .map(mapper::toDomain)
                 .toList();
-    }
-
-    /** Traduce el filtro a SQL. Debe coincidir con {@link FiltroMateriales#aplicaA}. */
-    private static Specification<MaterialEntity> especificacion(FiltroMateriales filtro) {
-        return (root, query, cb) -> {
-            List<Predicate> condiciones = new ArrayList<>();
-            if (filtro.nombre() != null) {
-                condiciones.add(cb.like(cb.lower(root.get("nombre")), patron(filtro.nombre()), '\\'));
-            }
-            if (filtro.codigo() != null) {
-                condiciones.add(cb.like(cb.lower(root.get("codigo")), patron(filtro.codigo()), '\\'));
-            }
-            if (filtro.categoria() != null) {
-                condiciones.add(cb.equal(root.get("categoria"), filtro.categoria()));
-            }
-            if (filtro.presentacion() != null) {
-                condiciones.add(cb.equal(root.get("presentacion"), filtro.presentacion()));
-            }
-            return cb.and(condiciones.toArray(Predicate[]::new));
-        };
-    }
-
-    /** Patrón "contiene" para LIKE, en minúsculas. %, _ y \ escritos por el usuario se buscan literalmente. */
-    private static String patron(String texto) {
-        return "%" + escaparLike(texto.toLowerCase()) + "%";
-    }
-
-    private static String escaparLike(String texto) {
-        return texto.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
     }
 }
