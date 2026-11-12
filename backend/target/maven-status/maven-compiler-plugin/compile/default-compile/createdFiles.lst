@@ -7,13 +7,15 @@ mx\itson\potroalmacen\reportes\adapter\out\persistence\package-info.class
 mx\itson\potroalmacen\auditoria\domain\package-info.class
 mx\itson\potroalmacen\reportes\domain\package-info.class
 mx\itson\potroalmacen\usuarios\application\port\out\package-info.class
+mx\itson\potroalmacen\materiales\application\port\in\ConsultarMaterialesUseCase.class
 mx\itson\potroalmacen\usuarios\application\port\in\package-info.class
 mx\itson\potroalmacen\areas\application\port\in\package-info.class
-mx\itson\potroalmacen\shared\infrastructure\rest\ErrorResponse.class
 mx\itson\potroalmacen\auditoria\application\service\package-info.class
 mx\itson\potroalmacen\reportes\application\port\out\package-info.class
+mx\itson\potroalmacen\materiales\application\service\ConsultarMaterialesService.class
 mx\itson\potroalmacen\materiales\domain\Material.class
 mx\itson\potroalmacen\usuarios\application\service\package-info.class
+mx\itson\potroalmacen\compartido\web\ErrorResponse.class
 mx\itson\potroalmacen\reportes\application\service\package-info.class
 mx\itson\potroalmacen\salidas\adapter\in\web\package-info.class
 mx\itson\potroalmacen\personal\application\port\in\package-info.class
@@ -43,6 +45,8 @@ mx\itson\potroalmacen\areas\application\service\package-info.class
 mx\itson\potroalmacen\compartido\web\CampoInvalido.class
 mx\itson\potroalmacen\personal\application\service\package-info.class
 mx\itson\potroalmacen\compartido\web\RespuestaError.class
+mx\itson\potroalmacen\materiales\adapter\in\web\MaterialConsultaController.class
+mx\itson\potroalmacen\materiales\application\port\in\RegistrarMaterialUseCase.class
 mx\itson\potroalmacen\materiales\domain\package-info.class
 mx\itson\potroalmacen\PotroAlmacenApplication.class
 mx\itson\potroalmacen\seguridad\ActorResolver.class
@@ -53,6 +57,7 @@ mx\itson\potroalmacen\materiales\application\service\package-info.class
 mx\itson\potroalmacen\usuarios\domain\package-info.class
 mx\itson\potroalmacen\auditoria\adapter\out\persistence\package-info.class
 mx\itson\potroalmacen\reportes\adapter\in\web\package-info.class
+mx\itson\potroalmacen\materiales\application\port\in\RegistrarMaterialCommand.class
 mx\itson\potroalmacen\materiales\adapter\out\persistence\package-info.class
 mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialMapper.class
 mx\itson\potroalmacen\personal\application\port\out\package-info.class
@@ -60,9 +65,11 @@ mx\itson\potroalmacen\reportes\package-info.class
 mx\itson\potroalmacen\salidas\adapter\out\persistence\package-info.class
 mx\itson\potroalmacen\salidas\application\service\package-info.class
 mx\itson\potroalmacen\compartido\excepcion\PermisoDenegadoException.class
+mx\itson\potroalmacen\materiales\application\service\RegistrarMaterialService.class
 mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialEntity.class
 mx\itson\potroalmacen\compartido\config\OpenApiConfig.class
 mx\itson\potroalmacen\materiales\application\port\out\MaterialRepositoryPort.class
+mx\itson\potroalmacen\materiales\adapter\in\web\MaterialResumenResponse.class
 mx\itson\potroalmacen\seguridad\dev\ActorFijoResolver.class
 mx\itson\potroalmacen\usuarios\adapter\out\persistence\package-info.class
 mx\itson\potroalmacen\salidas\package-info.class
@@ -74,3 +81,4 @@ mx\itson\potroalmacen\auditoria\application\port\in\package-info.class
 mx\itson\potroalmacen\auditoria\package-info.class
 mx\itson\potroalmacen\personal\package-info.class
 mx\itson\potroalmacen\seguridad\dev\ActorFijoProperties.class
+mx\itson\potroalmacen\materiales\application\port\in\FiltroMateriales.class
