@@ -3,11 +3,7 @@ package mx.itson.potroalmacen.materiales.application.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import mx.itson.potroalmacen.materiales.application.port.in.RegistrarMaterialCommand;
-import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
 import mx.itson.potroalmacen.materiales.domain.Campus;
 import mx.itson.potroalmacen.materiales.domain.Categoria;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
@@ -130,7 +126,8 @@ class RegistrarMaterialServiceTest {
         CodigoDuplicadoException excepcion =
                 assertThrows(CodigoDuplicadoException.class, () -> service.registrar(comandoDuplicado));
 
-        assertEquals("DUP-001", excepcion.getCodigo());
+        assertEquals("DUP-001", excepcion.getCodigoMaterial());
+        assertEquals("MATERIAL_DUPLICADO", excepcion.getCodigo());
     }
 
     @Test
@@ -186,32 +183,5 @@ class RegistrarMaterialServiceTest {
                 null);
 
         assertThrows(MaterialInvalidoException.class, () -> service.registrar(comandoSinCategoria));
-    }
-
-    /**
-     * Repositorio falso en memoria para pruebas unitarias sin Spring ni base de datos.
-     */
-    private static class FakeMaterialRepository implements MaterialRepositoryPort {
-        private final Map<String, Material> storage = new HashMap<>();
-        private int idSecuencia = 1;
-
-        @Override
-        public Material guardar(Material material) {
-            Material guardado = material.getId() == null ? material.conId(idSecuencia++) : material;
-            storage.put(guardado.getCodigo().toString(), guardado);
-            return guardado;
-        }
-
-        @Override
-        public Optional<Material> buscarPorCodigo(CodigoMaterial codigo) {
-            if (codigo == null) return Optional.empty();
-            return Optional.ofNullable(storage.get(codigo.toString()));
-        }
-
-        @Override
-        public boolean existePorCodigo(CodigoMaterial codigo) {
-            if (codigo == null) return false;
-            return storage.containsKey(codigo.toString());
-        }
     }
 }

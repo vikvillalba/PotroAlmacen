@@ -1,23 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package mx.itson.potroalmacen.materiales.domain.exceptions;
 
-/**
- *
- * @author erika
- */
-public class CodigoDuplicadoException extends RuntimeException {
+import mx.itson.potroalmacen.compartido.excepcion.DuplicadoException;
 
-    private final String codigo;
+/** Ya existe un material con el mismo código. Se responde con 409. */
+public class CodigoDuplicadoException extends DuplicadoException {
 
-    public CodigoDuplicadoException(String codigo) {
-        super("Ya existe un material con el código " + codigo);
-        this.codigo = codigo;
+    public static final String CODIGO = "MATERIAL_DUPLICADO";
+
+    private final String codigoMaterial;
+
+    public CodigoDuplicadoException(String codigoMaterial) {
+        super(CODIGO, "Ya existe un material con el código " + codigoMaterial);
+        this.codigoMaterial = codigoMaterial;
     }
 
-    public String getCodigo() {
-        return codigo;
+    /** Código del material repetido (getCodigo() es el código de error, por herencia). */
+    public String getCodigoMaterial() {
+        return codigoMaterial;
     }
 }
