@@ -4,3 +4,4 @@
 # Variables de entorno
 .env
 **/.env
+backend/target
