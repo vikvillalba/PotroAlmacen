@@ -1,6 +1,10 @@
 package mx.itson.potroalmacen.materiales.application.port.in;
 
 import java.math.BigDecimal;
+import mx.itson.potroalmacen.materiales.domain.Campus;
+import mx.itson.potroalmacen.materiales.domain.Categoria;
+import mx.itson.potroalmacen.materiales.domain.Presentacion;
+import mx.itson.potroalmacen.materiales.domain.UnidadMedida;
 import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoException;
 
 /**
@@ -10,10 +14,11 @@ import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoExcept
 public record RegistrarMaterialCommand(
         String codigo,
         String nombre,
-        String categoria,
-        String unidadMedida,
-        String presentacion,
-        String campus,
+        Categoria categoria,
+        UnidadMedida unidadMedida,
+        Presentacion presentacion,
+        String contenidoPresentacion,
+        Campus campus,
         BigDecimal precioUnitario,
         int existenciaInicial,
         int stockMinimo,

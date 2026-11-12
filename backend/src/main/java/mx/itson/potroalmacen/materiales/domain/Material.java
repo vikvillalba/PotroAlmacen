@@ -15,19 +15,17 @@ import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoExcept
 public final class Material {
 
     public static final int NOMBRE_MAXIMO = 500;
-    public static final int CATEGORIA_MAXIMA = 120;
-    public static final int UNIDAD_MEDIDA_MAXIMA = 60;
-    public static final int PRESENTACION_MAXIMA = 80;
-    public static final int CAMPUS_MAXIMO = 80;
+    public static final int CONTENIDO_PRESENTACION_MAXIMO = 120;
     public static final int USO_PRECAUCIONES_MAXIMO = 2000;
 
     private final Integer id;
     private final CodigoMaterial codigo;
-    private final String campus;
+    private final Campus campus;
     private String nombre;
-    private String categoria;
-    private String unidadMedida;
-    private String presentacion;
+    private Categoria categoria;
+    private UnidadMedida unidadMedida;
+    private Presentacion presentacion;
+    private String contenidoPresentacion;
     private BigDecimal precioUnitario;
     private int cantidad;
     private int stockMinimo;
@@ -38,10 +36,11 @@ public final class Material {
             Integer id,
             CodigoMaterial codigo,
             String nombre,
-            String categoria,
-            String unidadMedida,
-            String presentacion,
-            String campus,
+            Categoria categoria,
+            UnidadMedida unidadMedida,
+            Presentacion presentacion,
+            String contenidoPresentacion,
+            Campus campus,
             BigDecimal precioUnitario,
             int cantidad,
             int stockMinimo,
@@ -50,10 +49,12 @@ public final class Material {
         this.id = id;
         this.codigo = Objects.requireNonNull(codigo, "El código es obligatorio");
         this.nombre = requerirTexto(nombre, "nombre", NOMBRE_MAXIMO);
-        this.categoria = requerirTexto(categoria, "categoría", CATEGORIA_MAXIMA);
-        this.unidadMedida = requerirTexto(unidadMedida, "unidad de medida", UNIDAD_MEDIDA_MAXIMA);
-        this.presentacion = requerirTexto(presentacion, "presentación", PRESENTACION_MAXIMA);
-        this.campus = requerirTexto(campus, "campus", CAMPUS_MAXIMO);
+        this.categoria = requerir(categoria, "categoría");
+        this.unidadMedida = requerir(unidadMedida, "unidad de medida");
+        this.presentacion = requerir(presentacion, "presentación");
+        this.contenidoPresentacion =
+                opcional(contenidoPresentacion, "contenido de la presentación", CONTENIDO_PRESENTACION_MAXIMO);
+        this.campus = requerir(campus, "campus");
         this.precioUnitario = validarPrecio(precioUnitario);
         this.cantidad = validarNoNegativo(cantidad, "La cantidad");
         this.stockMinimo = validarNoNegativo(stockMinimo, "El stock mínimo");
@@ -64,10 +65,11 @@ public final class Material {
     public static Material crear(
             CodigoMaterial codigo,
             String nombre,
-            String categoria,
-            String unidadMedida,
-            String presentacion,
-            String campus,
+            Categoria categoria,
+            UnidadMedida unidadMedida,
+            Presentacion presentacion,
+            String contenidoPresentacion,
+            Campus campus,
             BigDecimal precioUnitario,
             int stockMinimo,
             Integer stockMaximo,
@@ -79,6 +81,7 @@ public final class Material {
                 categoria,
                 unidadMedida,
                 presentacion,
+                contenidoPresentacion,
                 campus,
                 precioUnitario,
                 0,
@@ -92,10 +95,11 @@ public final class Material {
             Integer id,
             CodigoMaterial codigo,
             String nombre,
-            String categoria,
-            String unidadMedida,
-            String presentacion,
-            String campus,
+            Categoria categoria,
+            UnidadMedida unidadMedida,
+            Presentacion presentacion,
+            String contenidoPresentacion,
+            Campus campus,
             BigDecimal precioUnitario,
             int cantidad,
             int stockMinimo,
@@ -109,6 +113,7 @@ public final class Material {
                 categoria,
                 unidadMedida,
                 presentacion,
+                contenidoPresentacion,
                 campus,
                 precioUnitario,
                 cantidad,
@@ -125,6 +130,7 @@ public final class Material {
                 categoria,
                 unidadMedida,
                 presentacion,
+                contenidoPresentacion,
                 campus,
                 precioUnitario,
                 cantidad,
@@ -133,16 +139,24 @@ public final class Material {
                 usoPrecauciones);
     }
 
-    public void actualizarDatos(String nombre, String categoria, String unidadMedida, String presentacion) {
+    public void actualizarDatos(
+            String nombre,
+            Categoria categoria,
+            UnidadMedida unidadMedida,
+            Presentacion presentacion,
+            String contenidoPresentacion) {
         // Se valida todo primero para no dejar el objeto a medias si algo falla.
         String nuevoNombre = requerirTexto(nombre, "nombre", NOMBRE_MAXIMO);
-        String nuevaCategoria = requerirTexto(categoria, "categoría", CATEGORIA_MAXIMA);
-        String nuevaUnidad = requerirTexto(unidadMedida, "unidad de medida", UNIDAD_MEDIDA_MAXIMA);
-        String nuevaPresentacion = requerirTexto(presentacion, "presentación", PRESENTACION_MAXIMA);
+        Categoria nuevaCategoria = requerir(categoria, "categoría");
+        UnidadMedida nuevaUnidad = requerir(unidadMedida, "unidad de medida");
+        Presentacion nuevaPresentacion = requerir(presentacion, "presentación");
+        String nuevoContenido =
+                opcional(contenidoPresentacion, "contenido de la presentación", CONTENIDO_PRESENTACION_MAXIMO);
         this.nombre = nuevoNombre;
         this.categoria = nuevaCategoria;
         this.unidadMedida = nuevaUnidad;
         this.presentacion = nuevaPresentacion;
+        this.contenidoPresentacion = nuevoContenido;
     }
 
     /** Pasar null o texto en blanco lo deja vacío. */
@@ -190,6 +204,13 @@ public final class Material {
     }
 
     // validaciones
+
+    private static <T> T requerir(T valor, String campo) {
+        if (valor == null) {
+            throw new MaterialInvalidoException("El campo " + campo + " es obligatorio");
+        }
+        return valor;
+    }
 
     private static String requerirTexto(String valor, String campo, int max) {
         if (valor == null || valor.isBlank()) {
@@ -251,19 +272,28 @@ public final class Material {
         return nombre;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public String getUnidadMedida() {
+    public UnidadMedida getUnidadMedida() {
         return unidadMedida;
     }
 
-    public String getPresentacion() {
+    public Presentacion getPresentacion() {
         return presentacion;
     }
 
-    public String getCampus() {
+    public String getContenidoPresentacion() {
+        return contenidoPresentacion;
+    }
+
+    /** Departamento al que pertenece el material, según su categoría. */
+    public Departamento getDepartamento() {
+        return categoria.getDepartamento();
+    }
+
+    public Campus getCampus() {
         return campus;
     }
 
