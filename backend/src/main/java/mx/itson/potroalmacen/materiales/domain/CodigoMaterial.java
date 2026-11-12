@@ -11,20 +11,19 @@ import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoExcept
  * @author erika
  */
 public record CodigoMaterial(String valor) {
- 
+
     public static final int LONGITUD_MAXIMA = 30;
- 
+
     public CodigoMaterial {
         if (valor == null || valor.isBlank()) {
             throw new MaterialInvalidoException("El código es obligatorio");
         }
         valor = valor.trim().toUpperCase();
         if (valor.length() > LONGITUD_MAXIMA) {
-            throw new MaterialInvalidoException(
-                    "El código no puede exceder " + LONGITUD_MAXIMA + " caracteres");
+            throw new MaterialInvalidoException("El código no puede exceder " + LONGITUD_MAXIMA + " caracteres");
         }
     }
- 
+
     @Override
     public String toString() {
         return valor;

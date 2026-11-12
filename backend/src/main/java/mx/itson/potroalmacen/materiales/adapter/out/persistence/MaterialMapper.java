@@ -1,7 +1,6 @@
 package mx.itson.potroalmacen.materiales.adapter.out.persistence;
 
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
-import mx.itson.potroalmacen.materiales.domain.FichaTecnica;
 import mx.itson.potroalmacen.materiales.domain.Material;
 import org.springframework.stereotype.Component;
 
@@ -22,18 +21,12 @@ public class MaterialMapper {
         entity.setCategoria(domain.getCategoria());
         entity.setUnidadMedida(domain.getUnidadMedida());
         entity.setPresentacion(domain.getPresentacion());
-        entity.setDepartamento(domain.getDepartamento());
+        entity.setCampus(domain.getCampus());
         entity.setPrecioUnitario(domain.getPrecioUnitario());
-
-        // Mapeo adaptado exactamente a los métodos del record FichaTecnica de Erika
-        FichaTecnica ficha = domain.getFicha();
-        if (ficha != null) {
-            entity.setCaracteristicasTecnicas(ficha.caracteristicasTecnicas());
-            entity.setMarcaRequerida(ficha.marcaRequerida());
-            entity.setNormas(ficha.normas());
-            // Guardamos la hoja de seguridad como texto (o validamos si aplica booleano en la entidad JPA)
-            entity.setUsoYPrecauciones(ficha.hojaSeguridad());
-        }
+        entity.setCantidad(domain.getCantidad());
+        entity.setStockMinimo(domain.getStockMinimo());
+        entity.setStockMaximo(domain.getStockMaximo());
+        entity.setUsoPrecauciones(domain.getUsoPrecauciones());
 
         return entity;
     }
@@ -42,12 +35,6 @@ public class MaterialMapper {
         if (entity == null) return null;
 
         CodigoMaterial codigoVO = new CodigoMaterial(entity.getCodigo());
-        FichaTecnica fichaVO = new FichaTecnica(
-                entity.getCaracteristicasTecnicas(),
-                entity.getMarcaRequerida(),
-                entity.getNormas(),
-                entity.getUsoYPrecauciones() // Mapeado desde el campo correspondiente en la entidad
-        );
 
         return Material.reconstruir(
                 entity.getId() != null ? entity.getId().intValue() : null,
@@ -56,9 +43,11 @@ public class MaterialMapper {
                 entity.getCategoria(),
                 entity.getUnidadMedida(),
                 entity.getPresentacion(),
-                entity.getDepartamento(),
+                entity.getCampus(),
                 entity.getPrecioUnitario(),
-                fichaVO
-        );
+                entity.getCantidad(),
+                entity.getStockMinimo(),
+                entity.getStockMaximo(),
+                entity.getUsoPrecauciones());
     }
 }

@@ -1,4 +1,4 @@
-package mx.itson.potroalmacen.shared.infrastructure.rest;
+package mx.itson.potroalmacen.compartido.web;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
@@ -12,4 +12,4 @@ public record ErrorResponse(
         String message,
         String path,
         Map<String, String> detallesCampos // Útil para errores 400 de validación de formularios
-) {}
+        ) {}
