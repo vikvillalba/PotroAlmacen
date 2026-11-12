@@ -1,14 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package mx.itson.potroalmacen.materiales.domain.exceptions;
 
 /**
+ * Un dato del material no cumple las reglas del dominio.
  *
- * @author erika
+ * <p>Extiende {@link IllegalArgumentException} para que el manejador global responda 400 (VALIDACION).
  */
-public class MaterialInvalidoException extends RuntimeException {
+public class MaterialInvalidoException extends IllegalArgumentException {
     public MaterialInvalidoException(String mensaje) {
         super(mensaje);
     }
