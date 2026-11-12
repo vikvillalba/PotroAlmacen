@@ -35,10 +35,7 @@ C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\
 C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\CodigoMaterial.java
 C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\exceptions\CodigoDuplicadoException.java
 C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\exceptions\MaterialInvalidoException.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\ExistenciaMaterial.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\FichaTecnica.java
 C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Material.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\MaterialRegistrado.java
 C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\package-info.java
 C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\package-info.java
 C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\adapter\in\web\package-info.java

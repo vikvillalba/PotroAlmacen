@@ -34,7 +34,6 @@ mx\itson\potroalmacen\materiales\application\port\in\package-info.class
 mx\itson\potroalmacen\materiales\adapter\in\web\package-info.class
 mx\itson\potroalmacen\compartido\excepcion\NoEncontradoException.class
 mx\itson\potroalmacen\reportes\application\port\in\package-info.class
-mx\itson\potroalmacen\materiales\domain\FichaTecnica.class
 mx\itson\potroalmacen\materiales\package-info.class
 mx\itson\potroalmacen\usuarios\package-info.class
 mx\itson\potroalmacen\materiales\adapter\out\persistence\SpringDataMaterialRepository.class
@@ -56,7 +55,6 @@ mx\itson\potroalmacen\auditoria\adapter\out\persistence\package-info.class
 mx\itson\potroalmacen\reportes\adapter\in\web\package-info.class
 mx\itson\potroalmacen\materiales\adapter\out\persistence\package-info.class
 mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialMapper.class
-mx\itson\potroalmacen\materiales\domain\MaterialRegistrado.class
 mx\itson\potroalmacen\personal\application\port\out\package-info.class
 mx\itson\potroalmacen\reportes\package-info.class
 mx\itson\potroalmacen\salidas\adapter\out\persistence\package-info.class
@@ -76,4 +74,3 @@ mx\itson\potroalmacen\auditoria\application\port\in\package-info.class
 mx\itson\potroalmacen\auditoria\package-info.class
 mx\itson\potroalmacen\personal\package-info.class
 mx\itson\potroalmacen\seguridad\dev\ActorFijoProperties.class
-mx\itson\potroalmacen\materiales\domain\ExistenciaMaterial.class
