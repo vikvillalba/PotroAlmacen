@@ -22,8 +22,10 @@ C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\bac
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\ErrorResponse.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\GlobalExceptionHandler.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\RespuestaError.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\CatalogosResponse.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\MaterialConsultaController.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\MaterialResumenResponse.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\OpcionCatalogo.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\package-info.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialEntity.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialMapper.java
@@ -40,11 +42,16 @@ C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\bac
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\service\ConsultarMaterialesService.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\service\package-info.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\service\RegistrarMaterialService.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Campus.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Categoria.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\CodigoMaterial.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Departamento.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\exceptions\CodigoDuplicadoException.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\exceptions\MaterialInvalidoException.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Material.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Presentacion.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\UnidadMedida.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\package-info.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\adapter\in\web\package-info.java
 C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\adapter\out\persistence\package-info.java

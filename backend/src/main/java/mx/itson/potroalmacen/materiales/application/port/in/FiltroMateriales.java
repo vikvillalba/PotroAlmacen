@@ -4,6 +4,9 @@
  */
 package mx.itson.potroalmacen.materiales.application.port.in;
 
+import mx.itson.potroalmacen.materiales.domain.Campus;
+import mx.itson.potroalmacen.materiales.domain.Categoria;
+
 /**
  *
  * @author erika
@@ -11,17 +14,14 @@ package mx.itson.potroalmacen.materiales.application.port.in;
  * 
  * Los textos en blanco se normalizan a null, que significa "sin filtro".
  */
-public record FiltroMateriales (String busqueda, String categoria){
+public record FiltroMateriales(String busqueda, Categoria categoria, Campus campus) {
+ 
     public FiltroMateriales {
-        busqueda = normalizar(busqueda);
-        categoria = normalizar(categoria);
+        busqueda = (busqueda == null || busqueda.isBlank()) ? null : busqueda.trim();
     }
  
     public static FiltroMateriales sinFiltros() {
-        return new FiltroMateriales(null, null);
-    }
- 
-    private static String normalizar(String valor) {
-        return (valor == null || valor.isBlank()) ? null : valor.trim();
+        return new FiltroMateriales(null, null, null);
     }
 }
+ 

@@ -10,25 +10,40 @@ import mx.itson.potroalmacen.materiales.domain.Material;
  *
  * @author erika
  */
-public record MaterialResumenResponse (
+public record MaterialResumenResponse(
         Integer id,
         String codigo,
         String nombre,
+        String categoriaId,
         String categoria,
         String unidadMedida,
         String presentacion,
+        String contenidoPresentacion,
+        String campus,
         int cantidad,
-        int stockMinimo){
-    
+        int stockMinimo,
+        String estado) {
+ 
     public static MaterialResumenResponse de(Material m) {
         return new MaterialResumenResponse(
                 m.getId(),
                 m.getCodigo().valor(),
                 m.getNombre(),
-                m.getCategoria(),
-                m.getUnidadMedida(),
-                m.getPresentacion(),
+                m.getCategoria().name(),
+                m.getCategoria().toString(),
+                m.getUnidadMedida().toString(),
+                m.getPresentacion().toString(),
+                m.getContenidoPresentacion(),
+                m.getCampus().toString(),
                 m.getCantidad(),
-                m.getStockMinimo());
+                m.getStockMinimo(),
+                estado(m));
+    }
+ 
+    private static String estado(Material m) {
+        if (m.getCantidad() == 0) {
+            return "Agotado";
+        }
+        return m.estaBajoMinimo() ? "Stock bajo" : "Disponible";
     }
 }

@@ -2,6 +2,8 @@ package mx.itson.potroalmacen.materiales.adapter.out.persistence;
 
 import java.util.List;
 import java.util.Optional;
+import mx.itson.potroalmacen.materiales.domain.Campus;
+import mx.itson.potroalmacen.materiales.domain.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,11 +15,14 @@ public interface SpringDataMaterialRepository extends JpaRepository<MaterialEnti
     
      @Query("""
             SELECT m FROM MaterialEntity m
-            WHERE (:busqueda IS NULL
-                   OR LOWER(m.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%'))
-                   OR LOWER(m.codigo) LIKE LOWER(CONCAT('%', :busqueda, '%')))
-              AND (:categoria IS NULL OR LOWER(m.categoria) = LOWER(:categoria))
+            WHERE (:patron IS NULL
+                   OR LOWER(m.nombre) LIKE :patron
+                   OR LOWER(m.codigo) LIKE :patron)
+              AND (:categoria IS NULL OR m.categoria = :categoria)
+              AND (:campus IS NULL OR m.campus = :campus)
             ORDER BY m.nombre
             """)
-    List<MaterialEntity> buscar(@Param("busqueda") String busqueda, @Param("categoria") String categoria);
+    List<MaterialEntity> buscar(@Param("patron") String patron,
+                                @Param("categoria") Categoria categoria,
+                                @Param("campus") Campus campus);
 }
