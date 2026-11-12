@@ -2,12 +2,18 @@ package mx.itson.potroalmacen.materiales.adapter.out.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import java.math.BigDecimal;
+import mx.itson.potroalmacen.materiales.domain.Campus;
+import mx.itson.potroalmacen.materiales.domain.Categoria;
+import mx.itson.potroalmacen.materiales.domain.Presentacion;
+import mx.itson.potroalmacen.materiales.domain.UnidadMedida;
 
 @Entity
 @Table(name = "mat_material")
@@ -23,17 +29,24 @@ public class MaterialEntity {
     @Column(nullable = false, length = 500)
     private String nombre;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 120)
-    private String categoria;
+    private Categoria categoria;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "unidad_medida", nullable = false, length = 60)
-    private String unidadMedida;
+    private UnidadMedida unidadMedida;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 80)
-    private String presentacion;
+    private Presentacion presentacion;
 
+    @Column(name = "contenido_presentacion", length = 120)
+    private String contenidoPresentacion;
+
+    @Enumerated(EnumType.STRING)
     @Column(length = 80, nullable = false)
-    private String campus;
+    private Campus campus;
 
     @Column(name = "precio_unitario", precision = 10, scale = 2)
     private BigDecimal precioUnitario;
@@ -49,10 +62,6 @@ public class MaterialEntity {
 
     @Column(name = "uso_precauciones", columnDefinition = "TEXT")
     private String usoPrecauciones;
-
-    @Version
-    @Column(nullable = false)
-    private Long version = 0L;
 
     public MaterialEntity() {}
 
@@ -81,35 +90,43 @@ public class MaterialEntity {
         this.nombre = nombre;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
-    public String getUnidadMedida() {
+    public UnidadMedida getUnidadMedida() {
         return unidadMedida;
     }
 
-    public void setUnidadMedida(String unidadMedida) {
+    public void setUnidadMedida(UnidadMedida unidadMedida) {
         this.unidadMedida = unidadMedida;
     }
 
-    public String getPresentacion() {
+    public Presentacion getPresentacion() {
         return presentacion;
     }
 
-    public void setPresentacion(String presentacion) {
+    public void setPresentacion(Presentacion presentacion) {
         this.presentacion = presentacion;
     }
 
-    public String getCampus() {
+    public String getContenidoPresentacion() {
+        return contenidoPresentacion;
+    }
+
+    public void setContenidoPresentacion(String contenidoPresentacion) {
+        this.contenidoPresentacion = contenidoPresentacion;
+    }
+
+    public Campus getCampus() {
         return campus;
     }
 
-    public void setCampus(String campus) {
+    public void setCampus(Campus campus) {
         this.campus = campus;
     }
 
@@ -151,13 +168,5 @@ public class MaterialEntity {
 
     public void setUsoPrecauciones(String usoPrecauciones) {
         this.usoPrecauciones = usoPrecauciones;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 }

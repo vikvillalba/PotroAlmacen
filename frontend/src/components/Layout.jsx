@@ -41,12 +41,21 @@ export default function Layout({ active, crumbs = [], title, subtitle, back, act
 
       <main className="container page">
         <nav className="crumbs" aria-label="Ruta de navegación">
-          {crumbs.map((c, i) => (
-            <span key={c.label} className="crumb">
-              {c.to ? <Link to={c.to}>{c.label}</Link> : <b aria-current="page">{c.label}</b>}
-              {i < crumbs.length - 1 && <ChevronRight size={12} aria-hidden="true" />}
-            </span>
-          ))}
+          {crumbs.map((c, i) => {
+            const ultimo = i === crumbs.length - 1
+            return (
+              <span key={c.label} className="crumb">
+                {ultimo ? (
+                  <b aria-current="page">{c.label}</b>
+                ) : c.to ? (
+                  <Link to={c.to}>{c.label}</Link>
+                ) : (
+                  <span>{c.label}</span>
+                )}
+                {!ultimo && <ChevronRight size={12} aria-hidden="true" />}
+              </span>
+            )
+          })}
         </nav>
         <div className="page-head">
           <div className="page-title">
