@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import mx.itson.potroalmacen.materiales.application.port.in.ConsultarMaterialesQuery;
+import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.domain.Campus;
 import mx.itson.potroalmacen.materiales.domain.Categoria;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
@@ -17,99 +17,69 @@ import org.junit.jupiter.api.Test;
 
 class ConsultarMaterialesServiceTest {
 
-    private FakeMaterialRepository repository;
     private ConsultarMaterialesService service;
+    private FakeMaterialRepository repository;
 
     @BeforeEach
     void setUp() {
         repository = new FakeMaterialRepository();
         service = new ConsultarMaterialesService(repository);
 
-        guardar("PIN-001", "Pintura vinílica blanca", Categoria.PINTURA, Presentacion.CUBETA);
-        guardar("PIN-002", "Pintura de esmalte negra", Categoria.PINTURA, Presentacion.GALON);
-        guardar("FER-001", "Tornillo hexagonal", Categoria.FERRETERIA, Presentacion.CAJA);
-        guardar("LIM-001", "Escoba de plástico", Categoria.SERVICIOS_GENERALES, Presentacion.PIEZA_INDIVIDUAL);
+        guardar("PIN-001", "Pintura vinílica blanca", Categoria.PINTURA, Campus.OBREGON_NAINARI);
+        guardar("PIN-002", "Pintura de esmalte negra", Categoria.PINTURA, Campus.GUAYMAS);
+        guardar("FER-001", "Tornillo hexagonal", Categoria.FERRETERIA, Campus.OBREGON_NAINARI);
     }
 
     @Test
-    @DisplayName("consultarTodos devuelve todos los materiales ordenados por nombre")
-    void consultarTodos_ordenadoPorNombre() {
-        assertEquals(List.of("LIM-001", "PIN-002", "PIN-001", "FER-001"), codigos(service.consultarTodos()));
+    @DisplayName("Sin filtros (o con filtro nulo) lista todos, ordenados por nombre")
+    void listar_sinFiltros() {
+        List<String> todos = List.of("PIN-002", "PIN-001", "FER-001");
+        assertEquals(todos, codigos(service.listar(FiltroMateriales.sinFiltros())));
+        assertEquals(todos, codigos(service.listar(null)));
+        assertEquals(todos, codigos(service.listar(new FiltroMateriales("   ", null, null))));
     }
 
     @Test
-    @DisplayName("consultarTodos devuelve lista vacía si no hay materiales")
-    void consultarTodos_sinMateriales() {
-        ConsultarMaterialesService vacio = new ConsultarMaterialesService(new FakeMaterialRepository());
-        assertTrue(vacio.consultarTodos().isEmpty());
-    }
-
-    @Test
-    @DisplayName("Un filtro sin criterios (o solo con texto en blanco) equivale a consultar todos")
-    void consultarFiltrados_sinCriterios() {
-        assertEquals(4, service.consultarFiltrados(ConsultarMaterialesQuery.sinFiltros()).size());
-        assertEquals(4, service.consultarFiltrados(new ConsultarMaterialesQuery("  ", "", null, null)).size());
-    }
-
-    @Test
-    @DisplayName("Filtra por parte del nombre sin distinguir mayúsculas")
-    void consultarFiltrados_porNombre() {
-        assertEquals(List.of("PIN-002", "PIN-001"), codigos(filtrar("PINTURA", null, null, null)));
-        assertEquals(List.of("FER-001"), codigos(filtrar("hexa", null, null, null)));
-    }
-
-    @Test
-    @DisplayName("Filtra por parte del código sin distinguir mayúsculas")
-    void consultarFiltrados_porCodigo() {
-        assertEquals(List.of("PIN-002", "PIN-001"), codigos(filtrar(null, "pin-", null, null)));
-        assertEquals(List.of("FER-001"), codigos(filtrar(null, "FER-001", null, null)));
-    }
-
-    @Test
-    @DisplayName("El texto del nombre no busca en el código ni al revés")
-    void consultarFiltrados_nombreYCodigoSonIndependientes() {
-        assertTrue(filtrar("PIN-001", null, null, null).isEmpty());
-        assertTrue(filtrar(null, "pintura", null, null).isEmpty());
+    @DisplayName("La búsqueda coincide con el nombre o el código, sin distinguir mayúsculas")
+    void listar_porBusqueda() {
+        assertEquals(List.of("FER-001"), codigos(service.listar(new FiltroMateriales("HEXA", null, null))));
+        assertEquals(List.of("FER-001"), codigos(service.listar(new FiltroMateriales("fer-", null, null))));
     }
 
     @Test
     @DisplayName("Filtra por categoría")
-    void consultarFiltrados_porCategoria() {
-        assertEquals(List.of("PIN-002", "PIN-001"), codigos(filtrar(null, null, Categoria.PINTURA, null)));
+    void listar_porCategoria() {
+        assertEquals(
+                List.of("PIN-002", "PIN-001"),
+                codigos(service.listar(new FiltroMateriales(null, Categoria.PINTURA, null))));
     }
 
     @Test
-    @DisplayName("Filtra por presentación")
-    void consultarFiltrados_porPresentacion() {
-        assertEquals(List.of("PIN-001"), codigos(filtrar(null, null, null, Presentacion.CUBETA)));
+    @DisplayName("Filtra por campus")
+    void listar_porCampus() {
+        assertEquals(
+                List.of("PIN-001", "FER-001"),
+                codigos(service.listar(new FiltroMateriales(null, null, Campus.OBREGON_NAINARI))));
     }
 
     @Test
-    @DisplayName("Combina varios criterios con Y")
-    void consultarFiltrados_criteriosCombinados() {
-        assertEquals(List.of("PIN-002"), codigos(filtrar(null, null, Categoria.PINTURA, Presentacion.GALON)));
-        assertTrue(filtrar("tornillo", null, Categoria.PINTURA, null).isEmpty());
+    @DisplayName("Combina los filtros con Y")
+    void listar_filtrosCombinados() {
+        assertEquals(
+                List.of("PIN-001"),
+                codigos(service.listar(new FiltroMateriales("pintura", Categoria.PINTURA, Campus.OBREGON_NAINARI))));
+        assertTrue(service.listar(new FiltroMateriales("tornillo", Categoria.PINTURA, null)).isEmpty());
     }
 
-    @Test
-    @DisplayName("Falla si la consulta es nula")
-    void consultarFiltrados_filtroNulo() {
-        assertThrows(NullPointerException.class, () -> service.consultarFiltrados(null));
-    }
-
-    private List<Material> filtrar(String nombre, String codigo, Categoria categoria, Presentacion presentacion) {
-        return service.consultarFiltrados(new ConsultarMaterialesQuery(nombre, codigo, categoria, presentacion));
-    }
-
-    private void guardar(String codigo, String nombre, Categoria categoria, Presentacion presentacion) {
+    private void guardar(String codigo, String nombre, Categoria categoria, Campus campus) {
         repository.guardar(Material.crear(
                 new CodigoMaterial(codigo),
                 nombre,
                 categoria,
                 UnidadMedida.PIEZA,
-                presentacion,
+                Presentacion.PIEZA_INDIVIDUAL,
                 null,
-                Campus.OBREGON_NAINARI,
+                campus,
                 BigDecimal.ONE,
                 0,
                 null,
