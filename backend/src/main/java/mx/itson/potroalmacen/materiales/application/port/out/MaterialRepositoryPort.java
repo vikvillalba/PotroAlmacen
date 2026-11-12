@@ -1,11 +1,9 @@
-
-
 package mx.itson.potroalmacen.materiales.application.port.out;
 
 import java.util.List;
 import java.util.Optional;
-import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
+import mx.itson.potroalmacen.materiales.domain.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.domain.Material;
 
 public interface MaterialRepositoryPort {
@@ -15,6 +13,8 @@ public interface MaterialRepositoryPort {
      *
      * @param material Entidad de dominio a persistir.
      * @return El material guardado (con ID asignado si es nuevo).
+     * @throws mx.itson.potroalmacen.materiales.domain.exceptions.CodigoDuplicadoException si otro material ya
+     *     tiene el mismo código (por ejemplo, dos registros simultáneos).
      */
     Material guardar(Material material);
 
@@ -34,13 +34,17 @@ public interface MaterialRepositoryPort {
      * @return true si ya existe, false en caso contrario.
      */
     boolean existePorCodigo(CodigoMaterial codigo);
-    
+
     /**
-     * <p>Busca materiales cuyo nombre o código contenga el texto de búsqueda
-     * y que coincidan con la categoría indicada.</p>
+     * @return todos los materiales, ordenados por nombre.
+     */
+    List<Material> buscarTodos();
+
+    /**
+     * Busca los materiales que cumplen el filtro, con la misma semántica que {@link FiltroMateriales#aplicaA}.
      *
-     * @param filtro Filtros opcionales de busqueda y categoría (los campos nulos no se aplican).
-     * @return Lista de materiales que cumplen los filtros; vacia si ninguno coincide.
+     * @param filtro criterios de búsqueda.
+     * @return los materiales que coinciden, ordenados por nombre.
      */
     List<Material> buscar(FiltroMateriales filtro);
 }

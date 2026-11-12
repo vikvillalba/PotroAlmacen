@@ -7,8 +7,10 @@ import mx.itson.potroalmacen.materiales.domain.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface SpringDataMaterialRepository extends JpaRepository<MaterialEntity, Long> {
+
+public interface SpringDataMaterialRepository extends JpaRepository<MaterialEntity, Long>, JpaSpecificationExecutor<MaterialEntity> {
     Optional<MaterialEntity> findByCodigo(String codigo);
 
     boolean existsByCodigo(String codigo);
