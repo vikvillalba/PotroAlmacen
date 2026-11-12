@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {
     Box, AlertTriangle, X, Search, Download, Plus,
     ChevronDown, ChevronRight, ChevronLeft,
@@ -32,7 +33,7 @@ export default function Inventario() {
             actions={
                 <>
                     <button className="btn"><Download size={16} /> Exportar</button>
-                    <button className="btn primary"><Plus size={16} /> Nuevo producto</button>
+                    <Link to="/fichas/nueva" className="btn primary"><Plus size={16} /> Nuevo producto</Link>
                 </>
             }
         >
