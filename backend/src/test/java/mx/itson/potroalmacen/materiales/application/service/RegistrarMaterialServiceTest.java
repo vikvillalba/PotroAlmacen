@@ -8,8 +8,13 @@ import java.util.Map;
 import java.util.Optional;
 import mx.itson.potroalmacen.materiales.application.port.in.RegistrarMaterialCommand;
 import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
+import mx.itson.potroalmacen.materiales.domain.Campus;
+import mx.itson.potroalmacen.materiales.domain.Categoria;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
+import mx.itson.potroalmacen.materiales.domain.Departamento;
 import mx.itson.potroalmacen.materiales.domain.Material;
+import mx.itson.potroalmacen.materiales.domain.Presentacion;
+import mx.itson.potroalmacen.materiales.domain.UnidadMedida;
 import mx.itson.potroalmacen.materiales.domain.exceptions.CodigoDuplicadoException;
 import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoException;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,10 +38,11 @@ class RegistrarMaterialServiceTest {
         RegistrarMaterialCommand comando = new RegistrarMaterialCommand(
                 "MAT-001",
                 "Pintura Vinílica Blanca",
-                "Pintura",
-                "Litro",
-                "Cubeta de 19 L",
-                "Obregón Náinari",
+                Categoria.PINTURA,
+                UnidadMedida.LITRO,
+                Presentacion.CUBETA,
+                "19 L",
+                Campus.OBREGON_NAINARI,
                 new BigDecimal("450.00"),
                 15,
                 5,
@@ -49,7 +55,11 @@ class RegistrarMaterialServiceTest {
         assertNotNull(registrado.getId());
         assertEquals("MAT-001", registrado.getCodigo().toString());
         assertEquals("Pintura Vinílica Blanca", registrado.getNombre());
-        assertEquals("Obregón Náinari", registrado.getCampus());
+        assertEquals(Campus.OBREGON_NAINARI, registrado.getCampus());
+        assertEquals(Categoria.PINTURA, registrado.getCategoria());
+        assertEquals(Departamento.MANTENIMIENTO, registrado.getDepartamento());
+        assertEquals(Presentacion.CUBETA, registrado.getPresentacion());
+        assertEquals("19 L", registrado.getContenidoPresentacion());
         assertEquals(15, registrado.getCantidad());
         assertEquals(5, registrado.getStockMinimo());
         assertEquals(50, registrado.getStockMaximo());
@@ -65,10 +75,11 @@ class RegistrarMaterialServiceTest {
         RegistrarMaterialCommand comando = new RegistrarMaterialCommand(
                 "MAT-002",
                 "Tornillo hexagonal 1/2 pulgada",
-                "Ferretería",
-                "Pieza",
-                "Caja con 100 piezas",
-                "Obregón Centro",
+                Categoria.FERRETERIA,
+                UnidadMedida.PIEZA,
+                Presentacion.CAJA,
+                "100 piezas",
+                Campus.OBREGON_CENTRO,
                 new BigDecimal("2.50"),
                 0,
                 20,
@@ -90,10 +101,11 @@ class RegistrarMaterialServiceTest {
         RegistrarMaterialCommand comando1 = new RegistrarMaterialCommand(
                 "DUP-001",
                 "Material Original",
-                "Ferretería",
-                "Pieza",
-                "Pieza",
-                "Guaymas",
+                Categoria.FERRETERIA,
+                UnidadMedida.PIEZA,
+                Presentacion.PIEZA_INDIVIDUAL,
+                null,
+                Campus.GUAYMAS,
                 BigDecimal.TEN,
                 5,
                 2,
@@ -104,10 +116,11 @@ class RegistrarMaterialServiceTest {
         RegistrarMaterialCommand comandoDuplicado = new RegistrarMaterialCommand(
                 "DUP-001",
                 "Material Duplicado",
-                "Ferretería",
-                "Pieza",
-                "Pieza",
-                "Guaymas",
+                Categoria.FERRETERIA,
+                UnidadMedida.PIEZA,
+                Presentacion.PIEZA_INDIVIDUAL,
+                null,
+                Campus.GUAYMAS,
                 BigDecimal.ONE,
                 10,
                 1,
@@ -128,10 +141,11 @@ class RegistrarMaterialServiceTest {
                 () -> new RegistrarMaterialCommand(
                         "MAT-003",
                         "Material Test",
-                        "Categoría",
-                        "Pieza",
-                        "Pieza",
-                        "Empalme",
+                        Categoria.FERRETERIA,
+                        UnidadMedida.PIEZA,
+                        Presentacion.PIEZA_INDIVIDUAL,
+                        null,
+                        Campus.EMPALME,
                         BigDecimal.ONE,
                         -5,
                         0,
@@ -143,9 +157,35 @@ class RegistrarMaterialServiceTest {
     @DisplayName("Debe fallar si los campos obligatorios del dominio están vacíos")
     void registrar_camposObligatoriosVacios_lanzaExcepcion() {
         RegistrarMaterialCommand comandoSinNombre = new RegistrarMaterialCommand(
-                "MAT-004", "   ", "Categoría", "Pieza", "Pieza", "Navojoa Sur", BigDecimal.ONE, 0, 0, null, null);
+                "MAT-004",
+                "   ",
+                Categoria.FERRETERIA,
+                UnidadMedida.PIEZA,
+                Presentacion.PIEZA_INDIVIDUAL,
+                null,
+                Campus.NAVOJOA_SUR, BigDecimal.ONE, 0, 0, null, null);
 
         assertThrows(MaterialInvalidoException.class, () -> service.registrar(comandoSinNombre));
+    }
+
+    @Test
+    @DisplayName("Debe fallar si falta la categoría")
+    void registrar_sinCategoria_lanzaExcepcion() {
+        RegistrarMaterialCommand comandoSinCategoria = new RegistrarMaterialCommand(
+                "MAT-005",
+                "Material sin categoría",
+                null,
+                UnidadMedida.PIEZA,
+                Presentacion.PIEZA_INDIVIDUAL,
+                null,
+                Campus.GUAYMAS,
+                BigDecimal.ONE,
+                0,
+                0,
+                null,
+                null);
+
+        assertThrows(MaterialInvalidoException.class, () -> service.registrar(comandoSinCategoria));
     }
 
     /**

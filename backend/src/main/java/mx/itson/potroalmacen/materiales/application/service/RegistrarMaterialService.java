@@ -40,6 +40,7 @@ public class RegistrarMaterialService implements RegistrarMaterialUseCase {
                 comando.categoria(),
                 comando.unidadMedida(),
                 comando.presentacion(),
+                comando.contenidoPresentacion(),
                 comando.campus(),
                 comando.precioUnitario(),
                 comando.stockMinimo(),

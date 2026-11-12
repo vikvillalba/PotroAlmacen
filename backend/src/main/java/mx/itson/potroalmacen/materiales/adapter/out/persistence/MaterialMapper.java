@@ -17,11 +17,11 @@ public class MaterialMapper {
             entity.setCodigo(domain.getCodigo().toString());
         }
 
-        entity.setCampus(domain.getCampus());
         entity.setNombre(domain.getNombre());
         entity.setCategoria(domain.getCategoria());
         entity.setUnidadMedida(domain.getUnidadMedida());
         entity.setPresentacion(domain.getPresentacion());
+        entity.setContenidoPresentacion(domain.getContenidoPresentacion());
         entity.setCampus(domain.getCampus());
         entity.setPrecioUnitario(domain.getPrecioUnitario());
         entity.setCantidad(domain.getCantidad());
@@ -44,6 +44,7 @@ public class MaterialMapper {
                 entity.getCategoria(),
                 entity.getUnidadMedida(),
                 entity.getPresentacion(),
+                entity.getContenidoPresentacion(),
                 entity.getCampus(),
                 entity.getPrecioUnitario(),
                 entity.getCantidad(),
