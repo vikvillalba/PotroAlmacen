@@ -1,24 +1,18 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
 package mx.itson.potroalmacen.materiales.application.port.in;
 
 import java.util.List;
 import mx.itson.potroalmacen.materiales.domain.Material;
 
-/** Puerto de entrada para consultar el catálogo de materiales. */
+/**
+ *
+ * @author erika
+ * 
+ * Caso de uso: listar materiales con búsqueda por nombre o código y filtro por categoría.
+ */
 public interface ConsultarMaterialesUseCase {
-
-    /**
-     * Consulta todos los materiales registrados.
-     *
-     * @return los materiales ordenados por nombre; lista vacía si no hay ninguno.
-     */
-    List<Material> consultarTodos();
-
-    /**
-     * Consulta los materiales que cumplen todos los criterios dados. Sin criterios equivale a
-     * {@link #consultarTodos()}.
-     *
-     * @param consulta criterios de búsqueda (nombre, código, categoría y presentación); no puede ser nula.
-     * @return los materiales que coinciden, ordenados por nombre; lista vacía si no hay coincidencias.
-     */
-    List<Material> consultarFiltrados(ConsultarMaterialesQuery consulta);
+    List<Material> listar(FiltroMateriales filtro);
 }

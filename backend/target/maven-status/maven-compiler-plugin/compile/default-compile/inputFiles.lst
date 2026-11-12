@@ -1,76 +1,91 @@
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\adapter\in\web\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\adapter\out\persistence\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\application\port\in\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\application\port\out\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\application\service\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\domain\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\adapter\in\web\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\adapter\out\persistence\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\application\port\in\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\application\port\out\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\application\service\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\domain\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\config\OpenApiConfig.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\excepcion\DuplicadoException.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\excepcion\NegocioException.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\excepcion\NoEncontradoException.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\excepcion\PermisoDenegadoException.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\CampoInvalido.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\ErrorResponse.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\GlobalExceptionHandler.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\RespuestaError.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialEntity.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialMapper.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialPersistenceAdapter.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\SpringDataMaterialRepository.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\in\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\out\MaterialRepositoryPort.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\out\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\service\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\CodigoMaterial.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\exceptions\CodigoDuplicadoException.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\exceptions\MaterialInvalidoException.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Material.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\adapter\in\web\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\adapter\out\persistence\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\application\port\in\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\application\port\out\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\application\service\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\domain\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\PotroAlmacenApplication.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\adapter\in\web\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\adapter\out\persistence\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\application\port\in\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\application\port\out\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\application\service\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\domain\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\adapter\in\web\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\adapter\out\persistence\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\application\port\in\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\application\port\out\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\application\service\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\domain\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\Actor.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\ActorResolver.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\dev\ActorFijoConfig.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\dev\ActorFijoProperties.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\dev\ActorFijoResolver.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\Rol.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\adapter\in\web\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\adapter\out\persistence\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\application\port\in\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\application\port\out\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\application\service\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\domain\package-info.java
-C:\Users\pablo\OneDrive\Documentos\GitHub\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\adapter\in\web\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\adapter\out\persistence\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\application\port\in\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\application\port\out\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\application\service\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\domain\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\areas\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\adapter\in\web\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\adapter\out\persistence\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\application\port\in\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\application\port\out\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\application\service\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\domain\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\auditoria\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\config\OpenApiConfig.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\excepcion\DuplicadoException.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\excepcion\NegocioException.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\excepcion\NoEncontradoException.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\excepcion\PermisoDenegadoException.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\CampoInvalido.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\ErrorResponse.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\GlobalExceptionHandler.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\compartido\web\RespuestaError.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\CatalogosResponse.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\MaterialConsultaController.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\MaterialResumenResponse.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\OpcionCatalogo.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\in\web\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialEntity.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialMapper.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\MaterialPersistenceAdapter.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\adapter\out\persistence\SpringDataMaterialRepository.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\in\ConsultarMaterialesUseCase.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\in\FiltroMateriales.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\in\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\in\RegistrarMaterialCommand.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\in\RegistrarMaterialUseCase.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\out\MaterialRepositoryPort.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\port\out\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\service\ConsultarMaterialesService.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\service\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\application\service\RegistrarMaterialService.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Campus.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Categoria.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\CodigoMaterial.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Departamento.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\exceptions\CodigoDuplicadoException.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\exceptions\MaterialInvalidoException.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Material.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\Presentacion.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\domain\UnidadMedida.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\materiales\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\adapter\in\web\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\adapter\out\persistence\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\application\port\in\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\application\port\out\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\application\service\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\domain\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\personal\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\PotroAlmacenApplication.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\adapter\in\web\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\adapter\out\persistence\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\application\port\in\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\application\port\out\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\application\service\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\domain\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\reportes\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\adapter\in\web\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\adapter\out\persistence\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\application\port\in\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\application\port\out\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\application\service\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\domain\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\salidas\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\Actor.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\ActorResolver.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\dev\ActorFijoConfig.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\dev\ActorFijoProperties.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\dev\ActorFijoResolver.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\seguridad\Rol.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\adapter\in\web\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\adapter\out\persistence\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\application\port\in\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\application\port\out\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\application\service\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\domain\package-info.java
+C:\Users\erika\OneDrive\Documentos\GitHub\clon repositorio jeje\PotroAlmacen\backend\src\main\java\mx\itson\potroalmacen\usuarios\package-info.java
