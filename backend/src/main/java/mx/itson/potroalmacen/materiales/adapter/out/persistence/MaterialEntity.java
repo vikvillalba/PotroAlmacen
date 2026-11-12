@@ -49,10 +49,6 @@ public class MaterialEntity {
     @Column(name = "uso_precauciones", columnDefinition = "TEXT")
     private String usoPrecauciones;
 
-    @Version
-    @Column(nullable = false)
-    private Long version = 0L;
-
     public MaterialEntity() {}
 
     // Getters y Setters
@@ -150,13 +146,5 @@ public class MaterialEntity {
 
     public void setUsoPrecauciones(String usoPrecauciones) {
         this.usoPrecauciones = usoPrecauciones;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 }
