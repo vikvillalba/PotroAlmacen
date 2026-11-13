@@ -14,5 +14,13 @@ import mx.itson.potroalmacen.materiales.domain.Material;
  * Caso de uso: listar materiales con búsqueda por nombre o código y filtro por categoría.
  */
 public interface ConsultarMaterialesUseCase {
+    /** Lista materiales con búsqueda por nombre o código y filtros por categoría y campus. */
     List<Material> listar(FiltroMateriales filtro);
+
+    /**
+     * Obtiene el detalle de un material.
+     *
+     * @throws MaterialNoEncontradoException si no existe
+     */
+    Material obtenerPorId(Integer id);
 }
