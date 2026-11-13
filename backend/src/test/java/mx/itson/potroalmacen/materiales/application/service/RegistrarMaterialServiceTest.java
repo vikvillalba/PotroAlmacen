@@ -160,7 +160,12 @@ class RegistrarMaterialServiceTest {
                 UnidadMedida.PIEZA,
                 Presentacion.PIEZA_INDIVIDUAL,
                 null,
-                Campus.NAVOJOA_SUR, BigDecimal.ONE, 0, 0, null, null);
+                Campus.NAVOJOA_SUR,
+                BigDecimal.ONE,
+                0,
+                0,
+                null,
+                null);
 
         assertThrows(MaterialInvalidoException.class, () -> service.registrar(comandoSinNombre));
     }

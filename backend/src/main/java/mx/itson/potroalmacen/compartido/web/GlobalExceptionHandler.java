@@ -45,11 +45,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     // 1.Integración de la excepción de dominio de Erika (Material inválido -> 400 Bad Request)
-//    @ExceptionHandler(MaterialInvalidoException.class)
-//    ResponseEntity<RespuestaError> manejarMaterialInvalido(MaterialInvalidoException ex) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(RespuestaError.de(CODIGO_VALIDACION, ex.getMessage()));
-//    }
+    //    @ExceptionHandler(MaterialInvalidoException.class)
+    //    ResponseEntity<RespuestaError> manejarMaterialInvalido(MaterialInvalidoException ex) {
+    //        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    //                .body(RespuestaError.de(CODIGO_VALIDACION, ex.getMessage()));
+    //    }
 
     // 2.Manejo de IllegalArgumentException (Detecta si es duplicado o error de solicitud)
     @ExceptionHandler(IllegalArgumentException.class)

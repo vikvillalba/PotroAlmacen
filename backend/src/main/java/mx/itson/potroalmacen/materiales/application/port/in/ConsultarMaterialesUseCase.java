@@ -10,7 +10,7 @@ import mx.itson.potroalmacen.materiales.domain.Material;
 /**
  *
  * @author erika
- * 
+ *
  * Caso de uso: listar materiales con búsqueda por nombre o código y filtro por categoría.
  */
 public interface ConsultarMaterialesUseCase {

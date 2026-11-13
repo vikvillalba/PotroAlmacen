@@ -72,7 +72,9 @@ class MaterialControllerTest {
 
     @Test
     void registrarResponde201ConElMaterial() throws Exception {
-        mockMvc.perform(post("/api/materiales").contentType(MediaType.APPLICATION_JSON).content(CUERPO_VALIDO))
+        mockMvc.perform(post("/api/materiales")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(CUERPO_VALIDO))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.codigo").value("PIN-001"))
@@ -90,7 +92,9 @@ class MaterialControllerTest {
 
     @Test
     void registrarSinCamposObligatoriosResponde400ConLosCampos() throws Exception {
-        mockMvc.perform(post("/api/materiales").contentType(MediaType.APPLICATION_JSON).content("{\"nombre\": \"\"}"))
+        mockMvc.perform(post("/api/materiales")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nombre\": \"\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.codigo").value("VALIDACION"))
                 .andExpect(jsonPath("$.campos[?(@.campo == 'codigo')]").exists())
@@ -112,7 +116,9 @@ class MaterialControllerTest {
     void registrarCodigoDuplicadoResponde409() throws Exception {
         errorAlRegistrar = new CodigoDuplicadoException("PIN-001");
 
-        mockMvc.perform(post("/api/materiales").contentType(MediaType.APPLICATION_JSON).content(CUERPO_VALIDO))
+        mockMvc.perform(post("/api/materiales")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(CUERPO_VALIDO))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.codigo").value("MATERIAL_DUPLICADO"));
     }

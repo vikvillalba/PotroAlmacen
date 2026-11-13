@@ -68,7 +68,8 @@ class ConsultarMaterialesServiceTest {
         assertEquals(
                 List.of("PIN-001"),
                 codigos(service.listar(new FiltroMateriales("pintura", Categoria.PINTURA, Campus.OBREGON_NAINARI))));
-        assertTrue(service.listar(new FiltroMateriales("tornillo", Categoria.PINTURA, null)).isEmpty());
+        assertTrue(service.listar(new FiltroMateriales("tornillo", Categoria.PINTURA, null))
+                .isEmpty());
     }
 
     private void guardar(String codigo, String nombre, Categoria categoria, Campus campus) {
