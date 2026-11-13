@@ -51,9 +51,9 @@ INSERT INTO mat_unidad_medida (nombre) VALUES
     ('Par');
 
 INSERT INTO mat_presentacion (nombre) VALUES
-    ('Botella de 1 L'),
-    ('Galón de 4 L'),
-    ('Garrafa de 20 L'),
-    ('Paquete con 4'),
+    ('Botella'),
+    ('Galón'),
+    ('Garrafa'),
+    ('Paquete'),
     ('Caja'),
-    ('Pieza individual');
+    ('Pieza');
