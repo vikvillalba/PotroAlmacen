@@ -1,0 +1,17 @@
+# Proxy de desarrollo con nginx.
+# Uso (desde frontend/):  docker compose up -d   ->  http://localhost:8000
+# Requiere el backend en localhost:8080 y Vite (npm run dev) en localhost:5173.
+name: potro-almacen-frontend
+
+services:
+  proxy:
+    image: nginx:1.28-alpine
+    container_name: potro-almacen-proxy
+    restart: unless-stopped
+    ports:
+      - "${PROXY_PORT:-8000}:80"
+    volumes:
+      - ./nginx/dev.conf:/etc/nginx/conf.d/default.conf:ro
+    # En Linux, host.docker.internal no existe por defecto.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
