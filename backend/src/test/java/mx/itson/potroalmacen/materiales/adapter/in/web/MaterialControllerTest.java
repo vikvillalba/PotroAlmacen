@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.List;
 import mx.itson.potroalmacen.compartido.web.GlobalExceptionHandler;
 import mx.itson.potroalmacen.materiales.application.port.in.ConsultarMaterialesUseCase;
@@ -52,19 +53,35 @@ class MaterialControllerTest {
 
     @BeforeEach
     void setUp() {
-        RegistrarMaterialUseCase registrar = comando -> {
-            ultimoComando = comando;
-            if (errorAlRegistrar != null) {
-                throw errorAlRegistrar;
+        RegistrarMaterialUseCase registrar = new RegistrarMaterialUseCase() {
+            @Override
+            public Material registrar(RegistrarMaterialCommand comando) {
+                ultimoComando = comando;
+                if (errorAlRegistrar != null) {
+                    throw errorAlRegistrar;
+                }
+                Material material = material(comando.codigo(), comando.nombre()).conId(1);
+                material.registrarEntrada(comando.existenciaInicial());
+                return material;
             }
-            Material material = material(comando.codigo(), comando.nombre()).conId(1);
-            material.registrarEntrada(comando.existenciaInicial());
-            return material;
         };
-        ConsultarMaterialesUseCase consultar = filtro -> {
-            ultimaConsulta = filtro;
-            return List.of(material("PIN-001", "Pintura vinílica blanca").conId(1));
+
+        ConsultarMaterialesUseCase consultar = new ConsultarMaterialesUseCase() {
+            @Override
+            public List<Material> listar(FiltroMateriales filtro) {
+                ultimaConsulta = filtro;
+                return List.of(material("PIN-001", "Pintura vinílica blanca").conId(1));
+            }
+
+            @Override
+            public Material obtenerPorId(Integer id) {
+                if (id != null && id == 1) {
+                    return material("PIN-001", "Pintura vinílica blanca").conId(1);
+                }
+                return null;
+            }
         };
+
         mockMvc = MockMvcBuilders.standaloneSetup(new MaterialController(registrar, consultar))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();

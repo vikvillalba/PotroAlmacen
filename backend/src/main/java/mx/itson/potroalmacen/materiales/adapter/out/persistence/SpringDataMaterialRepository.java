@@ -23,11 +23,9 @@ public interface SpringDataMaterialRepository extends JpaRepository<MaterialEnti
               AND (:campus IS NULL OR m.campus = :campus)
             ORDER BY m.nombre
             """)
-
-    List<MaterialEntity> buscar(@Param("patron") String patron,
-                                @Param("categoriasCoincidentes") List<Categoria> categoriasCoincidentes,
-                                @Param("categoria") Categoria categoria,
-                                @Param("campus") Campus campus);
-
-
+    List<MaterialEntity> buscar(
+            @Param("patron") String patron,
+            @Param("categoriasCoincidentes") List<Categoria> categoriasCoincidentes,
+            @Param("categoria") Categoria categoria,
+            @Param("campus") Campus campus);
 }
