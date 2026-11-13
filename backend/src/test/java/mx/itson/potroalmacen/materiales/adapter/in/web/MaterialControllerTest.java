@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.List;
 import mx.itson.potroalmacen.compartido.web.GlobalExceptionHandler;
 import mx.itson.potroalmacen.materiales.application.port.in.ConsultarMaterialesUseCase;

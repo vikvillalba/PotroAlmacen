@@ -9,7 +9,6 @@ import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
 import mx.itson.potroalmacen.materiales.domain.Material;
-import java.util.Objects;
 
 /** Repositorio falso en memoria para pruebas unitarias sin Spring ni base de datos. */
 class FakeMaterialRepository implements MaterialRepositoryPort {
