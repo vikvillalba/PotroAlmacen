@@ -20,6 +20,12 @@ const VALORES_INICIALES = {
 
 const aNumero = (texto) => (texto === '' ? null : Number(texto))
 
+function sinClave(objeto, clave) {
+    const copia = { ...objeto }
+    delete copia[clave]
+    return copia
+}
+
 const esEntero = (texto) => /^\d+$/.test(String(texto).trim())
 
 function validar(v) {
@@ -93,8 +99,7 @@ export default function RegistrarFicha() {
         // Al corregir un campo se limpia su error
         setErrores((anteriores) => {
             if (!anteriores[name]) return anteriores
-            const { [name]: _quitado, ...resto } = anteriores
-            return resto
+            return sinClave(anteriores, name)
         })
     }
 
@@ -105,8 +110,7 @@ export default function RegistrarFicha() {
         setErrores((anteriores) => {
             if (encontrado) return { ...anteriores, [name]: encontrado }
             if (!anteriores[name]) return anteriores
-            const { [name]: _quitado, ...resto } = anteriores
-            return resto
+            return sinClave(anteriores, name)
         })
     }
 
