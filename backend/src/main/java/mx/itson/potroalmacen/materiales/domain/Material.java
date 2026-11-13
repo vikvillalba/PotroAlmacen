@@ -74,6 +74,39 @@ public final class Material {
             int stockMinimo,
             Integer stockMaximo,
             String usoPrecauciones) {
+        return crear(
+                codigo,
+                nombre,
+                categoria,
+                unidadMedida,
+                presentacion,
+                contenidoPresentacion,
+                campus,
+                precioUnitario,
+                0,
+                stockMinimo,
+                stockMaximo,
+                usoPrecauciones);
+    }
+
+    public static Material crear(
+            CodigoMaterial codigo,
+            String nombre,
+            Categoria categoria,
+            UnidadMedida unidadMedida,
+            Presentacion presentacion,
+            String contenidoPresentacion,
+            Campus campus,
+            BigDecimal precioUnitario,
+            int cantidadInicial,
+            int stockMinimo,
+            Integer stockMaximo,
+            String usoPrecauciones) {
+        // Valida que la cantidad inicial sea menor o igual que el stock máximo
+        validarNoNegativo(cantidadInicial, "La existencia inicial");
+        if (stockMaximo != null && cantidadInicial > stockMaximo) {
+            throw new MaterialInvalidoException("La existencia inicial no puede rebasar el stock máximo");
+        }
         return new Material(
                 null,
                 codigo,
@@ -84,7 +117,7 @@ public final class Material {
                 contenidoPresentacion,
                 campus,
                 precioUnitario,
-                0,
+                cantidadInicial,
                 stockMinimo,
                 stockMaximo,
                 usoPrecauciones);
@@ -175,7 +208,11 @@ public final class Material {
         if (cantidadRecibida <= 0) {
             throw new MaterialInvalidoException("La cantidad de entrada debe ser mayor a cero");
         }
-        this.cantidad = Math.addExact(this.cantidad, cantidadRecibida);
+        int nuevaCantidad = Math.addExact(this.cantidad, cantidadRecibida);
+        if (stockMaximo != null && nuevaCantidad > stockMaximo) {
+            throw new MaterialInvalidoException("La existencia no puede rebasar el stock máximo");
+        }
+        this.cantidad = nuevaCantidad;
     }
 
     public void registrarSalida(int cantidadSolicitada) {
@@ -254,8 +291,8 @@ public final class Material {
         if (maximo < 0) {
             throw new MaterialInvalidoException("El stock máximo no puede ser negativo");
         }
-        if (maximo < minimo) {
-            throw new MaterialInvalidoException("El stock máximo no puede ser menor al stock mínimo");
+        if (maximo <= minimo) {
+            throw new MaterialInvalidoException("El stock mínimo debe ser menor que el stock máximo");
         }
         return maximo;
     }
