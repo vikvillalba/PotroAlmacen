@@ -141,3 +141,21 @@ Cada módulo extiende las excepciones de `compartido.excepcion` con su propio c�
 ### Integración continua
 
 GitHub Actions (`.github/workflows/ci.yml`) ejecuta `./mvnw verify` en cada pull request a `main`.
+
+## Proxy de desarrollo (nginx)
+
+Para que el frontend llame a la API con rutas relativas (`fetch('/api/materiales')`) sin configurar CORS,
+nginx sirve todo desde un mismo origen, <http://localhost:8000>:
+
+| Ruta     | Destino                                         |
+|----------|-------------------------------------------------|
+| `/api/*` | Backend Spring Boot en `localhost:8080`         |
+| `/*`     | Vite (`npm run dev`) en `localhost:5173`, con recarga en caliente |
+
+1. Levanta el backend (sección [Levantar el entorno local](#levantar-el-entorno-local)).
+2. En `frontend/`, arranca Vite: `npm run dev`.
+3. En `frontend/`, levanta el proxy: `docker compose up -d`.
+4. Abre <http://localhost:8000>.
+
+La configuración está en `frontend/nginx/dev.conf`. Para usar otro puerto: `PROXY_PORT=9000 docker compose up -d`.
+Para detenerlo: `docker compose down`.
