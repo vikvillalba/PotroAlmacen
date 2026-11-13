@@ -43,4 +43,12 @@ public interface MaterialRepositoryPort {
      * @return Lista de materiales que cumplen los filtros; vacía si ninguno coincide.
      */
     List<Material> buscar(FiltroMateriales filtro);
+
+    /**
+     * <p>Busca materiales cuyo id coincida con el id recibido en el metodo.</p>
+     *
+     * @param id del material.
+     * @return objeto completo del material.
+     */
+    Optional<Material> buscarPorId(Integer id);
 }

@@ -6,9 +6,9 @@ import mx.itson.potroalmacen.materiales.application.port.in.ConsultarMaterialesU
 import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
 import mx.itson.potroalmacen.materiales.domain.Material;
+import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialNoEncontradoException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialNoEncontradoException;
 
 /** Implementación de {@link ConsultarMaterialesUseCase}. Solo lectura. */
 @Service
@@ -29,7 +29,6 @@ public class ConsultarMaterialesService implements ConsultarMaterialesUseCase {
 
     @Override
     public Material obtenerPorId(Integer id) {
-        return repositorio.buscarPorId(id)
-                .orElseThrow(() -> new MaterialNoEncontradoException(id));
+        return repositorio.buscarPorId(id).orElseThrow(() -> new MaterialNoEncontradoException(id));
     }
 }

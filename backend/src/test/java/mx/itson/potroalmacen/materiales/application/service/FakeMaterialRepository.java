@@ -9,6 +9,7 @@ import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
 import mx.itson.potroalmacen.materiales.domain.Material;
+import java.util.Objects;
 
 /** Repositorio falso en memoria para pruebas unitarias sin Spring ni base de datos. */
 class FakeMaterialRepository implements MaterialRepositoryPort {
@@ -50,5 +51,14 @@ class FakeMaterialRepository implements MaterialRepositoryPort {
 
     private static boolean contiene(String valor, String buscado) {
         return valor.toLowerCase().contains(buscado.toLowerCase());
+    }
+
+    @Override
+    public Optional<Material> buscarPorId(Integer id) {
+        if (id == null) return Optional.empty();
+        // Cambia "repositorioInterno" por el nombre real de tu variable (ej. "materiales")
+        return storage.values().stream()
+                .filter(m -> java.util.Objects.equals(m.getId(), id))
+                .findFirst();
     }
 }

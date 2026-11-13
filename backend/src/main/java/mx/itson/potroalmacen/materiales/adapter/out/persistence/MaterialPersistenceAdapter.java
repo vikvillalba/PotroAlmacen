@@ -1,9 +1,12 @@
 package mx.itson.potroalmacen.materiales.adapter.out.persistence;
 
+import java.text.Normalizer;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import mx.itson.potroalmacen.materiales.application.port.in.FiltroMateriales;
 import mx.itson.potroalmacen.materiales.application.port.out.MaterialRepositoryPort;
+import mx.itson.potroalmacen.materiales.domain.Categoria;
 import mx.itson.potroalmacen.materiales.domain.CodigoMaterial;
 import mx.itson.potroalmacen.materiales.domain.Material;
 import mx.itson.potroalmacen.materiales.domain.exceptions.CodigoDuplicadoException;
@@ -29,7 +32,6 @@ public class MaterialPersistenceAdapter implements MaterialRepositoryPort {
             MaterialEntity savedEntity = repository.saveAndFlush(entity);
             return mapper.toDomain(savedEntity);
         } catch (DataIntegrityViolationException ex) {
-            // El único UNIQUE de mat_material es el código: otro registro lo insertó entre la validación y el guardado.
             throw new CodigoDuplicadoException(material.getCodigo().toString());
         }
     }
@@ -47,15 +49,6 @@ public class MaterialPersistenceAdapter implements MaterialRepositoryPort {
     }
 
     @Override
-    public List<Material> buscar(FiltroMateriales filtro) {
-        String patron =
-                filtro.busqueda() == null ? null : "%" + filtro.busqueda().toLowerCase() + "%";
-        return repository.buscar(patron, filtro.categoria(), filtro.campus()).stream()
-                .map(mapper::toDomain)
-                .toList();
-    }
-
-    @Override
     public Optional<Material> buscarPorId(Integer id) {
         if (id == null) return Optional.empty();
         return repository.findById(id.longValue()).map(mapper::toDomain);
@@ -63,7 +56,8 @@ public class MaterialPersistenceAdapter implements MaterialRepositoryPort {
 
     @Override
     public List<Material> buscar(FiltroMateriales filtro) {
-        String patron = filtro.busqueda() == null ? null : "%" + filtro.busqueda().toLowerCase() + "%";
+        String patron =
+                filtro.busqueda() == null ? null : "%" + filtro.busqueda().toLowerCase() + "%";
         return repository
                 .buscar(patron, categoriasQueCoinciden(filtro.busqueda()), filtro.categoria(), filtro.campus())
                 .stream()
