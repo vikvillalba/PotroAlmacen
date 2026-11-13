@@ -3,6 +3,10 @@ package mx.itson.potroalmacen.materiales.application.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.List;
 import mx.itson.potroalmacen.materiales.application.port.in.RegistrarMaterialCommand;
 import mx.itson.potroalmacen.materiales.domain.Campus;
 import mx.itson.potroalmacen.materiales.domain.Categoria;
@@ -13,19 +17,24 @@ import mx.itson.potroalmacen.materiales.domain.Presentacion;
 import mx.itson.potroalmacen.materiales.domain.UnidadMedida;
 import mx.itson.potroalmacen.materiales.domain.exceptions.CodigoDuplicadoException;
 import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoException;
+import mx.itson.potroalmacen.materiales.eventos.MaterialRegistrado;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class RegistrarMaterialServiceTest {
 
+    private static final Instant AHORA = Instant.parse("2026-11-12T18:00:00Z");
+
     private FakeMaterialRepository repository;
+    private FakePublicadorEventos publicador;
     private RegistrarMaterialService service;
 
     @BeforeEach
     void setUp() {
         repository = new FakeMaterialRepository();
-        service = new RegistrarMaterialService(repository);
+        publicador = new FakePublicadorEventos();
+        service = new RegistrarMaterialService(repository, publicador, Clock.fixed(AHORA, ZoneOffset.UTC));
     }
 
     @Test
@@ -188,5 +197,73 @@ class RegistrarMaterialServiceTest {
                 null);
 
         assertThrows(MaterialInvalidoException.class, () -> service.registrar(comandoSinCategoria));
+    }
+
+    @Test
+    @DisplayName("Debe publicar MaterialRegistrado con los datos del material guardado")
+    void registrar_publicaMaterialRegistrado() {
+        Material registrado = service.registrar(new RegistrarMaterialCommand(
+                "EVT-001",
+                "Pintura Vinílica Blanca",
+                Categoria.PINTURA,
+                UnidadMedida.LITRO,
+                Presentacion.CUBETA,
+                "19 L",
+                Campus.OBREGON_NAINARI,
+                new BigDecimal("450.00"),
+                15,
+                5,
+                50,
+                null));
+
+        assertEquals(
+                List.of(new MaterialRegistrado(
+                        registrado.getId(), "EVT-001", "Pintura Vinílica Blanca", "OBREGON_NAINARI", 15, AHORA)),
+                publicador.eventos());
+    }
+
+    @Test
+    @DisplayName("No debe publicar el evento si el código está duplicado")
+    void registrar_codigoDuplicado_noPublicaEvento() {
+        RegistrarMaterialCommand comando = new RegistrarMaterialCommand(
+                "EVT-002",
+                "Material Original",
+                Categoria.FERRETERIA,
+                UnidadMedida.PIEZA,
+                Presentacion.PIEZA_INDIVIDUAL,
+                null,
+                Campus.GUAYMAS,
+                BigDecimal.TEN,
+                0,
+                0,
+                null,
+                null);
+        service.registrar(comando);
+
+        assertThrows(CodigoDuplicadoException.class, () -> service.registrar(comando));
+
+        assertEquals(1, publicador.eventos().size());
+    }
+
+    @Test
+    @DisplayName("No debe publicar el evento si el material es inválido")
+    void registrar_materialInvalido_noPublicaEvento() {
+        RegistrarMaterialCommand comandoSinNombre = new RegistrarMaterialCommand(
+                "EVT-003",
+                "   ",
+                Categoria.FERRETERIA,
+                UnidadMedida.PIEZA,
+                Presentacion.PIEZA_INDIVIDUAL,
+                null,
+                Campus.NAVOJOA_SUR,
+                BigDecimal.ONE,
+                0,
+                0,
+                null,
+                null);
+
+        assertThrows(MaterialInvalidoException.class, () -> service.registrar(comandoSinNombre));
+
+        assertTrue(publicador.eventos().isEmpty());
     }
 }
