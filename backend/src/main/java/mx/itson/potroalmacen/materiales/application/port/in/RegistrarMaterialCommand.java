@@ -5,7 +5,6 @@ import mx.itson.potroalmacen.materiales.domain.Campus;
 import mx.itson.potroalmacen.materiales.domain.Categoria;
 import mx.itson.potroalmacen.materiales.domain.Presentacion;
 import mx.itson.potroalmacen.materiales.domain.UnidadMedida;
-import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoException;
 
 /**
  * Comando que encapsula los datos requeridos para registrar un material
@@ -23,10 +22,4 @@ public record RegistrarMaterialCommand(
         int existenciaInicial,
         int stockMinimo,
         Integer stockMaximo,
-        String usoPrecauciones) {
-    public RegistrarMaterialCommand {
-        if (existenciaInicial < 0) {
-            throw new MaterialInvalidoException("La existencia inicial no puede ser negativa");
-        }
-    }
-}
+        String usoPrecauciones) {}

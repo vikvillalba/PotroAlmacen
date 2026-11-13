@@ -60,13 +60,10 @@ public class RegistrarMaterialService implements RegistrarMaterialUseCase {
                 comando.contenidoPresentacion(),
                 comando.campus(),
                 comando.precioUnitario(),
+                comando.existenciaInicial(),
                 comando.stockMinimo(),
                 comando.stockMaximo(),
                 comando.usoPrecauciones());
-
-        if (comando.existenciaInicial() > 0) {
-            material.registrarEntrada(comando.existenciaInicial());
-        }
 
         Material guardado = materialRepository.guardar(material);
 
