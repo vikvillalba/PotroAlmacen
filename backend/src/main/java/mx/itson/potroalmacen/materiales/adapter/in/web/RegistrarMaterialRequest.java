@@ -22,14 +22,19 @@ import mx.itson.potroalmacen.materiales.domain.UnidadMedida;
  * dominio.
  */
 record RegistrarMaterialRequest(
-        @NotBlank @Size(max = CodigoMaterial.LONGITUD_MAXIMA) String codigo,
+        @NotBlank @Size(max = CodigoMaterial.LONGITUD_MAXIMA)
+        String codigo,
+
         @NotBlank @Size(max = Material.NOMBRE_MAXIMO) String nombre,
         @NotNull Categoria categoria,
         @NotNull UnidadMedida unidadMedida,
         @NotNull Presentacion presentacion,
         @Size(max = Material.CONTENIDO_PRESENTACION_MAXIMO) String contenidoPresentacion,
         @NotNull Campus campus,
-        @DecimalMin("0.00") @Digits(integer = 8, fraction = 2) BigDecimal precioUnitario,
+
+        @DecimalMin("0.00") @Digits(integer = 8, fraction = 2)
+        BigDecimal precioUnitario,
+
         @NotNull @PositiveOrZero Integer existenciaInicial,
         @NotNull @PositiveOrZero Integer stockMinimo,
         @PositiveOrZero Integer stockMaximo,

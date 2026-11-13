@@ -66,9 +66,17 @@ class MaterialController {
     @Operation(summary = "Opciones de categorías, campus, unidades de medida y presentaciones")
     CatalogosResponse catalogos() {
         return new CatalogosResponse(
-                Arrays.stream(Categoria.values()).map(c -> OpcionCatalogo.de(c, c.getEtiqueta())).toList(),
-                Arrays.stream(Campus.values()).map(c -> OpcionCatalogo.de(c, c.getEtiqueta())).toList(),
-                Arrays.stream(UnidadMedida.values()).map(u -> OpcionCatalogo.de(u, u.getEtiqueta())).toList(),
-                Arrays.stream(Presentacion.values()).map(p -> OpcionCatalogo.de(p, p.getEtiqueta())).toList());
+                Arrays.stream(Categoria.values())
+                        .map(c -> OpcionCatalogo.de(c, c.getEtiqueta()))
+                        .toList(),
+                Arrays.stream(Campus.values())
+                        .map(c -> OpcionCatalogo.de(c, c.getEtiqueta()))
+                        .toList(),
+                Arrays.stream(UnidadMedida.values())
+                        .map(u -> OpcionCatalogo.de(u, u.getEtiqueta()))
+                        .toList(),
+                Arrays.stream(Presentacion.values())
+                        .map(p -> OpcionCatalogo.de(p, p.getEtiqueta()))
+                        .toList());
     }
 }

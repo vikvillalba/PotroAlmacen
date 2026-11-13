@@ -1,6 +1,0 @@
-# Perfil de pruebas.
-# La conexión a MySQL la aporta Testcontainers con @ServiceConnection
-# (ver TestcontainersConfiguration en src/test), por eso aquí no hay datasource.
-spring:
-  jpa:
-    show-sql: false

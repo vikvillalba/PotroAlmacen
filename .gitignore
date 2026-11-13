@@ -5,3 +5,5 @@
 .env
 **/.env
 backend/target
+# Build de Maven
+**/target/

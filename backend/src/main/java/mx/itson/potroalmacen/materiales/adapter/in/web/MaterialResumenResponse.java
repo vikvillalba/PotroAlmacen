@@ -23,7 +23,7 @@ public record MaterialResumenResponse(
         int cantidad,
         int stockMinimo,
         String estado) {
- 
+
     public static MaterialResumenResponse de(Material m) {
         return new MaterialResumenResponse(
                 m.getId(),
@@ -39,7 +39,7 @@ public record MaterialResumenResponse(
                 m.getStockMinimo(),
                 estado(m));
     }
- 
+
     private static String estado(Material m) {
         if (m.getCantidad() == 0) {
             return "Agotado";

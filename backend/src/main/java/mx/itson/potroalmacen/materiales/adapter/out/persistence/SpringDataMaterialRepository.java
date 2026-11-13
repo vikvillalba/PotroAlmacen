@@ -8,13 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
 public interface SpringDataMaterialRepository extends JpaRepository<MaterialEntity, Long> {
     Optional<MaterialEntity> findByCodigo(String codigo);
 
     boolean existsByCodigo(String codigo);
-    
-     @Query("""
+
+    @Query("""
             SELECT m FROM MaterialEntity m
             WHERE (:patron IS NULL
                    OR LOWER(m.nombre) LIKE :patron
@@ -23,7 +22,6 @@ public interface SpringDataMaterialRepository extends JpaRepository<MaterialEnti
               AND (:campus IS NULL OR m.campus = :campus)
             ORDER BY m.nombre
             """)
-    List<MaterialEntity> buscar(@Param("patron") String patron,
-                                @Param("categoria") Categoria categoria,
-                                @Param("campus") Campus campus);
+    List<MaterialEntity> buscar(
+            @Param("patron") String patron, @Param("categoria") Categoria categoria, @Param("campus") Campus campus);
 }

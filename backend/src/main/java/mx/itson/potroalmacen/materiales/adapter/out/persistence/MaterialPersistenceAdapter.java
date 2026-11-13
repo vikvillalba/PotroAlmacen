@@ -48,7 +48,8 @@ public class MaterialPersistenceAdapter implements MaterialRepositoryPort {
 
     @Override
     public List<Material> buscar(FiltroMateriales filtro) {
-        String patron = filtro.busqueda() == null ? null : "%" + filtro.busqueda().toLowerCase() + "%";
+        String patron =
+                filtro.busqueda() == null ? null : "%" + filtro.busqueda().toLowerCase() + "%";
         return repository.buscar(patron, filtro.categoria(), filtro.campus()).stream()
                 .map(mapper::toDomain)
                 .toList();
