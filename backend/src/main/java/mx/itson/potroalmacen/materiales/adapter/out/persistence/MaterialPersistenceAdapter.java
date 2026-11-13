@@ -54,4 +54,37 @@ public class MaterialPersistenceAdapter implements MaterialRepositoryPort {
                 .map(mapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public Optional<Material> buscarPorId(Integer id) {
+        if (id == null) return Optional.empty();
+        return repository.findById(id.longValue()).map(mapper::toDomain);
+    }
+
+    @Override
+    public List<Material> buscar(FiltroMateriales filtro) {
+        String patron = filtro.busqueda() == null ? null : "%" + filtro.busqueda().toLowerCase() + "%";
+        return repository
+                .buscar(patron, categoriasQueCoinciden(filtro.busqueda()), filtro.categoria(), filtro.campus())
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
+    }
+
+    private static List<Categoria> categoriasQueCoinciden(String texto) {
+        if (texto == null) {
+            return List.of();
+        }
+        String buscado = normalizar(texto);
+        return Arrays.stream(Categoria.values())
+                .filter(c -> normalizar(c.getEtiqueta()).contains(buscado))
+                .toList();
+    }
+
+    private static String normalizar(String texto) {
+        return Normalizer.normalize(texto, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .toLowerCase()
+                .trim();
+    }
 }

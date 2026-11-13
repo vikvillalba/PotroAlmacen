@@ -36,11 +36,11 @@ public interface MaterialRepositoryPort {
     boolean existePorCodigo(CodigoMaterial codigo);
 
     /**
-     * Busca materiales cuyo nombre o código contenga el texto de búsqueda (sin distinguir mayúsculas) y que
-     * coincidan con la categoría y el campus indicados. Los campos nulos del filtro no se aplican.
+     * <p>Busca materiales cuyo nombre, código o categoría contenga el texto de búsqueda,
+     * y que coincidan con los filtros opcionales de categoría y campus.</p>
      *
-     * @param filtro filtros opcionales de búsqueda, categoría y campus.
-     * @return los materiales que cumplen los filtros, ordenados por nombre; vacía si ninguno coincide.
+     * @param filtro Filtros opcionales (los campos nulos no se aplican).
+     * @return Lista de materiales que cumplen los filtros; vacía si ninguno coincide.
      */
     List<Material> buscar(FiltroMateriales filtro);
 }

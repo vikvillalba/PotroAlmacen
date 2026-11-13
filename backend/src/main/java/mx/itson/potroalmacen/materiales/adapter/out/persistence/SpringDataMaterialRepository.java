@@ -17,11 +17,17 @@ public interface SpringDataMaterialRepository extends JpaRepository<MaterialEnti
             SELECT m FROM MaterialEntity m
             WHERE (:patron IS NULL
                    OR LOWER(m.nombre) LIKE :patron
-                   OR LOWER(m.codigo) LIKE :patron)
+                   OR LOWER(m.codigo) LIKE :patron
+                   OR m.categoria IN :categoriasCoincidentes)
               AND (:categoria IS NULL OR m.categoria = :categoria)
               AND (:campus IS NULL OR m.campus = :campus)
             ORDER BY m.nombre
             """)
-    List<MaterialEntity> buscar(
-            @Param("patron") String patron, @Param("categoria") Categoria categoria, @Param("campus") Campus campus);
+
+    List<MaterialEntity> buscar(@Param("patron") String patron,
+                                @Param("categoriasCoincidentes") List<Categoria> categoriasCoincidentes,
+                                @Param("categoria") Categoria categoria,
+                                @Param("campus") Campus campus);
+
+
 }

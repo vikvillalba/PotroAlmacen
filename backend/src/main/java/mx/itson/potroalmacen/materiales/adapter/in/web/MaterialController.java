@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * API del catálogo de materiales: registro, consulta y opciones de los catálogos.
@@ -78,5 +79,11 @@ class MaterialController {
                 Arrays.stream(Presentacion.values())
                         .map(p -> OpcionCatalogo.de(p, p.getEtiqueta()))
                         .toList());
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Detalle de un material", description = "Responde 404 si el material no existe.")
+    MaterialDetalleResponse detalle(@PathVariable Integer id) {
+        return MaterialDetalleResponse.de(consultarMateriales.obtenerPorId(id));
     }
 }
