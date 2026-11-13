@@ -147,9 +147,9 @@
             </plugin>
 
             <!--
-                Formato automático. El goal check se ejecuta en la fase verify, así que
-                ./mvnw verify (lo que corre el CI) falla si hay código sin formato.
-                Para corregirlo: ./mvnw spotless:apply
+                Formato automático. El goal apply se ejecuta en la fase process-sources, así que
+                cualquier build (compile, test, verify, spring-boot:run) formatea el código
+                en lugar de fallar. Para revisar sin modificar: ./mvnw spotless:check
             -->
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
@@ -169,8 +169,10 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>formatear</id>
+                        <phase>process-sources</phase>
                         <goals>
-                            <goal>check</goal>
+                            <goal>apply</goal>
                         </goals>
                     </execution>
                 </executions>

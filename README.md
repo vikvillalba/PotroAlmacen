@@ -104,9 +104,12 @@ desarrollo.
 
 ```bash
 ./mvnw test             # todas las pruebas (requiere Docker para Testcontainers)
-./mvnw spotless:apply    # aplica el formato de código
-./mvnw verify            # compila, ejecuta las pruebas y verifica formato (lo mismo que el CI)
+./mvnw verify            # compila y ejecuta las pruebas (lo mismo que el CI)
+./mvnw spotless:check    # solo revisa el formato, sin modificar archivos
 ```
+
+Cada build aplica el formato automáticamente con Spotless (Palantir Java Format), así que el formato
+nunca hace fallar las pruebas. Si un build cambia archivos, inclúyelos en tu commit.
 
 ### Migraciones de esquema (Flyway)
 
@@ -140,7 +143,17 @@ Cada módulo extiende las excepciones de `compartido.excepcion` con su propio c�
 
 ### Integración continua
 
-GitHub Actions (`.github/workflows/ci.yml`) ejecuta `./mvnw verify` en cada pull request a `main`.
+GitHub Actions (`.github/workflows/ci.yml`) corre en cada pull request a `main` y en cada push a `main`,
+con dos jobs en paralelo:
+
+| Job        | Qué hace                                                              |
+|------------|-----------------------------------------------------------------------|
+| `backend`  | `./mvnw verify` con JDK 21: compila y corre las pruebas. |
+| `frontend` | `npm ci`, `npm run lint` y `npm run build` con Node 22.               |
+
+Antes de abrir un PR, corre localmente `./mvnw verify` (en `backend/`)
+y `npm run lint` (en `frontend/`). Si fallan las pruebas del backend, el job sube los reportes de Surefire
+como artefacto descargable.
 
 ## Proxy de desarrollo (nginx)
 

@@ -46,8 +46,7 @@ class MaterialPersistenceAdapterTest {
                 new BigDecimal("50.00"),
                 5,
                 10,
-                "Uso industrial"
-        );
+                "Uso industrial");
 
         Material guardado = persistenceAdapter.guardar(nuevoMaterial);
 
