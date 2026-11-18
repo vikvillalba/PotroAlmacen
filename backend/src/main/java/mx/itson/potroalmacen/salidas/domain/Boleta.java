@@ -1,11 +1,11 @@
-package mx.itson.potroalmacen.boletas.domain;
+package mx.itson.potroalmacen.salidas.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import mx.itson.potroalmacen.boletas.domain.exceptions.BoletaInvalidaException;
+import mx.itson.potroalmacen.salidas.domain.exceptions.BoletaInvalidaException;
 
 public class Boleta {
 

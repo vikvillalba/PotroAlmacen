@@ -1,4 +1,4 @@
-package mx.itson.potroalmacen.boletas.domain;
+package mx.itson.potroalmacen.salidas.domain;
 
 public record EmpleadoRef(Integer idEmpleado, String nombreCompleto, String puesto) {
     public EmpleadoRef {
