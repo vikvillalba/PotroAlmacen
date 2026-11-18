@@ -99,10 +99,27 @@ public class Area {
     }
 
     // Getters de solo lectura
-    public Integer getId() { return id; }
-    public String getNombreArea() { return nombreArea; }
-    public TipoArea getTipoArea() { return tipoArea; }
-    public BigDecimal getMetrosCuadrados() { return metrosCuadrados; }
-    public List<Espacio> getEspacios() { return Collections.unmodifiableList(espacios); }
-    public List<Material> getMateriales() { return Collections.unmodifiableList(materiales); }
+    public Integer getId() {
+        return id;
+    }
+
+    public String getNombreArea() {
+        return nombreArea;
+    }
+
+    public TipoArea getTipoArea() {
+        return tipoArea;
+    }
+
+    public BigDecimal getMetrosCuadrados() {
+        return metrosCuadrados;
+    }
+
+    public List<Espacio> getEspacios() {
+        return Collections.unmodifiableList(espacios);
+    }
+
+    public List<Material> getMateriales() {
+        return Collections.unmodifiableList(materiales);
+    }
 }
