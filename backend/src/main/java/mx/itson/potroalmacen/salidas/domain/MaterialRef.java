@@ -1,4 +1,4 @@
-package mx.itson.potroalmacen.boletas.domain;
+package mx.itson.potroalmacen.salidas.domain;
 
 public record MaterialRef(String codigoMaterial, String nombreMaterial) {
     public MaterialRef {

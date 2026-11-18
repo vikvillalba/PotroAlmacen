@@ -1,4 +1,4 @@
-package mx.itson.potroalmacen.boletas.domain.exceptions;
+package mx.itson.potroalmacen.salidas.domain.exceptions;
 
 public class BoletaInvalidaException extends IllegalArgumentException {
     public static final String CODIGO = "BOLETA_INVALIDA";
