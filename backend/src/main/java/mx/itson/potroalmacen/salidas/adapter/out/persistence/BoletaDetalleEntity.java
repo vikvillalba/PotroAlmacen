@@ -45,17 +45,39 @@ public class BoletaDetalleEntity {
         // Requerido por JPA.
     }
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public BoletaEntity getBoleta() { return boleta; }
-    void setBoleta(BoletaEntity boleta) { this.boleta = boleta; }
+    public BoletaEntity getBoleta() {
+        return boleta;
+    }
 
-    public String getCodigoMaterial() { return codigoMaterial; }
-    public void setCodigoMaterial(String codigoMaterial) { this.codigoMaterial = codigoMaterial; }
+    void setBoleta(BoletaEntity boleta) {
+        this.boleta = boleta;
+    }
 
-    public String getNombreMaterial() { return nombreMaterial; }
-    public void setNombreMaterial(String nombreMaterial) { this.nombreMaterial = nombreMaterial; }
+    public String getCodigoMaterial() {
+        return codigoMaterial;
+    }
 
-    public Integer getCantidad() { return cantidad; }
-    public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }
+    public void setCodigoMaterial(String codigoMaterial) {
+        this.codigoMaterial = codigoMaterial;
+    }
+
+    public String getNombreMaterial() {
+        return nombreMaterial;
+    }
+
+    public void setNombreMaterial(String nombreMaterial) {
+        this.nombreMaterial = nombreMaterial;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
 }
