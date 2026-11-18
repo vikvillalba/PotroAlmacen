@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package mx.itson.potroalmacen.areas.adapter.out.persistence;
 
 import jakarta.persistence.CascadeType;
@@ -66,21 +70,47 @@ public class AreaEntity {
         materiales.add(material);
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getNombreArea() { return nombreArea; }
-    public void setNombreArea(String nombreArea) { this.nombreArea = nombreArea; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public TipoArea getTipoArea() { return tipoArea; }
-    public void setTipoArea(TipoArea tipoArea) { this.tipoArea = tipoArea; }
+    public String getNombreArea() {
+        return nombreArea;
+    }
 
-    public BigDecimal getMetrosCuadrados() { return metrosCuadrados; }
-    public void setMetrosCuadrados(BigDecimal metrosCuadrados) { this.metrosCuadrados = metrosCuadrados; }
+    public void setNombreArea(String nombreArea) {
+        this.nombreArea = nombreArea;
+    }
 
-    public List<EspacioEntity> getEspacios() { return espacios; }
+    public TipoArea getTipoArea() {
+        return tipoArea;
+    }
 
-    public List<AreaMaterialEntity> getMateriales() { return materiales; }
+    public void setTipoArea(TipoArea tipoArea) {
+        this.tipoArea = tipoArea;
+    }
 
-    public Long getVersion() { return version; }
+    public BigDecimal getMetrosCuadrados() {
+        return metrosCuadrados;
+    }
+
+    public void setMetrosCuadrados(BigDecimal metrosCuadrados) {
+        this.metrosCuadrados = metrosCuadrados;
+    }
+
+    public List<EspacioEntity> getEspacios() {
+        return espacios;
+    }
+
+    public List<AreaMaterialEntity> getMateriales() {
+        return materiales;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
 }

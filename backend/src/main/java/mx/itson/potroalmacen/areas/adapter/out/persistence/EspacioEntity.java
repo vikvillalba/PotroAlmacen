@@ -40,18 +40,38 @@ public class EspacioEntity {
         // Requerido por JPA.
     }
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public AreaEntity getArea() { return area; }
-    void setArea(AreaEntity area) { this.area = area; }
+    public AreaEntity getArea() {
+        return area;
+    }
 
-    public String getNombreEspacio() { return nombreEspacio; }
-    public void setNombreEspacio(String nombreEspacio) { this.nombreEspacio = nombreEspacio; }
+    void setArea(AreaEntity area) {
+        this.area = area;
+    }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getNombreEspacio() {
+        return nombreEspacio;
+    }
 
-    public FrecuenciaLimpieza getFrecuenciaLimpieza() { return frecuenciaLimpieza; }
+    public void setNombreEspacio(String nombreEspacio) {
+        this.nombreEspacio = nombreEspacio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public FrecuenciaLimpieza getFrecuenciaLimpieza() {
+        return frecuenciaLimpieza;
+    }
+
     public void setFrecuenciaLimpieza(FrecuenciaLimpieza frecuenciaLimpieza) {
         this.frecuenciaLimpieza = frecuenciaLimpieza;
     }

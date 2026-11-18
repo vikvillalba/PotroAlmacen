@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import mx.itson.potroalmacen.salidas.domain.EstadoBoleta;
 
-
-
 /**
  * Tabla {@code sal_boleta}: encabezado de la boleta de entrega.
  *
@@ -81,37 +79,91 @@ public class BoletaEntity {
         detalle.add(linea);
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getFolio() { return folio; }
-    public void setFolio(String folio) { this.folio = folio; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Integer getSolicitanteId() { return solicitanteId; }
-    public void setSolicitanteId(Integer solicitanteId) { this.solicitanteId = solicitanteId; }
+    public String getFolio() {
+        return folio;
+    }
 
-    public String getSolicitanteNombre() { return solicitanteNombre; }
-    public void setSolicitanteNombre(String solicitanteNombre) { this.solicitanteNombre = solicitanteNombre; }
+    public void setFolio(String folio) {
+        this.folio = folio;
+    }
 
-    public String getSolicitantePuesto() { return solicitantePuesto; }
-    public void setSolicitantePuesto(String solicitantePuesto) { this.solicitantePuesto = solicitantePuesto; }
+    public Integer getSolicitanteId() {
+        return solicitanteId;
+    }
 
-    public Integer getEntregadorId() { return entregadorId; }
-    public void setEntregadorId(Integer entregadorId) { this.entregadorId = entregadorId; }
+    public void setSolicitanteId(Integer solicitanteId) {
+        this.solicitanteId = solicitanteId;
+    }
 
-    public String getEntregadorNombre() { return entregadorNombre; }
-    public void setEntregadorNombre(String entregadorNombre) { this.entregadorNombre = entregadorNombre; }
+    public String getSolicitanteNombre() {
+        return solicitanteNombre;
+    }
 
-    public String getEntregadorPuesto() { return entregadorPuesto; }
-    public void setEntregadorPuesto(String entregadorPuesto) { this.entregadorPuesto = entregadorPuesto; }
+    public void setSolicitanteNombre(String solicitanteNombre) {
+        this.solicitanteNombre = solicitanteNombre;
+    }
 
-    public LocalDateTime getFechaHora() { return fechaHora; }
-    public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
+    public String getSolicitantePuesto() {
+        return solicitantePuesto;
+    }
 
-    public EstadoBoleta getEstado() { return estado; }
-    public void setEstado(EstadoBoleta estado) { this.estado = estado; }
+    public void setSolicitantePuesto(String solicitantePuesto) {
+        this.solicitantePuesto = solicitantePuesto;
+    }
 
-    public List<BoletaDetalleEntity> getDetalle() { return detalle; }
+    public Integer getEntregadorId() {
+        return entregadorId;
+    }
 
-    public Long getVersion() { return version; }
+    public void setEntregadorId(Integer entregadorId) {
+        this.entregadorId = entregadorId;
+    }
+
+    public String getEntregadorNombre() {
+        return entregadorNombre;
+    }
+
+    public void setEntregadorNombre(String entregadorNombre) {
+        this.entregadorNombre = entregadorNombre;
+    }
+
+    public String getEntregadorPuesto() {
+        return entregadorPuesto;
+    }
+
+    public void setEntregadorPuesto(String entregadorPuesto) {
+        this.entregadorPuesto = entregadorPuesto;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public EstadoBoleta getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoBoleta estado) {
+        this.estado = estado;
+    }
+
+    public List<BoletaDetalleEntity> getDetalle() {
+        return detalle;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
 }

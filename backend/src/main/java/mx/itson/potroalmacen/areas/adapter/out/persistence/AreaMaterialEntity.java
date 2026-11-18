@@ -37,14 +37,31 @@ public class AreaMaterialEntity {
         // Requerido por JPA.
     }
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public AreaEntity getArea() { return area; }
-    void setArea(AreaEntity area) { this.area = area; }
+    public AreaEntity getArea() {
+        return area;
+    }
 
-    public String getCodigoMaterial() { return codigoMaterial; }
-    public void setCodigoMaterial(String codigoMaterial) { this.codigoMaterial = codigoMaterial; }
+    void setArea(AreaEntity area) {
+        this.area = area;
+    }
 
-    public String getNombreMaterial() { return nombreMaterial; }
-    public void setNombreMaterial(String nombreMaterial) { this.nombreMaterial = nombreMaterial; }
+    public String getCodigoMaterial() {
+        return codigoMaterial;
+    }
+
+    public void setCodigoMaterial(String codigoMaterial) {
+        this.codigoMaterial = codigoMaterial;
+    }
+
+    public String getNombreMaterial() {
+        return nombreMaterial;
+    }
+
+    public void setNombreMaterial(String nombreMaterial) {
+        this.nombreMaterial = nombreMaterial;
+    }
 }
