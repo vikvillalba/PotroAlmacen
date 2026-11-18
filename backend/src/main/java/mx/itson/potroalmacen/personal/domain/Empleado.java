@@ -15,6 +15,8 @@ public class Empleado {
     private String puesto;
     private String jefeDirecto;
     private String telefono;
+    private boolean activo;
+    private boolean enPrestamo;
     private final List<AreaRef> areasAsignadas;
 
     private Empleado(
@@ -26,6 +28,8 @@ public class Empleado {
             String puesto,
             String jefeDirecto,
             String telefono,
+            boolean activo,
+            boolean enPrestamo,
             List<AreaRef> areasAsignadas) {
         this.id = id;
         this.nombre = nombre;
@@ -35,6 +39,8 @@ public class Empleado {
         this.puesto = puesto;
         this.jefeDirecto = jefeDirecto;
         this.telefono = telefono;
+        this.activo = activo;
+        this.enPrestamo = enPrestamo;
         this.areasAsignadas = areasAsignadas != null ? new ArrayList<>(areasAsignadas) : new ArrayList<>();
     }
 
@@ -58,11 +64,13 @@ public class Empleado {
                 puesto.trim(),
                 jefeDirecto != null ? jefeDirecto.trim() : null,
                 telefono != null ? telefono.trim() : null,
+                true, // Por defecto nace activo
+                false, // Por defecto no tiene préstamo activo
                 areasAsignadas);
     }
 
-    /** Reconstituye el agregado con su ID de base de datos. */
-    public Empleado conId(Integer id) {
+    /** Reconstituye el agregado con su ID y estados desde la base de datos. */
+    public Empleado reconstitadir(Integer id, boolean activo, boolean enPrestamo) {
         return new Empleado(
                 id,
                 this.nombre,
@@ -72,6 +80,8 @@ public class Empleado {
                 this.puesto,
                 this.jefeDirecto,
                 this.telefono,
+                activo,
+                enPrestamo,
                 this.areasAsignadas);
     }
 
@@ -83,6 +93,22 @@ public class Empleado {
             return nombre + " " + apellidoPaterno;
         }
         return nombre + " " + apellidoPaterno + " " + apellidoMaterno;
+    }
+
+    public void activar() {
+        this.activo = true;
+    }
+
+    public void inactivar() {
+        this.activo = false;
+    }
+
+    public void marcarEnPrestamo() {
+        this.enPrestamo = true;
+    }
+
+    public void liberarPrestamo() {
+        this.enPrestamo = false;
     }
 
     /** Asigna una nueva área de responsabilidad o trabajo al empleado. */
@@ -171,6 +197,14 @@ public class Empleado {
 
     public String getTelefono() {
         return telefono;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public boolean isEnPrestamo() {
+        return enPrestamo;
     }
 
     public List<AreaRef> getAreasAsignadas() {
