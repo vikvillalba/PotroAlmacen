@@ -1,4 +1,4 @@
-package mx.itson.potroalmacen.boletas.domain;
+package mx.itson.potroalmacen.salidas.domain;
 
 public enum EstadoBoleta {
     CREADA("Creada"),
