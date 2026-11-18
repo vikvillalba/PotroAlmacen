@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import mx.itson.potroalmacen.areas.domain.exceptions.AreaSinEspaciosException;
 import mx.itson.potroalmacen.areas.domain.exceptions.MetrosCuadradosInvalidosException;
-import mx.itson.potroalmacen.materiales.domain.Material;
 
 public class Area {
 
@@ -15,7 +14,7 @@ public class Area {
     private TipoArea tipoArea;
     private BigDecimal metrosCuadrados;
     private final List<Espacio> espacios;
-    private final List<Material> materiales;
+    private final List<MaterialRef> materiales; // Usamos MaterialRef en lugar de la entidad Material
 
     private Area(
             Integer id,
@@ -23,7 +22,7 @@ public class Area {
             TipoArea tipoArea,
             BigDecimal metrosCuadrados,
             List<Espacio> espacios,
-            List<Material> materiales) {
+            List<MaterialRef> materiales) {
         this.id = id;
         this.nombreArea = nombreArea;
         this.tipoArea = tipoArea;
@@ -38,7 +37,7 @@ public class Area {
             TipoArea tipoArea,
             BigDecimal metrosCuadrados,
             List<Espacio> espacios,
-            List<Material> materiales) {
+            List<MaterialRef> materiales) {
         validarDatos(nombreArea, metrosCuadrados, espacios);
         return new Area(null, nombreArea.trim(), tipoArea, metrosCuadrados, espacios, materiales);
     }
@@ -50,8 +49,7 @@ public class Area {
 
     // MÉTODOS DE NEGOCIO / COMPORTAMIENTO
 
-    /** Asocia un nuevo material a esta área. */
-    public void agregarMaterial(Material material) {
+    public void agregarMaterial(MaterialRef material) {
         if (material == null) {
             throw new IllegalArgumentException("El material no puede ser nulo.");
         }
@@ -60,12 +58,10 @@ public class Area {
         }
     }
 
-    /** Remueve la asociación de un material con esta área. */
-    public void removerMaterial(Material material) {
+    public void removerMaterial(MaterialRef material) {
         materiales.remove(material);
     }
 
-    /** Agrega un nuevo tipo/bloque de espacio al área. */
     public void agregarEspacio(Espacio espacio) {
         if (espacio == null) {
             throw new IllegalArgumentException("El espacio no puede ser nulo.");
@@ -73,7 +69,6 @@ public class Area {
         espacios.add(espacio);
     }
 
-    /** Actualiza la información general del área. */
     public void actualizarInformacion(String nuevoNombre, TipoArea nuevoTipo, BigDecimal nuevosMetros) {
         if (nuevoNombre == null || nuevoNombre.isBlank()) {
             throw new IllegalArgumentException("El nombre del área es obligatorio.");
@@ -119,7 +114,7 @@ public class Area {
         return Collections.unmodifiableList(espacios);
     }
 
-    public List<Material> getMateriales() {
+    public List<MaterialRef> getMateriales() {
         return Collections.unmodifiableList(materiales);
     }
 }
