@@ -1,9 +1,9 @@
 package mx.itson.potroalmacen.auditoria.domain;
 
 import java.time.Instant;
+import mx.itson.potroalmacen.auditoria.domain.exceptions.AuditoriaInvalidaException;
 import mx.itson.potroalmacen.compartido.auditoria.AccionAuditoria;
 import mx.itson.potroalmacen.compartido.auditoria.EventoAuditable;
-import mx.itson.potroalmacen.auditoria.domain.exceptions.AuditoriaInvalidaException;
 
 public class RegistroAuditoria {
 
@@ -30,7 +30,7 @@ public class RegistroAuditoria {
         this.campus = campus;
         this.accion = accion;
         this.modulo = modulo;
-        this.entrad = entidad; // o entidad
+        this.entidad = entidad; // o entidad
         this.referencia = referencia;
         this.ocurridoEn = ocurridoEn != null ? ocurridoEn : Instant.now();
     }
@@ -55,8 +55,7 @@ public class RegistroAuditoria {
                 evento.modulo(),
                 evento.entidad(),
                 evento.referencia(),
-                evento.ocurridoEn()
-        );
+                evento.ocurridoEn());
     }
 
     /** Reconstituye el registro histórico con su ID desde la base de datos. */
@@ -69,17 +68,39 @@ public class RegistroAuditoria {
                 this.modulo,
                 this.entidad,
                 this.referencia,
-                this.ocurridoEn
-        );
+                this.ocurridoEn);
     }
 
     // Getters de solo lectura
-    public Long getId() { return id; }
-    public Long getUsuarioId() { return usuarioId; }
-    public String getCampus() { return campus; }
-    public AccionAuditoria getAccion() { return accion; }
-    public String getModulo() { return modulo; }
-    public String getEntidad() { return entidad; }
-    public String getReferencia() { return referencia; }
-    public Instant getOcurridoEn() { return ocurridoEn; }
+    public Long getId() {
+        return id;
+    }
+
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public String getCampus() {
+        return campus;
+    }
+
+    public AccionAuditoria getAccion() {
+        return accion;
+    }
+
+    public String getModulo() {
+        return modulo;
+    }
+
+    public String getEntidad() {
+        return entidad;
+    }
+
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public Instant getOcurridoEn() {
+        return ocurridoEn;
+    }
 }
