@@ -18,7 +18,8 @@ import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import mx.itson.potroalmacen.boletas.domain.EstadoBoleta;
+import mx.itson.potroalmacen.salidas.domain.EstadoBoleta;
+
 
 
 /**
