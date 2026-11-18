@@ -1,12 +1,12 @@
 package mx.itson.potroalmacen.areas.domain;
 
-public record Espacio(TipoEspacio tipoEspacio, int cantidadEspacios) {
+public record Espacio(String nombreEspacio, String descripcion, FrecuenciaLimpieza frecuenciaLimpieza) {
     public Espacio {
-        if (tipoEspacio == null) {
-            throw new IllegalArgumentException("El tipo de espacio es obligatorio.");
+        if (nombreEspacio == null || nombreEspacio.isBlank()) {
+            throw new IllegalArgumentException("El nombre del espacio es obligatorio.");
         }
-        if (cantidadEspacios <= 0) {
-            throw new IllegalArgumentException("La cantidad de espacios debe ser mayor a cero.");
+        if (frecuenciaLimpieza == null) {
+            throw new IllegalArgumentException("La frecuencia de limpieza es obligatoria.");
         }
     }
 }
