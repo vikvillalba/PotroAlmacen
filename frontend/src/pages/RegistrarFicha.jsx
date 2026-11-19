@@ -26,7 +26,19 @@ function sinClave(objeto, clave) {
     return copia
 }
 
+const MAX_USO = 500
+const MAX_DIGITOS = 9
+
 const esEntero = (texto) => /^\d+$/.test(String(texto).trim())
+const soloDigitos = (texto) => texto.replace(/\D/g, '').slice(0, MAX_DIGITOS).replace(/^0+(?=\d)/, '')
+const CAMPOS_NUMERICOS = ['stockMinimo', 'stockMaximo', 'existenciaInicial']
+
+const DEPENDIENTES = {
+    stockMinimo: ['stockMinimo', 'stockMaximo', 'existenciaInicial'],
+    stockMaximo: ['stockMaximo', 'existenciaInicial'],
+    existenciaInicial: ['existenciaInicial'],
+    usoPrecauciones: ['usoPrecauciones'],
+}
 
 function validar(v) {
     const e = {}
@@ -56,25 +68,26 @@ function validar(v) {
         else if (!esEntero(texto)) e[campo] = `${etiqueta} debe ser un número entero mayor o igual a 0.`
     }
 
-    if (!e.stockMinimo && !e.stockMaximo && Number(v.stockMinimo) > Number(v.stockMaximo)) {
-        e.stockMaximo = 'El stock máximo debe ser mayor o igual al stock mínimo.'
+    if (!e.stockMinimo && !e.stockMaximo && Number(v.stockMinimo) >= Number(v.stockMaximo)) {
+        e.stockMaximo = `El stock máximo debe ser mayor que el stock mínimo (${v.stockMinimo}).`
     }
     if (!e.existenciaInicial && !e.stockMaximo && Number(v.existenciaInicial) > Number(v.stockMaximo)) {
-        e.existenciaInicial = 'La existencia inicial no puede superar el stock máximo.'
+        e.existenciaInicial = `La existencia inicial no puede superar el stock máximo (${v.stockMaximo}).`
     }
 
-    if (v.usoPrecauciones.trim().length > 500) e.usoPrecauciones = 'Máximo 500 caracteres.'
+    if (v.usoPrecauciones.trim().length > MAX_USO) e.usoPrecauciones = `Máximo ${MAX_USO} caracteres.`
 
     return e
 }
 
-function Campo({ nombre, etiqueta, error, tipo = '', children }) {
+function Campo({ nombre, etiqueta, error, ayuda, tipo = '', children }) {
     const idError = `error-${nombre}`
     return (
         <label className={`field${error ? ' invalid' : ''}`}>
             <span>{etiqueta}</span>
             <span className={`input ${tipo}`.trim()}>{children(error ? idError : undefined)}</span>
             {error && <small id={idError} className="field-error" role="alert">{error}</small>}
+            {ayuda && <small className="field-hint">{ayuda}</small>}
         </label>
     )
 }
@@ -93,13 +106,38 @@ export default function RegistrarFicha() {
     useEffect(() => () => clearTimeout(temporizador.current), [])
 
     const cambiar = (e) => {
-        const { name, value } = e.target
-        setValores((anteriores) => ({ ...anteriores, [name]: value }))
+        const { name } = e.target
+        let value = e.target.value
+        let aviso = null
+
+        // Los campos de stock solo aceptan dígitos
+        if (CAMPOS_NUMERICOS.includes(name)) value = soloDigitos(value)
+        if (name === 'codigo') value = value.replace(/\s+/g, '')
+        if (name === 'existenciaInicial' && esEntero(valores.stockMaximo) && esEntero(value) && Number(value) > Number(valores.stockMaximo)) {
+            value = String(valores.stockMaximo)
+            aviso = `Máximo permitido: ${valores.stockMaximo} (stock máximo).`
+        }
+
+        const nuevos = { ...valores, [name]: value }
+        setValores(nuevos)
         setMensajeExito(null)
-        // Al corregir un campo se limpia su error
+
+        const encontrados = validar(nuevos)
+        const revisar = DEPENDIENTES[name]
+
         setErrores((anteriores) => {
-            if (!anteriores[name]) return anteriores
-            return sinClave(anteriores, name)
+            const siguientes = { ...anteriores }
+            if (!revisar) {
+                delete siguientes[name]
+                return siguientes
+            }
+
+            for (const campo of revisar) {
+                if (encontrados[campo]) siguientes[campo] = encontrados[campo]
+                else delete siguientes[campo]
+            }
+            if (aviso) siguientes[name] = aviso
+            return siguientes
         })
     }
 
@@ -131,7 +169,9 @@ export default function RegistrarFicha() {
         setErrores(encontrados)
         if (Object.keys(encontrados).length > 0) {
             setMensajeError('Revisa los campos marcados en rojo antes de continuar.')
-            document.querySelector('[aria-invalid="true"]')?.focus()
+            requestAnimationFrame(() => {
+                document.querySelector('[aria-invalid="true"]')?.focus()
+            })
             return
         }
 
@@ -186,7 +226,7 @@ export default function RegistrarFicha() {
                     </div>
                     <div className="form">
                         <div className="row2">
-                            <Campo nombre="codigo" etiqueta="Código" error={errores.codigo}>
+                            <Campo nombre="codigo" etiqueta="Código" error={errores.codigo} ayuda="De 3 a 20 caracteres: solo letras, números y guiones (sin espacios).">
                                 {(d) => <input {...propsCampo('codigo')} aria-describedby={d} maxLength={20} placeholder="Ej. PIN-0001" />}
                             </Campo>
                             <Campo nombre="nombre" etiqueta="Nombre del producto" error={errores.nombre}>
@@ -246,19 +286,19 @@ export default function RegistrarFicha() {
 
                         <div className="row2">
                             <Campo nombre="stockMinimo" etiqueta="Stock mínimo" error={errores.stockMinimo}>
-                                {(d) => <input {...propsCampo('stockMinimo')} aria-describedby={d} type="number" min="0" step="1" inputMode="numeric" placeholder="0" />}
+                                {(d) => <input {...propsCampo('stockMinimo')} aria-describedby={d} type="text" inputMode="numeric" autoComplete="off" placeholder="0" />}
                             </Campo>
                             <Campo nombre="stockMaximo" etiqueta="Stock máximo" error={errores.stockMaximo}>
-                                {(d) => <input {...propsCampo('stockMaximo')} aria-describedby={d} type="number" min="0" step="1" inputMode="numeric" placeholder="0" />}
+                                {(d) => <input {...propsCampo('stockMaximo')} aria-describedby={d} type="text" inputMode="numeric" autoComplete="off" placeholder="0" />}
                             </Campo>
                         </div>
 
-                        <Campo nombre="existenciaInicial" etiqueta="Existencia inicial" error={errores.existenciaInicial}>
-                            {(d) => <input {...propsCampo('existenciaInicial')} aria-describedby={d} type="number" min="0" step="1" inputMode="numeric" placeholder="0" />}
+                        <Campo nombre="existenciaInicial" etiqueta="Existencia inicial" error={errores.existenciaInicial} ayuda={esEntero(valores.stockMaximo) ? `Máximo permitido: ${valores.stockMaximo}` : undefined}>
+                            {(d) => <input {...propsCampo('existenciaInicial')} aria-describedby={d} type="text" inputMode="numeric" autoComplete="off" placeholder="0" />}
                         </Campo>
 
-                        <Campo nombre="usoPrecauciones" etiqueta="Uso y precauciones (opcional)" error={errores.usoPrecauciones}>
-                            {(d) => <textarea {...propsCampo('usoPrecauciones')} aria-describedby={d} rows={3} placeholder="Indica cómo se usa el producto y las precauciones a tomar" />}
+                        <Campo nombre="usoPrecauciones" etiqueta="Uso y precauciones (opcional)" error={errores.usoPrecauciones} ayuda={`${valores.usoPrecauciones.length}/${MAX_USO}`}>
+                            {(d) => <textarea {...propsCampo('usoPrecauciones')} aria-describedby={d} rows={3} maxLength={MAX_USO} placeholder="Indica cómo se usa el producto y las precauciones a tomar" />}
                         </Campo>
                     </div>
                 </section>
