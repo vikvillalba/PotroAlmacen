@@ -52,27 +52,67 @@ public class RegistroAuditoriaEntity {
         // Requerido por JPA.
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getUsuarioId() { return usuarioId; }
-    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getCampus() { return campus; }
-    public void setCampus(String campus) { this.campus = campus; }
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
 
-    public AccionAuditoria getAccion() { return accion; }
-    public void setAccion(AccionAuditoria accion) { this.accion = accion; }
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 
-    public String getModulo() { return modulo; }
-    public void setModulo(String modulo) { this.modulo = modulo; }
+    public String getCampus() {
+        return campus;
+    }
 
-    public String getEntidad() { return entidad; }
-    public void setEntidad(String entidad) { this.entidad = entidad; }
+    public void setCampus(String campus) {
+        this.campus = campus;
+    }
 
-    public String getReferencia() { return referencia; }
-    public void setReferencia(String referencia) { this.referencia = referencia; }
+    public AccionAuditoria getAccion() {
+        return accion;
+    }
 
-    public Instant getOcurridoEn() { return ocurridoEn; }
-    public void setOcurridoEn(Instant ocurridoEn) { this.ocurridoEn = ocurridoEn; }
+    public void setAccion(AccionAuditoria accion) {
+        this.accion = accion;
+    }
+
+    public String getModulo() {
+        return modulo;
+    }
+
+    public void setModulo(String modulo) {
+        this.modulo = modulo;
+    }
+
+    public String getEntidad() {
+        return entidad;
+    }
+
+    public void setEntidad(String entidad) {
+        this.entidad = entidad;
+    }
+
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
+    }
+
+    public Instant getOcurridoEn() {
+        return ocurridoEn;
+    }
+
+    public void setOcurridoEn(Instant ocurridoEn) {
+        this.ocurridoEn = ocurridoEn;
+    }
 }
