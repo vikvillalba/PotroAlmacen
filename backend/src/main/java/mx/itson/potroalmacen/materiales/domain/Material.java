@@ -6,6 +6,7 @@ package mx.itson.potroalmacen.materiales.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import mx.itson.potroalmacen.materiales.domain.exceptions.ExistenciaInsuficienteException;
 import mx.itson.potroalmacen.materiales.domain.exceptions.MaterialInvalidoException;
 
 /**
@@ -220,7 +221,7 @@ public final class Material {
             throw new MaterialInvalidoException("La cantidad de salida debe ser mayor a cero");
         }
         if (cantidadSolicitada > cantidad) {
-            throw new MaterialInvalidoException("Cantidad solicitada excede las existencias disponibles");
+            throw new ExistenciaInsuficienteException(codigo.valor(), cantidad, cantidadSolicitada);
         }
         this.cantidad -= cantidadSolicitada;
     }
