@@ -21,13 +21,15 @@ public record SolicitudEntregaCommand(
     }
 
     /**
-     * Una línea de la solicitud: el material, la cantidad que tiene en inventario y la cantidad a entregar.
+     * Una línea de la solicitud: el material y la cantidad a entregar.
+     *
+     * <p>No lleva la existencia: el módulo Materiales es el dueño del inventario y la verifica al registrar la
+     * salida.
      *
      * @param codigoMaterial código del material en el catálogo del módulo Materiales.
-     * @param cantidadEnInventario existencia del material en inventario al momento de la solicitud.
      * @param cantidadAEntregar unidades que se van a entregar.
      */
-    public record MaterialSolicitado(String codigoMaterial, Integer cantidadEnInventario, Integer cantidadAEntregar) {
+    public record MaterialSolicitado(String codigoMaterial, Integer cantidadAEntregar) {
 
         public MaterialSolicitado {
             codigoMaterial = (codigoMaterial == null || codigoMaterial.isBlank()) ? null : codigoMaterial.trim();
