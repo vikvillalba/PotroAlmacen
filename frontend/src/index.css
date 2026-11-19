@@ -462,6 +462,10 @@ h1 {
   font-weight: 500;
 }
 
+.field-hint {
+  font-weight: 400;
+}
+
 .input {
   display: flex;
   align-items: center;
