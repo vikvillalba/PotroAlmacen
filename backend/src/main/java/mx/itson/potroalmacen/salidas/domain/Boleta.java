@@ -49,6 +49,18 @@ public class Boleta {
                 materiales);
     }
 
+    /** Reconstituye el agregado completo desde la persistencia con todos sus datos originales. */
+    public static Boleta reconstruir(
+            Integer id,
+            String folio,
+            EmpleadoRef solicitante,
+            EmpleadoRef entregador,
+            LocalDateTime fechaHora,
+            EstadoBoleta estado,
+            List<MaterialRef> materiales) {
+        return new Boleta(id, folio, solicitante, entregador, fechaHora, estado, materiales);
+    }
+
     /** Reconstituye el agregado con su ID y folio desde la base de datos. */
     public Boleta conIdYFolio(Integer id, String folio) {
         return new Boleta(id, folio, this.solicitante, this.entregador, this.fechaHora, this.estado, this.materiales);
