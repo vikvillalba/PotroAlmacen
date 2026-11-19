@@ -956,6 +956,7 @@ h1 {
   .user-info,
   .step span:not(.step-num):not(.step-line) {
     display: none;
+  }
 
   .filters,
   .footbar,
