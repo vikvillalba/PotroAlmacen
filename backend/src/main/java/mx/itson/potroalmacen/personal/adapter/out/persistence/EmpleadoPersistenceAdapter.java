@@ -1,0 +1,23 @@
+package mx.itson.potroalmacen.personal.adapter.out.persistence;
+
+import java.util.Optional;
+import mx.itson.potroalmacen.personal.application.port.out.EmpleadoRepositoryPort;
+import mx.itson.potroalmacen.personal.domain.Empleado;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class EmpleadoPersistenceAdapter implements EmpleadoRepositoryPort {
+
+    private final SpringDataEmpleadoRepository repository;
+    private final EmpleadoMapper mapper;
+
+    public EmpleadoPersistenceAdapter(SpringDataEmpleadoRepository repository, EmpleadoMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public Optional<Empleado> buscarPorId(Integer id) {
+        return repository.findById(id.longValue()).map(mapper::toDomain);
+    }
+}
