@@ -13,11 +13,12 @@ public interface InventarioPort {
     /**
      * Registra la salida de un material del inventario.
      *
+     * <p>Si el material no existe o la cantidad supera su existencia, se propaga la excepción que lanza el módulo
+     * Materiales; Salidas no la captura ni depende de su clase.
+     *
      * @param codigoMaterial código del material.
      * @param cantidad unidades que salen; mayor a cero.
      * @return la referencia del material entregado (código, nombre y cantidad).
-     * @throws mx.itson.potroalmacen.materiales.domain.exceptions.ExistenciaInsuficienteException si la cantidad
-     *     supera la existencia del material.
      */
     MaterialRef registrarSalida(String codigoMaterial, int cantidad);
 }
