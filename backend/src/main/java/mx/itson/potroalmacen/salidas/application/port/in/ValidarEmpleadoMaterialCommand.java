@@ -13,8 +13,7 @@ public record ValidarEmpleadoMaterialCommand(
         Integer idSolicitante,
         Integer idArea,
         LocalDateTime fechaEntrega,
-        List<SolicitudEntregaCommand.MaterialSolicitado> materiales
-) {
+        List<SolicitudEntregaCommand.MaterialSolicitado> materiales) {
     public ValidarEmpleadoMaterialCommand {
         materiales = List.copyOf(materiales);
     }
