@@ -81,8 +81,7 @@ public class DescontarExistenciasService implements DescontarExistenciasUseCase 
         List<SalidaRegistrada> salidas = new ArrayList<>();
         for (LineaSalida linea : solicitud.lineas()) {
             Material material = guardados.get(new CodigoMaterial(linea.codigoMaterial()));
-            salidas.add(new SalidaRegistrada(
-                    material.getCodigo().valor(), material.getNombre(), linea.cantidad()));
+            salidas.add(new SalidaRegistrada(material.getCodigo().valor(), material.getNombre(), linea.cantidad()));
         }
         return salidas;
     }
