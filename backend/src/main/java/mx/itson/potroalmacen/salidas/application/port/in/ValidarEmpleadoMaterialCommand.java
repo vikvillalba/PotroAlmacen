@@ -5,16 +5,22 @@ import java.util.List;
 
 /**
  * DTO que modela la validación de la solicitud de un material para un determinado empleado.
- * @param idSolicitante Id del empleado que solicita los materiales
- * @param fechaEntrega Fecha de entrega de los materiales
- * @param materiales
+ *
+ * @param idSolicitante Id del empleado que solicita los materiales.
+ * @param materiales Materiales a validar.
+ * @param fechaReferencia Fecha de referencia opcional para calcular la ventana de días del límite (por defecto la fecha actual).
  */
 public record ValidarEmpleadoMaterialCommand(
         Integer idSolicitante,
-        Integer idArea,
-        LocalDateTime fechaEntrega,
-        List<SolicitudEntregaCommand.MaterialSolicitado> materiales) {
+        List<SolicitudEntregaCommand.MaterialSolicitado> materiales,
+        LocalDateTime fechaReferencia) {
+
+    public ValidarEmpleadoMaterialCommand(
+            Integer idSolicitante, List<SolicitudEntregaCommand.MaterialSolicitado> materiales) {
+        this(idSolicitante, materiales, null);
+    }
+
     public ValidarEmpleadoMaterialCommand {
-        materiales = List.copyOf(materiales);
+        materiales = (materiales == null) ? List.of() : List.copyOf(materiales);
     }
 }
