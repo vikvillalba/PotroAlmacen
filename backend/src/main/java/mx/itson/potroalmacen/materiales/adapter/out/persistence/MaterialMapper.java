@@ -28,6 +28,8 @@ public class MaterialMapper {
         entity.setStockMinimo(domain.getStockMinimo());
         entity.setStockMaximo(domain.getStockMaximo());
         entity.setUsoPrecauciones(domain.getUsoPrecauciones());
+        entity.setLimiteEntregaEmpleado(domain.getLimiteEntregaPorEmpleado());
+        entity.setPeriodoLimiteDias(domain.getPeriodoLimiteDias());
 
         return entity;
     }
@@ -50,6 +52,8 @@ public class MaterialMapper {
                 entity.getCantidad(),
                 entity.getStockMinimo(),
                 entity.getStockMaximo(),
-                entity.getUsoPrecauciones());
+                entity.getUsoPrecauciones(),
+                entity.getLimiteEntregaEmpleado(),
+                entity.getPeriodoLimiteDias());
     }
 }

@@ -62,6 +62,12 @@ public class MaterialEntity {
     @Column(name = "uso_precauciones", columnDefinition = "TEXT")
     private String usoPrecauciones;
 
+    @Column(name = "limite_entrega_empleado")
+    private Integer limiteEntregaEmpleado;
+
+    @Column(name = "periodo_limite_dias")
+    private Integer periodoLimiteDias;
+
     public MaterialEntity() {}
 
     // Getters y Setters
@@ -167,5 +173,21 @@ public class MaterialEntity {
 
     public void setUsoPrecauciones(String usoPrecauciones) {
         this.usoPrecauciones = usoPrecauciones;
+    }
+
+    public Integer getLimiteEntregaEmpleado() {
+        return limiteEntregaEmpleado;
+    }
+
+    public void setLimiteEntregaEmpleado(Integer limiteEntregaEmpleado) {
+        this.limiteEntregaEmpleado = limiteEntregaEmpleado;
+    }
+
+    public Integer getPeriodoLimiteDias() {
+        return periodoLimiteDias;
+    }
+
+    public void setPeriodoLimiteDias(Integer periodoLimiteDias) {
+        this.periodoLimiteDias = periodoLimiteDias;
     }
 }

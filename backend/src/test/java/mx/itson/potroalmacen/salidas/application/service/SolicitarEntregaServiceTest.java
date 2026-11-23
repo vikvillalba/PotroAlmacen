@@ -2,6 +2,7 @@ package mx.itson.potroalmacen.salidas.application.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,6 +140,11 @@ class SolicitarEntregaServiceTest {
             Boleta conId = boleta.conIdYFolio(guardadas.size() + 1, boleta.getFolio());
             guardadas.add(conId);
             return conId;
+        }
+
+        @Override
+        public int cantidadEntregada(Integer solicitanteId, String codigoMaterial, LocalDateTime desde) {
+            return 0;
         }
     }
 }
