@@ -5,6 +5,8 @@ import java.util.Objects;
 import mx.itson.potroalmacen.salidas.application.port.in.SolicitarEntregaUseCase;
 import mx.itson.potroalmacen.salidas.application.port.in.SolicitudEntregaCommand;
 import mx.itson.potroalmacen.salidas.application.port.in.SolicitudEntregaCommand.MaterialSolicitado;
+import mx.itson.potroalmacen.salidas.application.port.in.ValidarEmpleadoMaterialCommand;
+import mx.itson.potroalmacen.salidas.application.port.in.ValidarEmpleadoMaterialUseCase;
 import mx.itson.potroalmacen.salidas.application.port.out.BoletaRepositoryPort;
 import mx.itson.potroalmacen.salidas.application.port.out.EmpleadoConsultaPort;
 import mx.itson.potroalmacen.salidas.application.port.out.InventarioPort;
@@ -18,10 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementación del caso de uso SolicitarEntregaUseCase.
- *
- * <p>Obtiene al solicitante y al entregador, registra en el inventario la salida de cada material (Materiales
- * verifica la existencia), crea la boleta con las reglas del dominio y la guarda. Todo ocurre en una transacción:
- * si algo falla, las salidas ya registradas se revierten.
+ * <p>
+ * Obtiene al solicitante y al entregador, valida el estado del empleado y los límites de entrega configurados,
+ * registra en el inventario la salida de cada material (Materiales verifica la existencia), crea la boleta con
+ * las reglas del dominio y la guarda. Ocurre en una transacción: si algo falla, las salidas ya registradas
+ * se revierten.
  */
 @Service
 @Transactional
@@ -30,12 +33,17 @@ public class SolicitarEntregaService implements SolicitarEntregaUseCase {
     private final EmpleadoConsultaPort empleados;
     private final InventarioPort inventario;
     private final BoletaRepositoryPort boletaRepository;
+    private final ValidarEmpleadoMaterialUseCase validarEmpleado;
 
     public SolicitarEntregaService(
-            EmpleadoConsultaPort empleados, InventarioPort inventario, BoletaRepositoryPort boletaRepository) {
+            EmpleadoConsultaPort empleados,
+            InventarioPort inventario,
+            BoletaRepositoryPort boletaRepository,
+            ValidarEmpleadoMaterialUseCase validarEmpleado) {
         this.empleados = Objects.requireNonNull(empleados, "empleados es obligatorio");
         this.inventario = Objects.requireNonNull(inventario, "inventario es obligatorio");
         this.boletaRepository = Objects.requireNonNull(boletaRepository, "boletaRepository es obligatorio");
+        this.validarEmpleado = Objects.requireNonNull(validarEmpleado, "validarEmpleado es obligatorio");
     }
 
     @Override
@@ -46,6 +54,11 @@ public class SolicitarEntregaService implements SolicitarEntregaUseCase {
         EmpleadoRef entregador = buscarEmpleado(comando.idEntregador());
 
         comando.materiales().forEach(SolicitarEntregaService::validarLinea);
+
+        if (comando.idSolicitante() != null && !comando.materiales().isEmpty()) {
+            validarEmpleado.validarEmpleado(
+                    new ValidarEmpleadoMaterialCommand(comando.idSolicitante(), comando.materiales()));
+        }
 
         List<MaterialRef> materiales = comando.materiales().stream()
                 .map(linea -> inventario.registrarSalida(linea.codigoMaterial(), linea.cantidadAEntregar()))

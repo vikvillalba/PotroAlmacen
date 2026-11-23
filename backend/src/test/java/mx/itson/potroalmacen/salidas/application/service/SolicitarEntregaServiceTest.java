@@ -11,6 +11,7 @@ import java.util.Optional;
 import mx.itson.potroalmacen.materiales.domain.exceptions.ExistenciaInsuficienteException;
 import mx.itson.potroalmacen.salidas.application.port.in.SolicitudEntregaCommand;
 import mx.itson.potroalmacen.salidas.application.port.in.SolicitudEntregaCommand.MaterialSolicitado;
+import mx.itson.potroalmacen.salidas.application.port.in.ValidarEmpleadoMaterialUseCase;
 import mx.itson.potroalmacen.salidas.application.port.out.BoletaRepositoryPort;
 import mx.itson.potroalmacen.salidas.application.port.out.EmpleadoConsultaPort;
 import mx.itson.potroalmacen.salidas.application.port.out.InventarioPort;
@@ -20,6 +21,7 @@ import mx.itson.potroalmacen.salidas.domain.EstadoBoleta;
 import mx.itson.potroalmacen.salidas.domain.MaterialRef;
 import mx.itson.potroalmacen.salidas.domain.exceptions.BoletaInvalidaException;
 import mx.itson.potroalmacen.salidas.domain.exceptions.EmpleadoNoEncontradoException;
+import mx.itson.potroalmacen.salidas.domain.exceptions.LimiteEntregaExcedidoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,9 +41,10 @@ class SolicitarEntregaServiceTest {
         inventario.existencias.put("LIM-001", 10);
         inventario.existencias.put("LIM-002", 3);
         boletas = new FakeBoletaRepository();
+        ValidarEmpleadoMaterialUseCase validarEmpleado = solicitud -> {};
         EmpleadoConsultaPort empleados =
                 id -> Optional.ofNullable(Map.of(1, ANA, 2, LUIS).get(id));
-        service = new SolicitarEntregaService(empleados, inventario, boletas);
+        service = new SolicitarEntregaService(empleados, inventario, boletas, validarEmpleado);
     }
 
     @Test
@@ -112,6 +115,25 @@ class SolicitarEntregaServiceTest {
     void solicitar_sinMateriales() {
         assertThrows(
                 BoletaInvalidaException.class, () -> service.solicitar(new SolicitudEntregaCommand(1, 2, List.of())));
+        assertTrue(boletas.guardadas.isEmpty());
+    }
+
+    @Test
+    @DisplayName(
+            "Cuando la validación del empleado o límite falla, se propaga la excepción y no se toca el inventario ni la boleta")
+    void solicitar_limiteExcedido_noTocaInventarioNiGuardaBoleta() {
+        ValidarEmpleadoMaterialUseCase validadorConFalla = solicitud -> {
+            throw new LimiteEntregaExcedidoException("LIM-001", 5, 7, 4, 3);
+        };
+        EmpleadoConsultaPort empleados =
+                id -> Optional.ofNullable(Map.of(1, ANA, 2, LUIS).get(id));
+        var serviceConLimite = new SolicitarEntregaService(empleados, inventario, boletas, validadorConFalla);
+
+        var comando = new SolicitudEntregaCommand(1, 2, List.of(new MaterialSolicitado("LIM-001", 3)));
+
+        assertThrows(LimiteEntregaExcedidoException.class, () -> serviceConLimite.solicitar(comando));
+        assertEquals(10, inventario.existencias.get("LIM-001"));
+        assertTrue(inventario.salidas.isEmpty());
         assertTrue(boletas.guardadas.isEmpty());
     }
 
