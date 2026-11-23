@@ -1,4 +1,5 @@
 /*
+ * /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -32,6 +33,8 @@ public final class Material {
     private int stockMinimo;
     private Integer stockMaximo;
     private String usoPrecauciones;
+    private Integer limiteEntregaPorEmpleado;
+    private Integer periodoLimiteDias;
 
     private Material(
             Integer id,
@@ -46,7 +49,9 @@ public final class Material {
             int cantidad,
             int stockMinimo,
             Integer stockMaximo,
-            String usoPrecauciones) {
+            String usoPrecauciones,
+            Integer limiteEntregaPorEmpleado,
+            Integer periodoLimiteDias) {
         this.id = id;
         this.codigo = Objects.requireNonNull(codigo, "El código es obligatorio");
         this.nombre = requerirTexto(nombre, "nombre", NOMBRE_MAXIMO);
@@ -61,6 +66,9 @@ public final class Material {
         this.stockMinimo = validarNoNegativo(stockMinimo, "El stock mínimo");
         this.stockMaximo = validarStockMaximo(stockMaximo, this.stockMinimo);
         this.usoPrecauciones = opcional(usoPrecauciones, "uso y precauciones", USO_PRECAUCIONES_MAXIMO);
+        validarLimiteEntrega(limiteEntregaPorEmpleado, periodoLimiteDias);
+        this.limiteEntregaPorEmpleado = limiteEntregaPorEmpleado;
+        this.periodoLimiteDias = periodoLimiteDias;
     }
 
     public static Material crear(
@@ -103,6 +111,42 @@ public final class Material {
             int stockMinimo,
             Integer stockMaximo,
             String usoPrecauciones) {
+        return crear(
+                codigo,
+                nombre,
+                categoria,
+                unidadMedida,
+                presentacion,
+                contenidoPresentacion,
+                campus,
+                precioUnitario,
+                cantidadInicial,
+                stockMinimo,
+                stockMaximo,
+                usoPrecauciones,
+                null,
+                null);
+    }
+
+    /**
+     * Crea un material con su límite de entrega por empleado. El límite y su periodo se indican juntos; si ambos son
+     * {@code null}, el material no tiene límite.
+     */
+    public static Material crear(
+            CodigoMaterial codigo,
+            String nombre,
+            Categoria categoria,
+            UnidadMedida unidadMedida,
+            Presentacion presentacion,
+            String contenidoPresentacion,
+            Campus campus,
+            BigDecimal precioUnitario,
+            int cantidadInicial,
+            int stockMinimo,
+            Integer stockMaximo,
+            String usoPrecauciones,
+            Integer limiteEntregaPorEmpleado,
+            Integer periodoLimiteDias) {
         // Valida que la cantidad inicial sea menor o igual que el stock máximo
         validarNoNegativo(cantidadInicial, "La existencia inicial");
         if (stockMaximo != null && cantidadInicial > stockMaximo) {
@@ -121,7 +165,42 @@ public final class Material {
                 cantidadInicial,
                 stockMinimo,
                 stockMaximo,
-                usoPrecauciones);
+                usoPrecauciones,
+                limiteEntregaPorEmpleado,
+                periodoLimiteDias);
+    }
+
+    /** Reconstruye un material ya persistido, sin límite de entrega. */
+    public static Material reconstruir(
+            Integer id,
+            CodigoMaterial codigo,
+            String nombre,
+            Categoria categoria,
+            UnidadMedida unidadMedida,
+            Presentacion presentacion,
+            String contenidoPresentacion,
+            Campus campus,
+            BigDecimal precioUnitario,
+            int cantidad,
+            int stockMinimo,
+            Integer stockMaximo,
+            String usoPrecauciones) {
+        return reconstruir(
+                id,
+                codigo,
+                nombre,
+                categoria,
+                unidadMedida,
+                presentacion,
+                contenidoPresentacion,
+                campus,
+                precioUnitario,
+                cantidad,
+                stockMinimo,
+                stockMaximo,
+                usoPrecauciones,
+                null,
+                null);
     }
 
     /** Reconstruye un material ya persistido. Lo usa el adaptador de persistencia. */
@@ -138,7 +217,9 @@ public final class Material {
             int cantidad,
             int stockMinimo,
             Integer stockMaximo,
-            String usoPrecauciones) {
+            String usoPrecauciones,
+            Integer limiteEntregaPorEmpleado,
+            Integer periodoLimiteDias) {
         Objects.requireNonNull(id, "El id es obligatorio al reconstruir un material");
         return new Material(
                 id,
@@ -153,7 +234,9 @@ public final class Material {
                 cantidad,
                 stockMinimo,
                 stockMaximo,
-                usoPrecauciones);
+                usoPrecauciones,
+                limiteEntregaPorEmpleado,
+                periodoLimiteDias);
     }
 
     public Material conId(Integer nuevoId) {
@@ -170,7 +253,9 @@ public final class Material {
                 cantidad,
                 stockMinimo,
                 stockMaximo,
-                usoPrecauciones);
+                usoPrecauciones,
+                limiteEntregaPorEmpleado,
+                periodoLimiteDias);
     }
 
     public void actualizarDatos(
@@ -201,6 +286,25 @@ public final class Material {
     /** Precio unitario sin IVA. En la recepción de material, el IVA se calcula aparte. */
     public void actualizarPrecio(BigDecimal nuevoPrecio) {
         this.precioUnitario = validarPrecio(nuevoPrecio);
+    }
+
+    // límite de entrega
+
+    /**
+     * Define cuánto de este material puede recibir un empleado dentro de un periodo. Se indican juntos: pasar los dos
+     * en {@code null} quita el límite.
+     *
+     * @param limitePorEmpleado cantidad máxima por empleado; mayor a cero.
+     * @param periodoDias días hacia atrás en los que se suman las entregas del empleado; mayor a cero.
+     */
+    public void cambiarLimiteEntrega(Integer limitePorEmpleado, Integer periodoDias) {
+        validarLimiteEntrega(limitePorEmpleado, periodoDias);
+        this.limiteEntregaPorEmpleado = limitePorEmpleado;
+        this.periodoLimiteDias = periodoDias;
+    }
+
+    public boolean tieneLimiteEntrega() {
+        return limiteEntregaPorEmpleado != null;
     }
 
     // existencia
@@ -298,6 +402,21 @@ public final class Material {
         return maximo;
     }
 
+    private static void validarLimiteEntrega(Integer limitePorEmpleado, Integer periodoDias) {
+        if (limitePorEmpleado == null && periodoDias == null) {
+            return;
+        }
+        if (limitePorEmpleado == null || periodoDias == null) {
+            throw new MaterialInvalidoException("El límite de entrega y su periodo deben indicarse juntos");
+        }
+        if (limitePorEmpleado <= 0) {
+            throw new MaterialInvalidoException("El límite de entrega por empleado debe ser mayor a cero");
+        }
+        if (periodoDias <= 0) {
+            throw new MaterialInvalidoException("El periodo del límite de entrega debe ser mayor a cero días");
+        }
+    }
+
     public Integer getId() {
         return id;
     }
@@ -353,6 +472,16 @@ public final class Material {
 
     public String getUsoPrecauciones() {
         return usoPrecauciones;
+    }
+
+    /** Cantidad máxima que un empleado puede recibir dentro del periodo; {@code null} si no hay límite. */
+    public Integer getLimiteEntregaPorEmpleado() {
+        return limiteEntregaPorEmpleado;
+    }
+
+    /** Días hacia atrás en los que se suman las entregas del empleado; {@code null} si no hay límite. */
+    public Integer getPeriodoLimiteDias() {
+        return periodoLimiteDias;
     }
 
     @Override
