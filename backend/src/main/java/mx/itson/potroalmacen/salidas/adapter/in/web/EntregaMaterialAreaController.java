@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /** HTTP API para solicitar la entrega de materiales destinada a un área. */
 @RestController
-@RequestMapping("/api/areas/{idArea}/entregas")
+@RequestMapping("/api/salidas/areas/{idArea}/entregas")
 @Tag(name = "Salidas", description = "Registro de entregas de material para áreas")
 class EntregaMaterialAreaController {
 
