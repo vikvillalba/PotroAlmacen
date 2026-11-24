@@ -79,7 +79,7 @@ class EntregaMaterialAreaControllerTest {
 
     @Test
     void solicitarEntregaValidaMaterialDelArea() throws Exception {
-        mockMvc.perform(post("/api/areas/1/entregas")
+        mockMvc.perform(post("/api/salidas/areas/1/entregas")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(SOLICITUD))
                 .andExpect(status().isCreated())
@@ -98,7 +98,7 @@ class EntregaMaterialAreaControllerTest {
         errorValidacion = new MaterialNoPermitidoEnAreaException("022");
         String solicitudNoPermitida = SOLICITUD.replace("001", "022");
 
-        mockMvc.perform(post("/api/areas/1/entregas")
+        mockMvc.perform(post("/api/salidas/areas/1/entregas")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(solicitudNoPermitida))
                 .andExpect(status().isBadRequest())
