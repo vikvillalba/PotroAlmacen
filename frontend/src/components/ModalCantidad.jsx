@@ -1,13 +1,31 @@
 import { useState } from 'react'
-import { Check, ChevronDown } from 'lucide-react'
+import { Check } from 'lucide-react'
 import Modal from './Modal.jsx'
 import ControlCantidad from './ControlCantidad.jsx'
 
 export default function ModalCantidad({ material, inicial, onAnadir, onCerrar }) {
-    const [cantidad, setCantidad] = useState(inicial?.cantidad ?? 1)
-    const [presentacion, setPresentacion] = useState(
-        inicial?.presentacion ?? material.presentaciones[0],
+    const maxDisponible = Number(material.cantidad ?? material.existencia ?? 0)
+    const [cantidad, setCantidad] = useState(() =>
+        Math.min(inicial?.cantidad ?? 1, Math.max(1, maxDisponible)),
     )
+    const [avisoStock, setAvisoStock] = useState(null)
+
+    const presentacion =
+        inicial?.presentacion ??
+        [material.presentacion, material.contenidoPresentacion].filter(Boolean).join(' · ')
+
+    const cambiarCantidad = (nueva) => {
+        if (nueva < 1) return
+        if (nueva > maxDisponible) {
+            setCantidad(maxDisponible)
+            setAvisoStock(`Solo hay ${maxDisponible} ${material.unidadMedida ?? 'unidades'} disponibles.`)
+            return
+        }
+        setAvisoStock(null)
+        setCantidad(nueva)
+    }
+
+    const invalida = maxDisponible <= 0 || cantidad < 1 || cantidad > maxDisponible
 
     return (
         <Modal
@@ -16,13 +34,18 @@ export default function ModalCantidad({ material, inicial, onAnadir, onCerrar })
             pie={
                 <>
                     <small className="modal-note">
-                        {material.refill ? `Refill: ${material.refill}` : ''}
+                        {avisoStock ? (
+                            <span className="red">{avisoStock}</span>
+                        ) : (
+                            <>Disponible: {maxDisponible} {material.unidadMedida ?? ''}</>
+                        )}
                     </small>
                     <div className="modal-actions">
                         <button type="button" className="btn" onClick={onCerrar}>Volver</button>
                         <button
                             type="button"
                             className="btn primary"
+                            disabled={invalida}
                             onClick={() => onAnadir({ material, cantidad, presentacion })}
                         >
                             <Check size={16} /> Añadir
@@ -36,28 +59,21 @@ export default function ModalCantidad({ material, inicial, onAnadir, onCerrar })
                     <tr>
                         <th scope="col">Código</th>
                         <th scope="col">Producto</th>
-                        <th scope="col">Cantidad</th>
                         <th scope="col">Presentación</th>
+                        <th scope="col">Cantidad</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td className="muted">{material.codigo}</td>
                         <td><strong>{material.nombre}</strong></td>
-                        <td><ControlCantidad valor={cantidad} onCambio={setCantidad} /></td>
+                        <td>{presentacion || '—'}</td>
                         <td>
-                            <span className="input select">
-                                <select
-                                    value={presentacion}
-                                    onChange={(e) => setPresentacion(e.target.value)}
-                                    aria-label="Presentación"
-                                >
-                                    {material.presentaciones.map((p) => (
-                                        <option key={p} value={p}>{p}</option>
-                                    ))}
-                                </select>
-                                <ChevronDown size={16} color="#6b7280" aria-hidden="true" />
-                            </span>
+                            <ControlCantidad
+                                valor={cantidad}
+                                max={maxDisponible}
+                                onCambio={cambiarCantidad}
+                            />
                         </td>
                     </tr>
                 </tbody>

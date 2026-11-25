@@ -8,15 +8,18 @@ import CampoSelect from '../components/CampoSelect.jsx'
 import PieAcciones from '../components/PieAcciones.jsx'
 import { normalizar } from '../utils/texto.js'
 
-// Datos de ejemplo mientras no exista el endpoint de personal.
+// TEMPORAL: el backend aún no tiene GET de personal ni de áreas. Los ids y nombres coinciden con
+// V202611192300__datos_mock_personal.sql para que el POST de la boleta encuentre al empleado.
 const SOLICITANTES = [
-    { id: 1, nombre: 'Victoria Villalba', puesto: 'Intendencia', area: '1800', tipo: 'ITSON', estado: 'Activo' },
-    { id: 2, nombre: 'Lucía Vásquez', puesto: 'Auxiliar de limpieza', area: 'Biblioteca', tipo: 'ITSON', estado: 'Activo' },
-    { id: 3, nombre: 'Pablo Zamora', puesto: 'Mantenimiento general', area: 'CISCO', tipo: 'Compañía', estado: 'Activo' },
-    { id: 4, nombre: 'Erika Gastélum', puesto: 'Intendencia', area: 'Polideportivo', tipo: 'ITSON', estado: 'Sin préstamo' },
+    { id: 1, nombre: 'María López Hernández', puesto: 'Intendente', area: 'Edificio Académico A', tipo: 'ITSON', estado: 'Activo' },
+    { id: 2, nombre: 'José Ramírez Torres', puesto: 'Intendente', area: 'Edificio Académico A', tipo: 'ITSON', estado: 'Activo' },
+    { id: 3, nombre: 'Ana Beltrán', puesto: 'Auxiliar de mantenimiento', area: 'Laboratorio de Cómputo', tipo: 'ITSON', estado: 'Activo' },
+    { id: 4, nombre: 'Luis Castro Valenzuela', puesto: 'Jardinero', area: 'Gimnasio Universitario', tipo: 'ITSON', estado: 'En préstamo' },
+    { id: 5, nombre: 'Carmen Ortega Félix', puesto: 'Coordinadora de limpieza', area: 'Oficinas Administrativas', tipo: 'ITSON', estado: 'Activo' },
+    { id: 8, nombre: 'Daniel Acosta Peña', puesto: 'Contratista de limpieza', area: 'Edificio Académico A', tipo: 'Externo', estado: 'Activo' },
 ]
-const AREAS = ['1800', 'Biblioteca', 'CISCO', 'Polideportivo'].map((a) => ({ id: a, nombre: a }))
-const BADGE = { Activo: 'ok', 'Sin préstamo': 'neutral' }
+const AREAS = [...new Set(SOLICITANTES.map((s) => s.area))].map((a) => ({ id: a, nombre: a }))
+const BADGE = { Activo: 'ok', 'En préstamo': 'warn' }
 
 export default function EntregaSolicitante() {
     const navigate = useNavigate()

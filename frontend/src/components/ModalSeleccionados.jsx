@@ -7,8 +7,15 @@ export default function ModalSeleccionados({ items, solicitante, onGuardar, onCe
     // los cambios solo se aplican al dar "Guardar".
     const [borrador, setBorrador] = useState(items)
 
-    const cambiarCantidad = (id, cantidad) =>
-        setBorrador((prev) => prev.map((i) => (i.material.id === id ? { ...i, cantidad } : i)))
+    const cambiarCantidad = (id, nuevaCantidad) =>
+        setBorrador((prev) =>
+            prev.map((i) => {
+                if (i.material.id !== id) return i
+                const maxDisponible = Number(i.material.cantidad ?? i.material.existencia ?? 0)
+                const ajustada = Math.max(1, Math.min(nuevaCantidad, maxDisponible))
+                return { ...i, cantidad: ajustada }
+            }),
+        )
 
     const quitar = (id) => setBorrador((prev) => prev.filter((i) => i.material.id !== id))
 
@@ -44,32 +51,37 @@ export default function ModalSeleccionados({ items, solicitante, onGuardar, onCe
                     </tr>
                 </thead>
                 <tbody>
-                    {borrador.map(({ material: m, cantidad, presentacion }) => (
-                        <tr key={m.id}>
-                            <td className="muted">{m.codigo}</td>
-                            <td>
-                                <strong>{m.nombre}</strong>
-                                <small>{presentacion}</small>
-                            </td>
-                            <td>{m.categoria}</td>
-                            <td>
-                                <ControlCantidad
-                                    valor={cantidad}
-                                    onCambio={(c) => cambiarCantidad(m.id, c)}
-                                />
-                            </td>
-                            <td>
-                                <button
-                                    type="button"
-                                    className="row-btn danger"
-                                    onClick={() => quitar(m.id)}
-                                    aria-label={`Quitar ${m.nombre}`}
-                                >
-                                    <Trash2 size={16} />
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                    {borrador.map(({ material: m, cantidad, presentacion }) => {
+                        const maxDisponible = Number(m.cantidad ?? m.existencia ?? 0)
+                        return (
+                            <tr key={m.id}>
+                                <td className="muted">{m.codigo}</td>
+                                <td>
+                                    <strong>{m.nombre}</strong>
+                                    <small>{presentacion}</small>
+                                </td>
+                                <td>{m.categoria}</td>
+                                <td>
+                                    <ControlCantidad
+                                        valor={cantidad}
+                                        max={maxDisponible}
+                                        onCambio={(c) => cambiarCantidad(m.id, c)}
+                                    />
+                                    <small>Disp.: {maxDisponible} {m.unidadMedida ?? ''}</small>
+                                </td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="row-btn danger"
+                                        onClick={() => quitar(m.id)}
+                                        aria-label={`Quitar ${m.nombre}`}
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </td>
+                            </tr>
+                        )
+                    })}
                     {n === 0 && (
                         <tr>
                             <td colSpan={5} className="muted center">No hay materiales seleccionados.</td>

@@ -7,24 +7,8 @@ import CampoBusqueda from '../components/CampoBusqueda.jsx'
 import PieAcciones from '../components/PieAcciones.jsx'
 import ModalCantidad from '../components/ModalCantidad.jsx'
 import ModalSeleccionados from '../components/ModalSeleccionados.jsx'
-import { normalizar } from '../utils/texto.js'
+import { useMateriales } from '../hooks/useMateriales.js'
 
-// Datos de ejemplo mientras no se conecte /api/materiales.
-const MATERIALES = [
-    {
-        id: 1, nombre: 'Limpiador Multiusos', categoria: 'Líquidos', codigo: 'LQ-0145',
-        estado: 'Disponible', refill: '24 - Octubre',
-        presentaciones: ['Botella de 1 L', 'Garrafa de 5 L', 'Galón'],
-    },
-    {
-        id: 2, nombre: 'Aspiradora industrial', categoria: 'Equipo eléctrico', codigo: 'ACT-0421',
-        estado: 'Disponible', presentaciones: ['Pieza'],
-    },
-    {
-        id: 3, nombre: 'Rodillo para pintar', categoria: 'Pintura', codigo: 'ACT-0310',
-        estado: 'Disponible', presentaciones: ['Pieza'],
-    },
-]
 const BADGE = { Disponible: 'ok', 'Stock bajo': 'warn', Agotado: 'bad' }
 
 export default function EntregaMateriales() {
@@ -35,10 +19,7 @@ export default function EntregaMateriales() {
     const [materialActivo, setMaterialActivo] = useState(null)
     const [verSeleccionados, setVerSeleccionados] = useState(false)
 
-    const texto = normalizar(busqueda.trim())
-    const visibles = MATERIALES.filter(
-        (m) => !texto || normalizar(`${m.nombre} ${m.codigo}`).includes(texto),
-    )
+    const { materiales: visibles, error, cargando } = useMateriales(busqueda)
 
     const anadir = (item) => {
         setItems((prev) => {
@@ -106,6 +87,7 @@ export default function EntregaMateriales() {
                                 <tr>
                                     <th scope="col">Material</th>
                                     <th scope="col">Código</th>
+                                    <th scope="col">Existencias</th>
                                     <th scope="col">Disponibilidad</th>
                                 </tr>
                             </thead>
@@ -115,17 +97,35 @@ export default function EntregaMateriales() {
                                         key={m.id}
                                         className={`pick ${items.some((i) => i.material.id === m.id) ? 'selected' : ''}`}
                                         tabIndex={0}
-                                        onClick={() => setMaterialActivo(m)}
-                                        onKeyDown={(e) => e.key === 'Enter' && setMaterialActivo(m)}
+                                        onClick={() => m.estado !== 'Agotado' && setMaterialActivo(m)}
+                                        onKeyDown={(e) => e.key === 'Enter' && m.estado !== 'Agotado' && setMaterialActivo(m)}
                                     >
-                                        <td><strong>{m.nombre}</strong><small>{m.categoria}</small></td>
-                                        <td>{m.codigo}</td>
+                                        <td>
+                                            <strong>{m.nombre}</strong>
+                                            <small>
+                                                {[m.categoria, m.presentacion, m.contenidoPresentacion].filter(Boolean).join(' · ')}
+                                            </small>
+                                        </td>
+                                        <td className="muted">{m.codigo}</td>
+                                        <td>{m.cantidad} {m.unidadMedida}</td>
                                         <td><span className={`badge ${BADGE[m.estado]}`}>{m.estado}</span></td>
                                     </tr>
                                 ))}
-                                {visibles.length === 0 && (
+                                {error && (
                                     <tr>
-                                        <td colSpan={3} className="muted center">
+                                        <td colSpan={4} className="muted center" role="alert">
+                                            {error.mensaje}
+                                        </td>
+                                    </tr>
+                                )}
+                                {!error && cargando && visibles.length === 0 && (
+                                    <tr>
+                                        <td colSpan={4} className="muted center">Cargando materiales…</td>
+                                    </tr>
+                                )}
+                                {!error && !cargando && visibles.length === 0 && (
+                                    <tr>
+                                        <td colSpan={4} className="muted center">
                                             No hay materiales que coincidan con la búsqueda.
                                         </td>
                                     </tr>

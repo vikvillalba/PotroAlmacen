@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Check, ChevronDown, Plus } from 'lucide-react'
+import { ArrowLeft, Check, ChevronDown, Plus, X } from 'lucide-react'
 import Layout from '../components/Layout.jsx'
+import ModalArea from '../components/ModalArea.jsx'
 import { registrarMaterial } from '../api/materiales.js'
+import { asignarMaterialArea, listarAreas } from '../api/areas.js'
 import { useCatalogos } from '../hooks/useCatalogos.js'
 
 const VALORES_INICIALES = {
@@ -12,6 +14,8 @@ const VALORES_INICIALES = {
     campus: '',
     unidadMedida: '',
     presentacion: '',
+    contenidoPresentacion: '',
+    precioUnitario: '',
     existenciaInicial: '',
     stockMinimo: '',
     stockMaximo: '',
@@ -27,10 +31,19 @@ function sinClave(objeto, clave) {
 }
 
 const MAX_USO = 500
+const MAX_CONTENIDO = 100
 const MAX_DIGITOS = 9
 
 const esEntero = (texto) => /^\d+$/.test(String(texto).trim())
+const esDecimalValido = (texto) => /^\d{1,8}(\.\d{1,2})?$/.test(String(texto).trim())
 const soloDigitos = (texto) => texto.replace(/\D/g, '').slice(0, MAX_DIGITOS).replace(/^0+(?=\d)/, '')
+const soloDecimal = (texto) => {
+    const limpio = texto.replace(/[^0-9.]/g, '')
+    const partes = limpio.split('.')
+    if (partes.length <= 2) return limpio
+    return `${partes[0]}.${partes.slice(1).join('')}`
+}
+
 const CAMPOS_NUMERICOS = ['stockMinimo', 'stockMaximo', 'existenciaInicial']
 
 const DEPENDIENTES = {
@@ -38,6 +51,8 @@ const DEPENDIENTES = {
     stockMaximo: ['stockMaximo', 'existenciaInicial'],
     existenciaInicial: ['existenciaInicial'],
     usoPrecauciones: ['usoPrecauciones'],
+    contenidoPresentacion: ['contenidoPresentacion'],
+    precioUnitario: ['precioUnitario'],
 }
 
 function validar(v) {
@@ -58,9 +73,17 @@ function validar(v) {
     if (!v.unidadMedida) e.unidadMedida = 'Selecciona una unidad de medida.'
     if (!v.presentacion) e.presentacion = 'Selecciona una presentación.'
 
+    if (v.contenidoPresentacion.trim().length > MAX_CONTENIDO) {
+        e.contenidoPresentacion = `Máximo ${MAX_CONTENIDO} caracteres.`
+    }
+
+    const precio = String(v.precioUnitario).trim()
+    if (precio !== '' && !esDecimalValido(precio)) {
+        e.precioUnitario = 'Ingresa un precio válido (ej. 125.50).'
+    }
+
     for (const [campo, etiqueta] of [
         ['stockMinimo', 'El stock mínimo'],
-        ['stockMaximo', 'El stock máximo'],
         ['existenciaInicial', 'La existencia inicial'],
     ]) {
         const texto = String(v[campo]).trim()
@@ -68,11 +91,18 @@ function validar(v) {
         else if (!esEntero(texto)) e[campo] = `${etiqueta} debe ser un número entero mayor o igual a 0.`
     }
 
-    if (!e.stockMinimo && !e.stockMaximo && Number(v.stockMinimo) >= Number(v.stockMaximo)) {
-        e.stockMaximo = `El stock máximo debe ser mayor que el stock mínimo (${v.stockMinimo}).`
-    }
-    if (!e.existenciaInicial && !e.stockMaximo && Number(v.existenciaInicial) > Number(v.stockMaximo)) {
-        e.existenciaInicial = `La existencia inicial no puede superar el stock máximo (${v.stockMaximo}).`
+    const textoMax = String(v.stockMaximo).trim()
+    if (textoMax !== '') {
+        if (!esEntero(textoMax)) {
+            e.stockMaximo = 'El stock máximo debe ser un número entero mayor o igual a 0.'
+        } else {
+            if (!e.stockMinimo && Number(v.stockMinimo) >= Number(textoMax)) {
+                e.stockMaximo = `El stock máximo debe ser mayor que el stock mínimo (${v.stockMinimo}).`
+            }
+            if (!e.existenciaInicial && Number(v.existenciaInicial) > Number(textoMax)) {
+                e.existenciaInicial = `La existencia inicial no puede superar el stock máximo (${textoMax}).`
+            }
+        }
     }
 
     if (v.usoPrecauciones.trim().length > MAX_USO) e.usoPrecauciones = `Máximo ${MAX_USO} caracteres.`
@@ -102,16 +132,29 @@ export default function RegistrarFicha() {
     const [mensajeExito, setMensajeExito] = useState(null)
     const [enviando, setEnviando] = useState(false)
 
-    // Evita navegar si el usuario sale de la pantalla antes de tiempo
+    const [areasDisponibles, setAreasDisponibles] = useState([])
+    const [areasAsignadas, setAreasAsignadas] = useState([])
+    const [modalAreaAbierto, setModalAreaAbierto] = useState(false)
+
     useEffect(() => () => clearTimeout(temporizador.current), [])
+
+    useEffect(() => {
+        const controlador = new AbortController()
+        listarAreas(controlador.signal)
+            .then((datos) => setAreasDisponibles(datos ?? []))
+            .catch((e) => {
+                if (e.name !== 'AbortError') console.error('Error cargando áreas:', e)
+            })
+        return () => controlador.abort()
+    }, [])
 
     const cambiar = (e) => {
         const { name } = e.target
         let value = e.target.value
         let aviso = null
 
-        // Los campos de stock solo aceptan dígitos
         if (CAMPOS_NUMERICOS.includes(name)) value = soloDigitos(value)
+        if (name === 'precioUnitario') value = soloDecimal(value)
         if (name === 'codigo') value = value.replace(/\s+/g, '')
         if (name === 'existenciaInicial' && esEntero(valores.stockMaximo) && esEntero(value) && Number(value) > Number(valores.stockMaximo)) {
             value = String(valores.stockMaximo)
@@ -141,7 +184,6 @@ export default function RegistrarFicha() {
         })
     }
 
-    // Valida un campo al salir de él
     const alSalir = (e) => {
         const { name } = e.target
         const encontrado = validar(valores)[name]
@@ -160,6 +202,21 @@ export default function RegistrarFicha() {
         'aria-invalid': errores[nombre] ? true : undefined,
     })
 
+    const agregarArea = (nuevaArea) => {
+        setAreasAsignadas((prev) => {
+            const existe = prev.some((item) => item.id === nuevaArea.id)
+            if (existe) {
+                return prev.map((item) => (item.id === nuevaArea.id ? nuevaArea : item))
+            }
+            return [...prev, nuevaArea]
+        })
+        setModalAreaAbierto(false)
+    }
+
+    const quitarArea = (id) => {
+        setAreasAsignadas((prev) => prev.filter((a) => a.id !== id))
+    }
+
     const enviar = async (e) => {
         e.preventDefault()
         setMensajeError(null)
@@ -177,31 +234,60 @@ export default function RegistrarFicha() {
 
         setEnviando(true)
         try {
+            const codigoLimpio = valores.codigo.trim()
+            const nombreLimpio = valores.nombre.trim()
+
             await registrarMaterial({
-                codigo: valores.codigo.trim(),
-                nombre: valores.nombre.trim(),
+                codigo: codigoLimpio,
+                nombre: nombreLimpio,
                 categoria: valores.categoria,
                 campus: valores.campus,
                 unidadMedida: valores.unidadMedida,
                 presentacion: valores.presentacion,
+                contenidoPresentacion: valores.contenidoPresentacion.trim() || null,
+                precioUnitario: aNumero(valores.precioUnitario.trim()),
                 existenciaInicial: aNumero(valores.existenciaInicial),
                 stockMinimo: aNumero(valores.stockMinimo),
                 stockMaximo: aNumero(valores.stockMaximo),
                 usoPrecauciones: valores.usoPrecauciones.trim() || null,
             })
-            setMensajeExito(`La ficha "${valores.nombre.trim()}" se registró correctamente.`)
+
+            if (areasAsignadas.length > 0) {
+                try {
+                    await Promise.all(
+                        areasAsignadas.map((area) =>
+                            asignarMaterialArea(area.id, {
+                                codigoMaterial: codigoLimpio,
+                                nombreMaterial: nombreLimpio,
+                                cantidad: area.cantidad,
+                            }),
+                        ),
+                    )
+                } catch (errArea) {
+                    console.error('No se pudieron asociar las áreas:', errArea)
+                }
+            }
+
+            setMensajeExito(`La ficha "${nombreLimpio}" se registró correctamente.`)
             setValores(VALORES_INICIALES)
+            setAreasAsignadas([])
             setErrores({})
-            // Se deja ver el mensaje un momento y se regresa al inventario
             temporizador.current = setTimeout(() => navigate('/inventario'), 1800)
             return
         } catch (error) {
-            // Errores por campo devueltos por el servidor (p. ej. código duplicado)
-            if (error.campos && Object.keys(error.campos).length > 0) setErrores(error.campos)
+            if (error.campos && Object.keys(error.campos).length > 0) {
+                setErrores(error.campos)
+            } else if (error.status === 409) {
+                setErrores({ codigo: error.mensaje })
+            }
             setMensajeError(error.mensaje)
         }
         setEnviando(false)
     }
+
+    const areasNoAgregadas = areasDisponibles.filter(
+        (a) => !areasAsignadas.some((asig) => asig.id === a.id),
+    )
 
     return (
         <Layout
@@ -285,10 +371,19 @@ export default function RegistrarFicha() {
                         </div>
 
                         <div className="row2">
+                            <Campo nombre="contenidoPresentacion" etiqueta="Contenido de la presentación (opcional)" error={errores.contenidoPresentacion} ayuda="Ej. 20 litros, 12 piezas, 5 kg">
+                                {(d) => <input {...propsCampo('contenidoPresentacion')} aria-describedby={d} maxLength={MAX_CONTENIDO} placeholder="Ej. Galón de 4 L" />}
+                            </Campo>
+                            <Campo nombre="precioUnitario" etiqueta="Precio unitario (opcional)" error={errores.precioUnitario} ayuda="Monto en pesos mexicanos (ej. 150.00)">
+                                {(d) => <input {...propsCampo('precioUnitario')} aria-describedby={d} type="text" inputMode="decimal" autoComplete="off" placeholder="0.00" />}
+                            </Campo>
+                        </div>
+
+                        <div className="row2">
                             <Campo nombre="stockMinimo" etiqueta="Stock mínimo" error={errores.stockMinimo}>
                                 {(d) => <input {...propsCampo('stockMinimo')} aria-describedby={d} type="text" inputMode="numeric" autoComplete="off" placeholder="0" />}
                             </Campo>
-                            <Campo nombre="stockMaximo" etiqueta="Stock máximo" error={errores.stockMaximo}>
+                            <Campo nombre="stockMaximo" etiqueta="Stock máximo (opcional)" error={errores.stockMaximo}>
                                 {(d) => <input {...propsCampo('stockMaximo')} aria-describedby={d} type="text" inputMode="numeric" autoComplete="off" placeholder="0" />}
                             </Campo>
                         </div>
@@ -309,9 +404,27 @@ export default function RegistrarFicha() {
                         <small>Selecciona las áreas que consumen este producto</small>
                     </div>
                     <ul className="chips">
-                        <li className="muted">Aún no has agregado áreas.</li>
+                        {areasAsignadas.length === 0 && (
+                            <li className="muted">Aún no has agregado áreas.</li>
+                        )}
+                        {areasAsignadas.map((a) => (
+                            <li key={a.id} className="chip">
+                                <span>{a.nombreArea} · {a.cantidad}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => quitarArea(a.id)}
+                                    aria-label={`Quitar ${a.nombreArea}`}
+                                >
+                                    <X size={14} aria-hidden="true" />
+                                </button>
+                            </li>
+                        ))}
                         <li>
-                            <button type="button" className="chip-add">
+                            <button
+                                type="button"
+                                className="chip-add"
+                                onClick={() => setModalAreaAbierto(true)}
+                            >
                                 <Plus size={14} aria-hidden="true" /> Agregar área
                             </button>
                         </li>
@@ -327,6 +440,14 @@ export default function RegistrarFicha() {
                     </button>
                 </div>
             </form>
+
+            {modalAreaAbierto && (
+                <ModalArea
+                    areasDisponibles={areasNoAgregadas}
+                    onAnadir={agregarArea}
+                    onCerrar={() => setModalAreaAbierto(false)}
+                />
+            )}
 
             {mensajeExito && (
                 <div className="toast success" role="status">
