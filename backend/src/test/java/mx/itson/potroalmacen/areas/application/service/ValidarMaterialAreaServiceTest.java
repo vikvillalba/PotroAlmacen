@@ -27,22 +27,17 @@ class ValidarMaterialAreaServiceTest {
 
     private static final int ID_AREA = 1;
 
-    private FakeAreaRepository areas;
     private ValidarMaterialAreaService service;
 
     @BeforeEach
     void setUp() {
-        areas = new FakeAreaRepository();
-        areas.agregar(
-                ID_AREA,
-                Area.crear(
-                        "Edificio A",
-                        TipoArea.values()[0],
-                        new BigDecimal("120.50"),
-                        List.of(new Espacio("Aula 101", null, FrecuenciaLimpieza.values()[0])),
-                        List.of(
-                                new MaterialRef("MAT-001", "Escoba", 10),
-                                new MaterialRef("MAT-002", "Jabón", 5))));
+        FakeAreaRepository areas = new FakeAreaRepository();
+        areas.agregar(Area.crear(
+                "Edificio A",
+                TipoArea.values()[0],
+                new BigDecimal("120.50"),
+                List.of(new Espacio("Aula 101", null, FrecuenciaLimpieza.values()[0])),
+                List.of(new MaterialRef("MAT-001", "Escoba", 10), new MaterialRef("MAT-002", "Jabón", 5))));
         service = new ValidarMaterialAreaService(areas);
     }
 
@@ -98,8 +93,7 @@ class ValidarMaterialAreaServiceTest {
     @DisplayName("Lanza AreaNoEncontradaException cuando el área no existe")
     void validar_areaInexistente_lanzaExcepcion() {
         assertThrows(
-                AreaNoEncontradaException.class,
-                () -> service.validar(new SolicitudMaterialArea(99, "MAT-001", 1)));
+                AreaNoEncontradaException.class, () -> service.validar(new SolicitudMaterialArea(99, "MAT-001", 1)));
     }
 
     @Test
@@ -107,8 +101,7 @@ class ValidarMaterialAreaServiceTest {
     void validar_datosObligatoriosFaltantes_lanzaExcepcion() {
         assertThrows(IllegalArgumentException.class, () -> service.validar(null));
         assertThrows(
-                IllegalArgumentException.class,
-                () -> service.validar(new SolicitudMaterialArea(null, "MAT-001", 1)));
+                IllegalArgumentException.class, () -> service.validar(new SolicitudMaterialArea(null, "MAT-001", 1)));
         assertThrows(
                 IllegalArgumentException.class, () -> service.validar(new SolicitudMaterialArea(ID_AREA, "  ", 1)));
     }
@@ -119,7 +112,9 @@ class ValidarMaterialAreaServiceTest {
         List<MaterialPermitidoResumen> resultado = service.consultarMaterialesPermitidos(ID_AREA);
 
         assertEquals(
-                List.of(new MaterialPermitidoResumen("MAT-001", "Escoba"), new MaterialPermitidoResumen("MAT-002", "Jabón")),
+                List.of(
+                        new MaterialPermitidoResumen("MAT-001", "Escoba"),
+                        new MaterialPermitidoResumen("MAT-002", "Jabón")),
                 resultado);
     }
 
@@ -132,8 +127,8 @@ class ValidarMaterialAreaServiceTest {
     private static final class FakeAreaRepository implements AreaRepositoryPort {
         private final Map<Integer, Area> almacen = new HashMap<>();
 
-        void agregar(int id, Area area) {
-            almacen.put(id, area.conId(id));
+        void agregar(Area area) {
+            almacen.put(ValidarMaterialAreaServiceTest.ID_AREA, area.conId(ValidarMaterialAreaServiceTest.ID_AREA));
         }
 
         @Override
