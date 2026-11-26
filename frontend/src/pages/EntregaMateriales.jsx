@@ -22,7 +22,7 @@ export default function EntregaMateriales() {
     const [materialActivo, setMaterialActivo] = useState(null)
     const [verSeleccionados, setVerSeleccionados] = useState(false)
 
-    const { materiales: visibles, error, cargando, sinArea } =
+    const { materiales: visibles, fueraDeArea, error, cargando, sinArea } =
         useMaterialesArea(solicitante?.idArea, busqueda)
 
     // Si el inventario cambió, los materiales ya elegidos toman la existencia más reciente y se vuelven a validar.
@@ -56,6 +56,8 @@ export default function EntregaMateriales() {
 
     const total = items.length
     const hayExceso = itemsExcedidos(items).length > 0
+    const hayBusqueda = busqueda.trim().length > 0
+    const noCatalogadoEnArea = !error && !cargando && hayBusqueda && visibles.length === 0 && fueraDeArea.length > 0
 
     return (
         <Layout
@@ -148,7 +150,16 @@ export default function EntregaMateriales() {
                                         <td colSpan={4} className="muted center">Cargando materiales…</td>
                                     </tr>
                                 )}
-                                {!error && !cargando && visibles.length === 0 && (
+                                {noCatalogadoEnArea && (
+                                    <tr>
+                                        <td colSpan={4} className="center" role="alert">
+                                            <p className="alert error" style={{ margin: 0 }}>
+                                                El material no está catalogado para esta área ({fueraDeArea.map((m) => `${m.nombre} (${m.codigo})`).join(', ')}).
+                                            </p>
+                                        </td>
+                                    </tr>
+                                )}
+                                {!error && !cargando && !noCatalogadoEnArea && visibles.length === 0 && (
                                     <tr>
                                         <td colSpan={4} className="muted center">
                                             No hay materiales que coincidan con la búsqueda.
