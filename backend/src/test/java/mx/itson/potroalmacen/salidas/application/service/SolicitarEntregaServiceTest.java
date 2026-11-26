@@ -13,7 +13,7 @@ import mx.itson.potroalmacen.salidas.application.port.in.SolicitudEntregaCommand
 import mx.itson.potroalmacen.salidas.application.port.in.SolicitudEntregaCommand.MaterialSolicitado;
 import mx.itson.potroalmacen.salidas.application.port.in.ValidarEmpleadoMaterialUseCase;
 import mx.itson.potroalmacen.salidas.application.port.out.BoletaRepositoryPort;
-import mx.itson.potroalmacen.salidas.application.port.out.EmpleadoConsultaPort;
+import mx.itson.potroalmacen.salidas.application.port.out.EmpleadoConsultaConcurrenciaPort;
 import mx.itson.potroalmacen.salidas.application.port.out.InventarioPort;
 import mx.itson.potroalmacen.salidas.domain.Boleta;
 import mx.itson.potroalmacen.salidas.domain.EmpleadoRef;
@@ -42,7 +42,7 @@ class SolicitarEntregaServiceTest {
         inventario.existencias.put("LIM-002", 3);
         boletas = new FakeBoletaRepository();
         ValidarEmpleadoMaterialUseCase validarEmpleado = solicitud -> {};
-        EmpleadoConsultaPort empleados =
+        EmpleadoConsultaConcurrenciaPort empleados =
                 id -> Optional.ofNullable(Map.of(1, ANA, 2, LUIS).get(id));
         service = new SolicitarEntregaService(empleados, inventario, boletas, validarEmpleado);
     }
@@ -125,7 +125,7 @@ class SolicitarEntregaServiceTest {
         ValidarEmpleadoMaterialUseCase validadorConFalla = solicitud -> {
             throw new LimiteEntregaExcedidoException("LIM-001", 5, 7, 4, 3);
         };
-        EmpleadoConsultaPort empleados =
+        EmpleadoConsultaConcurrenciaPort empleados =
                 id -> Optional.ofNullable(Map.of(1, ANA, 2, LUIS).get(id));
         var serviceConLimite = new SolicitarEntregaService(empleados, inventario, boletas, validadorConFalla);
 

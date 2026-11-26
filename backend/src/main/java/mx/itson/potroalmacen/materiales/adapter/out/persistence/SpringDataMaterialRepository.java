@@ -1,15 +1,21 @@
 package mx.itson.potroalmacen.materiales.adapter.out.persistence;
 
+import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
 import mx.itson.potroalmacen.materiales.domain.Campus;
 import mx.itson.potroalmacen.materiales.domain.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface SpringDataMaterialRepository extends JpaRepository<MaterialEntity, Long> {
     Optional<MaterialEntity> findByCodigo(String codigo);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT m FROM MaterialEntity m WHERE m.codigo = :codigo")
+    Optional<MaterialEntity> findByCodigoConBloqueo(@Param("codigo") String codigo);
 
     boolean existsByCodigo(String codigo);
 

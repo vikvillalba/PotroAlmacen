@@ -30,6 +30,11 @@ class FakeMaterialRepository implements MaterialRepositoryPort {
     }
 
     @Override
+    public Optional<Material> buscarPorCodigoConBloqueo(CodigoMaterial codigo) {
+        return this.buscarPorCodigo(codigo);
+    }
+
+    @Override
     public boolean existePorCodigo(CodigoMaterial codigo) {
         if (codigo == null) return false;
         return storage.containsKey(codigo.toString());

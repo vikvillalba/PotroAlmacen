@@ -29,7 +29,7 @@ public class RegistrarSalidaMaterialService implements RegistrarSalidaMaterialUs
     public SalidaRegistrada registrarSalida(String codigoMaterial, int cantidad) {
         CodigoMaterial codigo = new CodigoMaterial(codigoMaterial);
         Material material = repositorio
-                .buscarPorCodigo(codigo)
+                .buscarPorCodigoConBloqueo(codigo)
                 .orElseThrow(() -> new MaterialNoEncontradoException(codigo.valor()));
 
         material.registrarSalida(cantidad);

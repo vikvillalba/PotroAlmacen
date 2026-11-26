@@ -8,7 +8,7 @@ import mx.itson.potroalmacen.salidas.application.port.in.SolicitudEntregaCommand
 import mx.itson.potroalmacen.salidas.application.port.in.ValidarEmpleadoMaterialCommand;
 import mx.itson.potroalmacen.salidas.application.port.in.ValidarEmpleadoMaterialUseCase;
 import mx.itson.potroalmacen.salidas.application.port.out.BoletaRepositoryPort;
-import mx.itson.potroalmacen.salidas.application.port.out.EmpleadoConsultaPort;
+import mx.itson.potroalmacen.salidas.application.port.out.EmpleadoConsultaConcurrenciaPort;
 import mx.itson.potroalmacen.salidas.application.port.out.InventarioPort;
 import mx.itson.potroalmacen.salidas.domain.Boleta;
 import mx.itson.potroalmacen.salidas.domain.EmpleadoRef;
@@ -30,13 +30,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SolicitarEntregaService implements SolicitarEntregaUseCase {
 
-    private final EmpleadoConsultaPort empleados;
+    private final EmpleadoConsultaConcurrenciaPort empleados;
     private final InventarioPort inventario;
     private final BoletaRepositoryPort boletaRepository;
     private final ValidarEmpleadoMaterialUseCase validarEmpleado;
 
     public SolicitarEntregaService(
-            EmpleadoConsultaPort empleados,
+            EmpleadoConsultaConcurrenciaPort empleados,
             InventarioPort inventario,
             BoletaRepositoryPort boletaRepository,
             ValidarEmpleadoMaterialUseCase validarEmpleado) {
@@ -73,7 +73,9 @@ public class SolicitarEntregaService implements SolicitarEntregaUseCase {
         if (idEmpleado == null) {
             return null;
         }
-        return empleados.buscarPorId(idEmpleado).orElseThrow(() -> new EmpleadoNoEncontradoException(idEmpleado));
+        return empleados
+                .buscarPorIdConBloqueo(idEmpleado)
+                .orElseThrow(() -> new EmpleadoNoEncontradoException(idEmpleado));
     }
 
     /** Se valida antes de tocar el inventario para no registrar salidas de una solicitud mal formada. */

@@ -28,7 +28,7 @@ public class ConsultarEmpleadoService implements ConsultarEmpleadoUseCase {
         return repositorio.buscarPorId(id).map(ConsultarEmpleadoService::aResumen);
     }
 
-    private static EmpleadoResumen aResumen(Empleado empleado) {
+    static EmpleadoResumen aResumen(Empleado empleado) {
         return new EmpleadoResumen(
                 empleado.getId(), empleado.getNombreCompleto(), empleado.getPuesto(), empleado.isActivo());
     }
