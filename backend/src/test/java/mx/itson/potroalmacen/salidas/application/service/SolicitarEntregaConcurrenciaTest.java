@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("test")
 @Import(TestcontainersConfiguration.class)
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-class SolicitarEntregaConcurrenciaIT {
+class SolicitarEntregaConcurrenciaTest {
 
     @Autowired
     private SolicitarEntregaUseCase solicitarEntregaUseCase;
