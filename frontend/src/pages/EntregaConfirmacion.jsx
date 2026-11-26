@@ -5,6 +5,8 @@ import Layout from '../components/Layout.jsx'
 import Pasos from '../components/Pasos.jsx'
 import PieAcciones from '../components/PieAcciones.jsx'
 import ModalFirma from '../components/ModalFirma.jsx'
+import AlertaExcedente from '../components/AlertaExcedente.jsx'
+import { MENSAJE_EXCEDE, excede, itemsExcedidos } from '../utils/stock.js'
 import { registrarEntrega, lineasDeEntrega } from '../api/salidas.js'
 import { listarEmpleadosAlmacen } from '../api/empleados.js'
 
@@ -46,8 +48,10 @@ export default function EntregaConfirmacion() {
     }
 
     const estadoPrevio = { solicitante, items }
+    const hayExceso = itemsExcedidos(items).length > 0
 
     const confirmar = async () => {
+        if (hayExceso) return
         setEnviando(true)
         setError(null)
         try {
@@ -158,28 +162,37 @@ export default function EntregaConfirmacion() {
                             <div className="table-wrap">
                                 <table className="table">
                                     <thead>
-                                        <tr>
-                                            <th scope="col">Código</th>
-                                            <th scope="col">Producto</th>
-                                            <th scope="col">Categoría</th>
-                                            <th scope="col" className="num">Cantidad</th>
-                                        </tr>
+                                    <tr>
+                                        <th scope="col">Código</th>
+                                        <th scope="col">Producto</th>
+                                        <th scope="col">Categoría</th>
+                                        <th scope="col" className="num">Cantidad</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        {items.map(({ material, cantidad }) => (
-                                            <tr key={material.id}>
+                                    {items.map((item) => {
+                                        const { material, cantidad } = item
+                                        const excedido = excede(item)
+                                        return (
+                                            <tr key={material.id} className={excedido ? 'excede' : undefined}>
                                                 <td className="muted">{material.codigo}</td>
                                                 <td><strong>{material.nombre}</strong></td>
                                                 <td>{material.categoria}</td>
                                                 <td className="num">
-                                                    <strong>{cantidad} {material.unidadMedida}</strong>
+                                                    <strong className={excedido ? 'red' : undefined}>
+                                                        {cantidad} {material.unidadMedida}
+                                                    </strong>
+                                                    {excedido && <small className="stock-error">{MENSAJE_EXCEDE}</small>}
                                                 </td>
                                             </tr>
-                                        ))}
+                                        )
+                                    })}
                                     </tbody>
                                 </table>
                             </div>
                         </section>
+
+                        <AlertaExcedente items={items} />
 
                         <p className="alert info">
                             <Info size={16} aria-hidden="true" />
@@ -194,7 +207,7 @@ export default function EntregaConfirmacion() {
                     <button
                         type="button"
                         className="btn primary"
-                        disabled={enviando || !idEntregador || (FIRMA_OBLIGATORIA && !firma)}
+                        disabled={enviando || hayExceso || !idEntregador || (FIRMA_OBLIGATORIA && !firma)}
                         onClick={confirmar}
                     >
                         <Check size={16} /> {enviando ? 'Registrando…' : 'Confirmar entrega'}

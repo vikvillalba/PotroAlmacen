@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowRight, List, Plus } from 'lucide-react'
 import Layout from '../components/Layout.jsx'
@@ -7,7 +7,9 @@ import CampoBusqueda from '../components/CampoBusqueda.jsx'
 import PieAcciones from '../components/PieAcciones.jsx'
 import ModalCantidad from '../components/ModalCantidad.jsx'
 import ModalSeleccionados from '../components/ModalSeleccionados.jsx'
+import AlertaExcedente from '../components/AlertaExcedente.jsx'
 import { useMateriales } from '../hooks/useMateriales.js'
+import { excede, itemsExcedidos, stockDisponible } from '../utils/stock.js'
 
 const BADGE = { Disponible: 'ok', 'Stock bajo': 'warn', Agotado: 'bad' }
 
@@ -16,11 +18,25 @@ export default function EntregaMateriales() {
     const navigate = useNavigate()
     const solicitante = state?.solicitante
     const [busqueda, setBusqueda] = useState('')
-    const [items, setItems] = useState(state?.items ?? [])
+    const [seleccion, setItems] = useState(state?.items ?? [])
     const [materialActivo, setMaterialActivo] = useState(null)
     const [verSeleccionados, setVerSeleccionados] = useState(false)
 
     const { materiales: visibles, error, cargando } = useMateriales(busqueda)
+
+    // Si el inventario cambió, los materiales ya elegidos toman la existencia más reciente y se vuelven a validar.
+    const items = useMemo(
+        () =>
+            seleccion.map((i) => {
+                const fresco = visibles.find((m) => m.id === i.material.id)
+                if (!fresco || stockDisponible(fresco) === stockDisponible(i.material)) return i
+                return {
+                    ...i,
+                    material: { ...i.material, cantidad: fresco.cantidad, existencia: fresco.existencia, estado: fresco.estado },
+                }
+            }),
+        [seleccion, visibles],
+    )
 
     const anadir = (item) => {
         setItems((prev) => {
@@ -38,6 +54,7 @@ export default function EntregaMateriales() {
     }
 
     const total = items.length
+    const hayExceso = itemsExcedidos(items).length > 0
 
     return (
         <Layout
@@ -85,56 +102,58 @@ export default function EntregaMateriales() {
                     <div className="table-wrap">
                         <table className="table">
                             <thead>
-                                <tr>
-                                    <th scope="col">Material</th>
-                                    <th scope="col">Código</th>
-                                    <th scope="col">Existencias</th>
-                                    <th scope="col">Disponibilidad</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">Material</th>
+                                <th scope="col">Código</th>
+                                <th scope="col">Existencias</th>
+                                <th scope="col">Disponibilidad</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {visibles.map((m) => (
-                                    <tr
-                                        key={m.id}
-                                        className={`pick ${items.some((i) => i.material.id === m.id) ? 'selected' : ''}`}
-                                        tabIndex={0}
-                                        onClick={() => m.estado !== 'Agotado' && setMaterialActivo(m)}
-                                        onKeyDown={(e) => e.key === 'Enter' && m.estado !== 'Agotado' && setMaterialActivo(m)}
-                                    >
-                                        <td>
-                                            <strong>{m.nombre}</strong>
-                                            <small>
-                                                {[m.categoria, m.presentacion, m.contenidoPresentacion].filter(Boolean).join(' · ')}
-                                            </small>
-                                        </td>
-                                        <td className="muted">{m.codigo}</td>
-                                        <td>{m.cantidad} {m.unidadMedida}</td>
-                                        <td><span className={`badge ${BADGE[m.estado]}`}>{m.estado}</span></td>
-                                    </tr>
-                                ))}
-                                {error && (
-                                    <tr>
-                                        <td colSpan={4} className="muted center" role="alert">
-                                            {error.mensaje}
-                                        </td>
-                                    </tr>
-                                )}
-                                {!error && cargando && visibles.length === 0 && (
-                                    <tr>
-                                        <td colSpan={4} className="muted center">Cargando materiales…</td>
-                                    </tr>
-                                )}
-                                {!error && !cargando && visibles.length === 0 && (
-                                    <tr>
-                                        <td colSpan={4} className="muted center">
-                                            No hay materiales que coincidan con la búsqueda.
-                                        </td>
-                                    </tr>
-                                )}
+                            {visibles.map((m) => (
+                                <tr
+                                    key={m.id}
+                                    className={`pick ${items.some((i) => i.material.id === m.id) ? 'selected' : ''} ${items.some((i) => i.material.id === m.id && excede(i)) ? 'excede' : ''}`}
+                                    tabIndex={0}
+                                    onClick={() => m.estado !== 'Agotado' && setMaterialActivo(m)}
+                                    onKeyDown={(e) => e.key === 'Enter' && m.estado !== 'Agotado' && setMaterialActivo(m)}
+                                >
+                                    <td>
+                                        <strong>{m.nombre}</strong>
+                                        <small>
+                                            {[m.categoria, m.presentacion, m.contenidoPresentacion].filter(Boolean).join(' · ')}
+                                        </small>
+                                    </td>
+                                    <td className="muted">{m.codigo}</td>
+                                    <td>{m.cantidad} {m.unidadMedida}</td>
+                                    <td><span className={`badge ${BADGE[m.estado]}`}>{m.estado}</span></td>
+                                </tr>
+                            ))}
+                            {error && (
+                                <tr>
+                                    <td colSpan={4} className="muted center" role="alert">
+                                        {error.mensaje}
+                                    </td>
+                                </tr>
+                            )}
+                            {!error && cargando && visibles.length === 0 && (
+                                <tr>
+                                    <td colSpan={4} className="muted center">Cargando materiales…</td>
+                                </tr>
+                            )}
+                            {!error && !cargando && visibles.length === 0 && (
+                                <tr>
+                                    <td colSpan={4} className="muted center">
+                                        No hay materiales que coincidan con la búsqueda.
+                                    </td>
+                                </tr>
+                            )}
                             </tbody>
                         </table>
                     </div>
                 </section>
+
+                <AlertaExcedente items={items} />
 
                 <PieAcciones volver="/entregas/nueva">
                     <small role="status">
@@ -143,7 +162,8 @@ export default function EntregaMateriales() {
                     <button
                         type="button"
                         className="btn primary"
-                        disabled={total === 0}
+                        disabled={total === 0 || hayExceso}
+                        title={hayExceso ? 'Corrige las cantidades que exceden el stock' : undefined}
                         onClick={() => navigate('/entregas/nueva/confirmacion', { state: { solicitante, items } })}
                     >
                         Siguiente <ArrowRight size={16} />

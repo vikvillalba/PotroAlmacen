@@ -2,30 +2,23 @@ import { useState } from 'react'
 import { Check } from 'lucide-react'
 import Modal from './Modal.jsx'
 import ControlCantidad from './ControlCantidad.jsx'
+import { MENSAJE_EXCEDE, stockDisponible } from '../utils/stock.js'
 
 export default function ModalCantidad({ material, inicial, onAnadir, onCerrar }) {
-    const maxDisponible = Number(material.cantidad ?? material.existencia ?? 0)
+    const maxDisponible = stockDisponible(material)
     const [cantidad, setCantidad] = useState(() =>
         Math.min(inicial?.cantidad ?? 1, Math.max(1, maxDisponible)),
     )
-    const [avisoStock, setAvisoStock] = useState(null)
 
     const presentacion =
         inicial?.presentacion ??
         [material.presentacion, material.contenidoPresentacion].filter(Boolean).join(' · ')
 
-    const cambiarCantidad = (nueva) => {
-        if (nueva < 1) return
-        if (nueva > maxDisponible) {
-            setCantidad(maxDisponible)
-            setAvisoStock(`Solo hay ${maxDisponible} ${material.unidadMedida ?? 'unidades'} disponibles.`)
-            return
-        }
-        setAvisoStock(null)
-        setCantidad(nueva)
-    }
-
-    const invalida = maxDisponible <= 0 || cantidad < 1 || cantidad > maxDisponible
+    // Validación en vivo: se puede escribir cualquier cantidad y se marca en rojo si no cabe.
+    const excedido = cantidad > maxDisponible
+    const excedente = Math.max(0, cantidad - maxDisponible)
+    const invalida = maxDisponible <= 0 || cantidad < 1 || excedido
+    const unidad = material.unidadMedida ?? ''
 
     return (
         <Modal
@@ -33,11 +26,15 @@ export default function ModalCantidad({ material, inicial, onAnadir, onCerrar })
             onCerrar={onCerrar}
             pie={
                 <>
-                    <small className="modal-note">
-                        {avisoStock ? (
-                            <span className="red">{avisoStock}</span>
+                    <small className="modal-note" id="aviso-cantidad" role={excedido ? 'alert' : undefined}>
+                        {excedido ? (
+                            <span className="red">
+                                {MENSAJE_EXCEDE}: hay {maxDisponible} {unidad} (excedente: {excedente}).
+                            </span>
+                        ) : cantidad < 1 ? (
+                            <span className="red">Indica una cantidad mayor a cero.</span>
                         ) : (
-                            <>Disponible: {maxDisponible} {material.unidadMedida ?? ''}</>
+                            <>Disponible: {maxDisponible} {unidad}</>
                         )}
                     </small>
                     <div className="modal-actions">
@@ -56,26 +53,29 @@ export default function ModalCantidad({ material, inicial, onAnadir, onCerrar })
         >
             <table className="table">
                 <thead>
-                    <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Producto</th>
-                        <th scope="col">Presentación</th>
-                        <th scope="col">Cantidad</th>
-                    </tr>
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Presentación</th>
+                    <th scope="col">Cantidad</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td className="muted">{material.codigo}</td>
-                        <td><strong>{material.nombre}</strong></td>
-                        <td>{presentacion || '—'}</td>
-                        <td>
-                            <ControlCantidad
-                                valor={cantidad}
-                                max={maxDisponible}
-                                onCambio={cambiarCantidad}
-                            />
-                        </td>
-                    </tr>
+                <tr className={excedido ? 'excede' : undefined}>
+                    <td className="muted">{material.codigo}</td>
+                    <td><strong>{material.nombre}</strong></td>
+                    <td>{presentacion || '—'}</td>
+                    <td>
+                        <ControlCantidad
+                            valor={cantidad}
+                            max={maxDisponible}
+                            onCambio={setCantidad}
+                            invalido={excedido || cantidad < 1}
+                            describedBy="aviso-cantidad"
+                        />
+                        {excedido && <small className="stock-error">{MENSAJE_EXCEDE}</small>}
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </Modal>
