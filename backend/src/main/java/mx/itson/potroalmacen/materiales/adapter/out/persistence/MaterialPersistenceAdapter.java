@@ -43,6 +43,12 @@ public class MaterialPersistenceAdapter implements MaterialRepositoryPort {
     }
 
     @Override
+    public Optional<Material> buscarPorCodigoConBloqueo(CodigoMaterial codigo) {
+        if (codigo == null) return Optional.empty();
+        return repository.findByCodigoConBloqueo(codigo.toString()).map(mapper::toDomain);
+    }
+
+    @Override
     public boolean existePorCodigo(CodigoMaterial codigo) {
         if (codigo == null) return false;
         return repository.existsByCodigo(codigo.toString());

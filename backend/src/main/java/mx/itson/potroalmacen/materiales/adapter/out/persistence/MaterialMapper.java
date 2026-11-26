@@ -13,9 +13,7 @@ public class MaterialMapper {
         MaterialEntity entity = new MaterialEntity();
         entity.setId(domain.getId() != null ? domain.getId().longValue() : null);
 
-        if (domain.getCodigo() != null) {
-            entity.setCodigo(domain.getCodigo().toString());
-        }
+        entity.setCodigo(domain.getCodigo().toString());
 
         entity.setNombre(domain.getNombre());
         entity.setCategoria(domain.getCategoria());

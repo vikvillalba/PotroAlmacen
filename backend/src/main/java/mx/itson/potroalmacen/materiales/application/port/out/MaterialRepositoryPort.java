@@ -27,6 +27,13 @@ public interface MaterialRepositoryPort {
     Optional<Material> buscarPorCodigo(CodigoMaterial codigo);
 
     /**
+     * <p>Busca un material por su código con un bloqueo pesimista en la base de datos</p>
+     * @param codigo El código único del material.
+     * @return Optional con el material si se encuentra, o vacío si no.
+     */
+    Optional<Material> buscarPorCodigoConBloqueo(CodigoMaterial codigo);
+
+    /**
      * <p>Verifica si ya existe un material registrado con el código dado.</p>
      * (Requerimiento de la HU1 para evitar duplicados).
      *

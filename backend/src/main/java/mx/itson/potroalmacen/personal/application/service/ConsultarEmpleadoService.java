@@ -60,7 +60,7 @@ public class ConsultarEmpleadoService implements ConsultarEmpleadoUseCase {
                 .toLowerCase(Locale.ROOT);
     }
 
-    private static EmpleadoResumen aResumen(Empleado empleado) {
+    static EmpleadoResumen aResumen(Empleado empleado) {
         return new EmpleadoResumen(
                 empleado.getId(), empleado.getNombreCompleto(), empleado.getPuesto(), empleado.isActivo());
     }
