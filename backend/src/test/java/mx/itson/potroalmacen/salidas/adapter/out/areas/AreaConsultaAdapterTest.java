@@ -31,8 +31,7 @@ class AreaConsultaAdapterTest {
 
         assertSame(
                 error,
-                assertThrows(
-                        IllegalArgumentException.class, () -> adapter.validarMaterialPermitido(2, "LIM-001", 1)));
+                assertThrows(IllegalArgumentException.class, () -> adapter.validarMaterialPermitido(2, "LIM-001", 1)));
     }
 
     @Test
