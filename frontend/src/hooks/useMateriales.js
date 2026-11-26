@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { listarMateriales } from '../api/materiales.js'
 
 /** Adapta un material del API conservando los campos del backend y compatibilidad con modales. */
-const paraEntrega = (m) => {
+export const paraEntrega = (m) => {
     const presentacionCompleta = [m.presentacion, m.contenidoPresentacion]
         .filter(Boolean)
         .join(' · ')

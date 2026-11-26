@@ -193,6 +193,16 @@ class SolicitarEntregaServiceTest {
         }
 
         @Override
+        public List<Boleta> listarTodas() {
+            return List.copyOf(guardadas);
+        }
+
+        @Override
+        public Optional<Boleta> buscarPorId(Integer id) {
+            return guardadas.stream().filter(b -> id.equals(b.getId())).findFirst();
+        }
+
+        @Override
         public int cantidadEntregada(Integer solicitanteId, String codigoMaterial, LocalDateTime desde) {
             return 0;
         }

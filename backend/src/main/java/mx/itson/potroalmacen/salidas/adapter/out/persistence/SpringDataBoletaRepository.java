@@ -1,12 +1,15 @@
 package mx.itson.potroalmacen.salidas.adapter.out.persistence;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import mx.itson.potroalmacen.salidas.domain.EstadoBoleta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface SpringDataBoletaRepository extends JpaRepository<BoletaEntity, Long> {
+
+    List<BoletaEntity> findAllByOrderByFechaHoraDesc();
 
     @Query("""
             SELECT COALESCE(SUM(d.cantidad), 0)

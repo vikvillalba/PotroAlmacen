@@ -1,6 +1,8 @@
 package mx.itson.potroalmacen.salidas.application.port.out;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import mx.itson.potroalmacen.salidas.domain.Boleta;
 
 public interface BoletaRepositoryPort {
@@ -10,6 +12,16 @@ public interface BoletaRepositoryPort {
      * @return Boleta registrada
      */
     Boleta guardar(Boleta boleta);
+
+    /**
+     * Lista todas las boletas registradas ordenadas por fecha descendente.
+     */
+    List<Boleta> listarTodas();
+
+    /**
+     * Busca una boleta por su identificador.
+     */
+    Optional<Boleta> buscarPorId(Integer id);
 
     /**
      * Suma las unidades de un material que se le han entregado a un empleado desde una fecha. Solo cuentan las boletas
