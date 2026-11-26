@@ -2,9 +2,12 @@ package mx.itson.potroalmacen.salidas.adapter.out.personal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import mx.itson.potroalmacen.personal.application.port.in.ConsultarEmpleadoUseCase;
 import mx.itson.potroalmacen.personal.application.port.in.EmpleadoResumen;
+import mx.itson.potroalmacen.personal.domain.Empleado;
 import mx.itson.potroalmacen.salidas.domain.EmpleadoRef;
 import mx.itson.potroalmacen.salidas.domain.exceptions.EmpleadoInactivoException;
 import org.junit.jupiter.api.DisplayName;
@@ -16,8 +19,22 @@ class EmpleadoConsultaAdapterTest {
             1, new EmpleadoResumen(1, "Ana López Ruiz", "Intendente", true),
             2, new EmpleadoResumen(2, "Luis Pérez", "Almacenista", false));
 
-    private final EmpleadoConsultaAdapter adapter =
-            new EmpleadoConsultaAdapter(id -> Optional.ofNullable(EMPLEADOS.get(id)));
+    private final EmpleadoConsultaAdapter adapter = new EmpleadoConsultaAdapter(new ConsultarEmpleadoUseCase() {
+        @Override
+        public Optional<EmpleadoResumen> buscarPorId(Integer id) {
+            return Optional.ofNullable(EMPLEADOS.get(id));
+        }
+
+        @Override
+        public List<Empleado> listarTodos() {
+            return List.of();
+        }
+
+        @Override
+        public List<Empleado> listarAlmacen() {
+            return List.of();
+        }
+    });
 
     @Test
     @DisplayName("Convierte el empleado activo de Personal a la referencia de Salidas")

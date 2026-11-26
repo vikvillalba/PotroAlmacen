@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import Layout from '../components/Layout.jsx'
@@ -7,28 +7,29 @@ import CampoBusqueda from '../components/CampoBusqueda.jsx'
 import CampoSelect from '../components/CampoSelect.jsx'
 import PieAcciones from '../components/PieAcciones.jsx'
 import { normalizar } from '../utils/texto.js'
+import { listarEmpleados } from '../api/empleados.js'
 
-// TEMPORAL: el backend aún no tiene GET de personal ni de áreas. Los ids y nombres coinciden con
-// V202611192300__datos_mock_personal.sql para que el POST de la boleta encuentre al empleado.
-const SOLICITANTES = [
-    { id: 1, nombre: 'María López Hernández', puesto: 'Intendente', area: 'Edificio Académico A', tipo: 'ITSON', estado: 'Activo' },
-    { id: 2, nombre: 'José Ramírez Torres', puesto: 'Intendente', area: 'Edificio Académico A', tipo: 'ITSON', estado: 'Activo' },
-    { id: 3, nombre: 'Ana Beltrán', puesto: 'Auxiliar de mantenimiento', area: 'Laboratorio de Cómputo', tipo: 'ITSON', estado: 'Activo' },
-    { id: 4, nombre: 'Luis Castro Valenzuela', puesto: 'Jardinero', area: 'Gimnasio Universitario', tipo: 'ITSON', estado: 'En préstamo' },
-    { id: 5, nombre: 'Carmen Ortega Félix', puesto: 'Coordinadora de limpieza', area: 'Oficinas Administrativas', tipo: 'ITSON', estado: 'Activo' },
-    { id: 8, nombre: 'Daniel Acosta Peña', puesto: 'Contratista de limpieza', area: 'Edificio Académico A', tipo: 'Externo', estado: 'Activo' },
-]
-const AREAS = [...new Set(SOLICITANTES.map((s) => s.area))].map((a) => ({ id: a, nombre: a }))
-const BADGE = { Activo: 'ok', 'En préstamo': 'warn' }
+const BADGE = { Activo: 'ok', 'En préstamo': 'warn', Inactivo: 'err' }
 
 export default function EntregaSolicitante() {
     const navigate = useNavigate()
+    const [solicitantes, setSolicitantes] = useState([])
+    const [cargando, setCargando] = useState(true)
+    const [error, setError] = useState(null)
     const [busqueda, setBusqueda] = useState('')
     const [area, setArea] = useState('')
     const [seleccionado, setSeleccionado] = useState(null)
 
+    useEffect(() => {
+        listarEmpleados()
+            .then((data) => setSolicitantes(data))
+            .catch((err) => setError(err.message))
+            .finally(() => setCargando(false))
+    }, [])
+
+    const areas = [...new Set(solicitantes.map((s) => s.area))].map((a) => ({ id: a, nombre: a }))
     const texto = normalizar(busqueda.trim())
-    const visibles = SOLICITANTES.filter(
+    const visibles = solicitantes.filter(
         (s) =>
             (!area || s.area === area) &&
             (!texto || normalizar(`${s.nombre} ${s.area}`).includes(texto)),
@@ -67,9 +68,11 @@ export default function EntregaSolicitante() {
                             valor={area}
                             onCambio={setArea}
                             todas="Todas las áreas"
-                            opciones={AREAS}
+                            opciones={areas}
                         />
                     </form>
+
+                    {error && <p className="alert error" role="alert">{error}</p>}
 
                     <div className="table-wrap">
                         <table className="table">
@@ -83,7 +86,12 @@ export default function EntregaSolicitante() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {visibles.map((s) => (
+                                {cargando && (
+                                    <tr>
+                                        <td colSpan={5} className="muted center">Cargando personal...</td>
+                                    </tr>
+                                )}
+                                {!cargando && visibles.map((s) => (
                                     <tr
                                         key={s.id}
                                         className={`pick ${seleccionado?.id === s.id ? 'selected' : ''}`}
@@ -101,10 +109,10 @@ export default function EntregaSolicitante() {
                                         <td><strong>{s.nombre}</strong><small>{s.puesto}</small></td>
                                         <td>{s.area}</td>
                                         <td>{s.tipo}</td>
-                                        <td><span className={`badge ${BADGE[s.estado]}`}>{s.estado}</span></td>
+                                        <td><span className={`badge ${BADGE[s.estado] || ''}`}>{s.estado}</span></td>
                                     </tr>
                                 ))}
-                                {visibles.length === 0 && (
+                                {!cargando && visibles.length === 0 && (
                                     <tr>
                                         <td colSpan={5} className="muted center">
                                             No hay solicitantes que coincidan con la búsqueda.
