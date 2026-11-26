@@ -1,6 +1,8 @@
 package mx.itson.potroalmacen.salidas.adapter.out.persistence;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import mx.itson.potroalmacen.salidas.application.port.out.BoletaRepositoryPort;
 import mx.itson.potroalmacen.salidas.domain.Boleta;
 import mx.itson.potroalmacen.salidas.domain.EstadoBoleta;
@@ -22,6 +24,18 @@ public class BoletaPersistenceAdapter implements BoletaRepositoryPort {
         BoletaEntity entity = mapper.toBoletaEntity(boleta);
         entity = repository.save(entity);
         return mapper.toDomain(entity);
+    }
+
+    @Override
+    public List<Boleta> listarTodas() {
+        return repository.findAllByOrderByFechaHoraDesc().stream()
+                .map(mapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public Optional<Boleta> buscarPorId(Integer id) {
+        return repository.findById(id.longValue()).map(mapper::toDomain);
     }
 
     @Override

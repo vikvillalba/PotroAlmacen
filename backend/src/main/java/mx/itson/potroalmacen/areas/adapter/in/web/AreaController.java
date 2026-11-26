@@ -8,6 +8,8 @@ import java.util.Objects;
 import mx.itson.potroalmacen.areas.application.port.in.AsignarMaterialAreaCommand;
 import mx.itson.potroalmacen.areas.application.port.in.AsignarMaterialAreaUseCase;
 import mx.itson.potroalmacen.areas.application.port.in.ConsultarAreasUseCase;
+import mx.itson.potroalmacen.areas.application.port.in.MaterialPermitidoResumen;
+import mx.itson.potroalmacen.areas.application.port.in.ValidarMaterialAreaUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,10 +26,15 @@ class AreaController {
 
     private final ConsultarAreasUseCase consultarAreas;
     private final AsignarMaterialAreaUseCase asignarMaterialArea;
+    private final ValidarMaterialAreaUseCase validarMaterialArea;
 
-    AreaController(ConsultarAreasUseCase consultarAreas, AsignarMaterialAreaUseCase asignarMaterialArea) {
+    AreaController(
+            ConsultarAreasUseCase consultarAreas,
+            AsignarMaterialAreaUseCase asignarMaterialArea,
+            ValidarMaterialAreaUseCase validarMaterialArea) {
         this.consultarAreas = Objects.requireNonNull(consultarAreas);
         this.asignarMaterialArea = Objects.requireNonNull(asignarMaterialArea);
+        this.validarMaterialArea = Objects.requireNonNull(validarMaterialArea);
     }
 
     @GetMapping
@@ -36,6 +43,12 @@ class AreaController {
         return consultarAreas.listarTodas().stream()
                 .map(AreaResumenResponse::de)
                 .toList();
+    }
+
+    @GetMapping("/{idArea}/materiales")
+    @Operation(summary = "Materiales catalogados para un área")
+    List<MaterialPermitidoResumen> materialesPermitidos(@PathVariable Integer idArea) {
+        return validarMaterialArea.consultarMaterialesPermitidos(idArea);
     }
 
     @PostMapping("/{idArea}/materiales")

@@ -8,7 +8,7 @@ import PieAcciones from '../components/PieAcciones.jsx'
 import ModalCantidad from '../components/ModalCantidad.jsx'
 import ModalSeleccionados from '../components/ModalSeleccionados.jsx'
 import AlertaExcedente from '../components/AlertaExcedente.jsx'
-import { useMateriales } from '../hooks/useMateriales.js'
+import { useMaterialesArea } from '../hooks/useMaterialesArea.js'
 import { excede, itemsExcedidos, stockDisponible } from '../utils/stock.js'
 
 const BADGE = { Disponible: 'ok', 'Stock bajo': 'warn', Agotado: 'bad' }
@@ -22,7 +22,8 @@ export default function EntregaMateriales() {
     const [materialActivo, setMaterialActivo] = useState(null)
     const [verSeleccionados, setVerSeleccionados] = useState(false)
 
-    const { materiales: visibles, error, cargando } = useMateriales(busqueda)
+    const { materiales: visibles, error, cargando, sinArea } =
+        useMaterialesArea(solicitante?.idArea, busqueda)
 
     // Si el inventario cambió, los materiales ya elegidos toman la existencia más reciente y se vuelven a validar.
     const items = useMemo(
@@ -62,7 +63,7 @@ export default function EntregaMateriales() {
             crumbs={[{ label: 'Servicios Generales', to: '/' }, { label: 'Entrega de material' }]}
             back="/entregas/nueva"
             title="Entrega de material y/o equipo"
-            subtitle="Indica el tipo y la cantidad de cada material a entregar."
+            subtitle={`Solo se muestran los materiales catalogados para ${solicitante?.area ?? 'el área'}.`}
             actions={
                 <button type="button" className="btn soft" onClick={() => setVerSeleccionados(true)}>
                     <List size={16} /> Materiales seleccionados ({total})
@@ -99,55 +100,61 @@ export default function EntregaMateriales() {
                         </button>
                     </form>
 
+                    {sinArea && (
+                        <p className="alert error" role="alert">
+                            El solicitante no tiene un área asignada, no es posible filtrar materiales.
+                        </p>
+                    )}
+
                     <div className="table-wrap">
                         <table className="table">
                             <thead>
-                            <tr>
-                                <th scope="col">Material</th>
-                                <th scope="col">Código</th>
-                                <th scope="col">Existencias</th>
-                                <th scope="col">Disponibilidad</th>
-                            </tr>
+                                <tr>
+                                    <th scope="col">Material</th>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Existencias</th>
+                                    <th scope="col">Disponibilidad</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            {visibles.map((m) => (
-                                <tr
-                                    key={m.id}
-                                    className={`pick ${items.some((i) => i.material.id === m.id) ? 'selected' : ''} ${items.some((i) => i.material.id === m.id && excede(i)) ? 'excede' : ''}`}
-                                    tabIndex={0}
-                                    onClick={() => m.estado !== 'Agotado' && setMaterialActivo(m)}
-                                    onKeyDown={(e) => e.key === 'Enter' && m.estado !== 'Agotado' && setMaterialActivo(m)}
-                                >
-                                    <td>
-                                        <strong>{m.nombre}</strong>
-                                        <small>
-                                            {[m.categoria, m.presentacion, m.contenidoPresentacion].filter(Boolean).join(' · ')}
-                                        </small>
-                                    </td>
-                                    <td className="muted">{m.codigo}</td>
-                                    <td>{m.cantidad} {m.unidadMedida}</td>
-                                    <td><span className={`badge ${BADGE[m.estado]}`}>{m.estado}</span></td>
-                                </tr>
-                            ))}
-                            {error && (
-                                <tr>
-                                    <td colSpan={4} className="muted center" role="alert">
-                                        {error.mensaje}
-                                    </td>
-                                </tr>
-                            )}
-                            {!error && cargando && visibles.length === 0 && (
-                                <tr>
-                                    <td colSpan={4} className="muted center">Cargando materiales…</td>
-                                </tr>
-                            )}
-                            {!error && !cargando && visibles.length === 0 && (
-                                <tr>
-                                    <td colSpan={4} className="muted center">
-                                        No hay materiales que coincidan con la búsqueda.
-                                    </td>
-                                </tr>
-                            )}
+                                {visibles.map((m) => (
+                                    <tr
+                                        key={m.id}
+                                        className={`pick ${items.some((i) => i.material.id === m.id) ? 'selected' : ''} ${items.some((i) => i.material.id === m.id && excede(i)) ? 'excede' : ''}`}
+                                        tabIndex={0}
+                                        onClick={() => m.estado !== 'Agotado' && setMaterialActivo(m)}
+                                        onKeyDown={(e) => e.key === 'Enter' && m.estado !== 'Agotado' && setMaterialActivo(m)}
+                                    >
+                                        <td>
+                                            <strong>{m.nombre}</strong>
+                                            <small>
+                                                {[m.categoria, m.presentacion, m.contenidoPresentacion].filter(Boolean).join(' · ')}
+                                            </small>
+                                        </td>
+                                        <td className="muted">{m.codigo}</td>
+                                        <td>{m.cantidad} {m.unidadMedida}</td>
+                                        <td><span className={`badge ${BADGE[m.estado]}`}>{m.estado}</span></td>
+                                    </tr>
+                                ))}
+                                {error && (
+                                    <tr>
+                                        <td colSpan={4} className="muted center" role="alert">
+                                            {error.mensaje}
+                                        </td>
+                                    </tr>
+                                )}
+                                {!error && cargando && visibles.length === 0 && (
+                                    <tr>
+                                        <td colSpan={4} className="muted center">Cargando materiales…</td>
+                                    </tr>
+                                )}
+                                {!error && !cargando && visibles.length === 0 && (
+                                    <tr>
+                                        <td colSpan={4} className="muted center">
+                                            No hay materiales que coincidan con la búsqueda.
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>

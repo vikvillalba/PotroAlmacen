@@ -215,6 +215,16 @@ class ValidarEmpleadoMaterialServiceTest {
         }
 
         @Override
+        public List<Boleta> listarTodas() {
+            return List.of();
+        }
+
+        @Override
+        public Optional<Boleta> buscarPorId(Integer id) {
+            return Optional.empty();
+        }
+
+        @Override
         public int cantidadEntregada(Integer solicitanteId, String codigoMaterial, LocalDateTime desde) {
             this.ultimaFechaDesdeConsultada = desde;
             return entregas.getOrDefault(solicitanteId + ":" + codigoMaterial, 0);

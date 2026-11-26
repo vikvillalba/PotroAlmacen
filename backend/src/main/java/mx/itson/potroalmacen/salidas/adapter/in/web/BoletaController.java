@@ -3,9 +3,13 @@ package mx.itson.potroalmacen.salidas.adapter.in.web;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Objects;
+import mx.itson.potroalmacen.salidas.application.port.in.ConsultarBoletasUseCase;
 import mx.itson.potroalmacen.salidas.application.port.in.SolicitarEntregaUseCase;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +28,25 @@ import org.springframework.web.bind.annotation.RestController;
 class BoletaController {
 
     private final SolicitarEntregaUseCase solicitarEntrega;
+    private final ConsultarBoletasUseCase consultarBoletas;
 
-    BoletaController(SolicitarEntregaUseCase solicitarEntrega) {
+    BoletaController(SolicitarEntregaUseCase solicitarEntrega, ConsultarBoletasUseCase consultarBoletas) {
         this.solicitarEntrega = Objects.requireNonNull(solicitarEntrega);
+        this.consultarBoletas = Objects.requireNonNull(consultarBoletas);
+    }
+
+    @GetMapping
+    @Operation(summary = "Lista todas las boletas de entrega registradas")
+    List<BoletaResponse> listar() {
+        return consultarBoletas.listar().stream()
+                .map(BoletaResponse::fromDomain)
+                .toList();
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Obtiene el detalle de una boleta por su id")
+    BoletaResponse detalle(@PathVariable Integer id) {
+        return BoletaResponse.fromDomain(consultarBoletas.obtenerPorId(id));
     }
 
     @PostMapping

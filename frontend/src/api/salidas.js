@@ -1,4 +1,4 @@
-import { post } from './cliente.js'
+import { get, post } from './cliente.js'
 
 const BASE = '/api/salidas'
 
@@ -8,6 +8,13 @@ const BASE = '/api/salidas'
  */
 export const registrarEntrega = ({ idSolicitante, idEntregador, materiales }) =>
     post(`${BASE}/boletas`, { idSolicitante, idEntregador, materiales })
+
+export const registrarEntregaArea = ({ idArea, idSolicitante, idEntregador, materiales }) =>
+    post(`${BASE}/areas/${idArea}/entregas`, { idSolicitante, idEntregador, materiales })
+
+export const listarBoletas = (signal) => get(`${BASE}/boletas`, { signal })
+
+export const obtenerBoleta = (id, signal) => get(`${BASE}/boletas/${id}`, { signal })
 
 /** Convierte los items del carrito de la pantalla de entrega al formato del API. */
 export const lineasDeEntrega = (items) =>
