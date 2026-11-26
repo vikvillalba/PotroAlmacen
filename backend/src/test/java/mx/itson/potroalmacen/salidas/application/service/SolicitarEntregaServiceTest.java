@@ -15,6 +15,7 @@ import mx.itson.potroalmacen.salidas.application.port.in.ValidarEmpleadoMaterial
 import mx.itson.potroalmacen.salidas.application.port.out.BoletaRepositoryPort;
 import mx.itson.potroalmacen.salidas.application.port.out.EmpleadoConsultaConcurrenciaPort;
 import mx.itson.potroalmacen.salidas.application.port.out.InventarioPort;
+import mx.itson.potroalmacen.salidas.application.port.out.PublicadorEventosPort;
 import mx.itson.potroalmacen.salidas.domain.Boleta;
 import mx.itson.potroalmacen.salidas.domain.EmpleadoRef;
 import mx.itson.potroalmacen.salidas.domain.EstadoBoleta;
@@ -22,6 +23,7 @@ import mx.itson.potroalmacen.salidas.domain.MaterialRef;
 import mx.itson.potroalmacen.salidas.domain.exceptions.BoletaInvalidaException;
 import mx.itson.potroalmacen.salidas.domain.exceptions.EmpleadoNoEncontradoException;
 import mx.itson.potroalmacen.salidas.domain.exceptions.LimiteEntregaExcedidoException;
+import mx.itson.potroalmacen.salidas.eventos.BoletaGenerada;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +35,7 @@ class SolicitarEntregaServiceTest {
 
     private FakeInventario inventario;
     private FakeBoletaRepository boletas;
+    private FakePublicador publicador;
     private SolicitarEntregaService service;
 
     @BeforeEach
@@ -41,10 +44,11 @@ class SolicitarEntregaServiceTest {
         inventario.existencias.put("LIM-001", 10);
         inventario.existencias.put("LIM-002", 3);
         boletas = new FakeBoletaRepository();
+        publicador = new FakePublicador();
         ValidarEmpleadoMaterialUseCase validarEmpleado = solicitud -> {};
         EmpleadoConsultaConcurrenciaPort empleados =
                 id -> Optional.ofNullable(Map.of(1, ANA, 2, LUIS).get(id));
-        service = new SolicitarEntregaService(empleados, inventario, boletas, validarEmpleado);
+        service = new SolicitarEntregaService(empleados, inventario, boletas, validarEmpleado, publicador);
     }
 
     @Test
@@ -65,6 +69,29 @@ class SolicitarEntregaServiceTest {
         assertEquals(6, inventario.existencias.get("LIM-001"));
         assertEquals(0, inventario.existencias.get("LIM-002"));
         assertEquals(1, boletas.guardadas.size());
+    }
+
+    @Test
+    @DisplayName("Al guardar la boleta publica BoletaGenerada con su id, folio, solicitante y entregador")
+    void solicitar_valida_publicaBoletaGenerada() {
+        Boleta boleta =
+                service.solicitar(new SolicitudEntregaCommand(1, 2, List.of(new MaterialSolicitado("LIM-001", 1))));
+
+        assertEquals(1, publicador.publicados.size());
+        BoletaGenerada evento = assertInstanceOf(BoletaGenerada.class, publicador.publicados.get(0));
+        assertEquals(boleta.getId(), evento.boletaId());
+        assertEquals(boleta.getFolio(), evento.folio());
+        assertEquals(1, evento.idSolicitante());
+        assertEquals(2, evento.idEntregador());
+    }
+
+    @Test
+    @DisplayName("Si la solicitud falla no se publica ningún evento")
+    void solicitar_fallida_noPublicaEvento() {
+        var comando = new SolicitudEntregaCommand(1, 2, List.of(new MaterialSolicitado("LIM-002", 5)));
+
+        assertThrows(ExistenciaInsuficienteException.class, () -> service.solicitar(comando));
+        assertTrue(publicador.publicados.isEmpty());
     }
 
     @Test
@@ -127,7 +154,8 @@ class SolicitarEntregaServiceTest {
         };
         EmpleadoConsultaConcurrenciaPort empleados =
                 id -> Optional.ofNullable(Map.of(1, ANA, 2, LUIS).get(id));
-        var serviceConLimite = new SolicitarEntregaService(empleados, inventario, boletas, validadorConFalla);
+        var serviceConLimite =
+                new SolicitarEntregaService(empleados, inventario, boletas, validadorConFalla, publicador);
 
         var comando = new SolicitudEntregaCommand(1, 2, List.of(new MaterialSolicitado("LIM-001", 3)));
 
@@ -167,6 +195,15 @@ class SolicitarEntregaServiceTest {
         @Override
         public int cantidadEntregada(Integer solicitanteId, String codigoMaterial, LocalDateTime desde) {
             return 0;
+        }
+    }
+
+    private static final class FakePublicador implements PublicadorEventosPort {
+        final List<Object> publicados = new ArrayList<>();
+
+        @Override
+        public void publicar(Object evento) {
+            publicados.add(evento);
         }
     }
 }

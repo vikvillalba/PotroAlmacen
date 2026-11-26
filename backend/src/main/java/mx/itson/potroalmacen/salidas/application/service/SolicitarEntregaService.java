@@ -1,5 +1,6 @@
 package mx.itson.potroalmacen.salidas.application.service;
 
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 import mx.itson.potroalmacen.salidas.application.port.in.SolicitarEntregaUseCase;
@@ -10,11 +11,13 @@ import mx.itson.potroalmacen.salidas.application.port.in.ValidarEmpleadoMaterial
 import mx.itson.potroalmacen.salidas.application.port.out.BoletaRepositoryPort;
 import mx.itson.potroalmacen.salidas.application.port.out.EmpleadoConsultaConcurrenciaPort;
 import mx.itson.potroalmacen.salidas.application.port.out.InventarioPort;
+import mx.itson.potroalmacen.salidas.application.port.out.PublicadorEventosPort;
 import mx.itson.potroalmacen.salidas.domain.Boleta;
 import mx.itson.potroalmacen.salidas.domain.EmpleadoRef;
 import mx.itson.potroalmacen.salidas.domain.MaterialRef;
 import mx.itson.potroalmacen.salidas.domain.exceptions.BoletaInvalidaException;
 import mx.itson.potroalmacen.salidas.domain.exceptions.EmpleadoNoEncontradoException;
+import mx.itson.potroalmacen.salidas.eventos.BoletaGenerada;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
  * <p>
  * Obtiene al solicitante y al entregador, valida el estado del empleado y los límites de entrega configurados,
  * registra en el inventario la salida de cada material (Materiales verifica la existencia), crea la boleta con
- * las reglas del dominio y la guarda. Ocurre en una transacción: si algo falla, las salidas ya registradas
- * se revierten.
+ * las reglas del dominio, la guarda y publica {@link BoletaGenerada} para que Auditoría la registre en la
+ * bitácora. Ocurre en una transacción: si algo falla, las salidas ya registradas se revierten y el evento no
+ * llega a Auditoría (su listener se ejecuta solo después del commit).
  */
 @Service
 @Transactional
@@ -34,16 +38,19 @@ public class SolicitarEntregaService implements SolicitarEntregaUseCase {
     private final InventarioPort inventario;
     private final BoletaRepositoryPort boletaRepository;
     private final ValidarEmpleadoMaterialUseCase validarEmpleado;
+    private final PublicadorEventosPort publicadorEventos;
 
     public SolicitarEntregaService(
             EmpleadoConsultaConcurrenciaPort empleados,
             InventarioPort inventario,
             BoletaRepositoryPort boletaRepository,
-            ValidarEmpleadoMaterialUseCase validarEmpleado) {
+            ValidarEmpleadoMaterialUseCase validarEmpleado,
+            PublicadorEventosPort publicadorEventos) {
         this.empleados = Objects.requireNonNull(empleados, "empleados es obligatorio");
         this.inventario = Objects.requireNonNull(inventario, "inventario es obligatorio");
         this.boletaRepository = Objects.requireNonNull(boletaRepository, "boletaRepository es obligatorio");
         this.validarEmpleado = Objects.requireNonNull(validarEmpleado, "validarEmpleado es obligatorio");
+        this.publicadorEventos = Objects.requireNonNull(publicadorEventos, "publicadorEventos es obligatorio");
     }
 
     @Override
@@ -64,8 +71,14 @@ public class SolicitarEntregaService implements SolicitarEntregaUseCase {
                 .map(linea -> inventario.registrarSalida(linea.codigoMaterial(), linea.cantidadAEntregar()))
                 .toList();
 
-        Boleta boleta = Boleta.crear(solicitante, entregador, materiales);
-        return boletaRepository.guardar(boleta);
+        Boleta guardada = boletaRepository.guardar(Boleta.crear(solicitante, entregador, materiales));
+        publicadorEventos.publicar(new BoletaGenerada(
+                guardada.getId(),
+                guardada.getFolio(),
+                guardada.getSolicitante().idEmpleado(),
+                guardada.getEntregador().idEmpleado(),
+                guardada.getFechaHora().atZone(ZoneId.systemDefault()).toInstant()));
+        return guardada;
     }
 
     /** Un id nulo se deja pasar como null para que el dominio responda con su regla de campo obligatorio. */
