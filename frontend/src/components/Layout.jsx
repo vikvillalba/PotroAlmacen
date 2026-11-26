@@ -7,7 +7,7 @@ const TABS = [
   { id: 'admin', label: 'Administracion', icon: Shield },
 ]
 
-export default function Layout({ active, crumbs = [], title, subtitle, back, actions, children }) {
+export default function Layout({ active, crumbs = [], title, subtitle, back, backState, actions, children }) {
   const navigate = useNavigate()
   return (
     <>
@@ -60,7 +60,11 @@ export default function Layout({ active, crumbs = [], title, subtitle, back, act
         <div className="page-head">
           <div className="page-title">
             {back && (
-              <button className="icon-btn" onClick={() => navigate(back)} aria-label="Regresar">
+              <button
+                className="icon-btn"
+                onClick={() => navigate(back, { state: backState })}
+                aria-label="Regresar"
+              >
                 <ChevronLeft size={18} />
               </button>
             )}

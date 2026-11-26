@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowRight, List, Plus } from 'lucide-react'
 import Layout from '../components/Layout.jsx'
 import Pasos from '../components/Pasos.jsx'
@@ -13,9 +13,10 @@ const BADGE = { Disponible: 'ok', 'Stock bajo': 'warn', Agotado: 'bad' }
 
 export default function EntregaMateriales() {
     const { state } = useLocation()
+    const navigate = useNavigate()
     const solicitante = state?.solicitante
     const [busqueda, setBusqueda] = useState('')
-    const [items, setItems] = useState([])
+    const [items, setItems] = useState(state?.items ?? [])
     const [materialActivo, setMaterialActivo] = useState(null)
     const [verSeleccionados, setVerSeleccionados] = useState(false)
 
@@ -139,8 +140,12 @@ export default function EntregaMateriales() {
                     <small role="status">
                         {total} {total === 1 ? 'material seleccionado' : 'materiales seleccionados'}
                     </small>
-                    {/* Navegar al paso 3 cuando exista */}
-                    <button type="button" className="btn primary" disabled={total === 0}>
+                    <button
+                        type="button"
+                        className="btn primary"
+                        disabled={total === 0}
+                        onClick={() => navigate('/entregas/nueva/confirmacion', { state: { solicitante, items } })}
+                    >
                         Siguiente <ArrowRight size={16} />
                     </button>
                 </PieAcciones>

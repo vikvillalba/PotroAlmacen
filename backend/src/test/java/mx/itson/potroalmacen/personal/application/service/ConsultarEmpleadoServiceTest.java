@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import mx.itson.potroalmacen.personal.application.port.in.EmpleadoResumen;
+import mx.itson.potroalmacen.personal.application.port.out.EmpleadoRepositoryPort;
 import mx.itson.potroalmacen.personal.domain.Empleado;
 import mx.itson.potroalmacen.personal.domain.TipoEmpleado;
 import org.junit.jupiter.api.DisplayName;
@@ -19,9 +20,23 @@ class ConsultarEmpleadoServiceTest {
     private static final Empleado LUIS = Empleado.crear(
                     "Luis", "Pérez", null, TipoEmpleado.EXTERNO, "Almacenista", null, null, List.of())
             .reconstitadir(2, false, false);
+    private static final Empleado CARLOS = Empleado.crear(
+                    "Carlos", "Soto", "Mendoza", TipoEmpleado.ITSON, "Encargado de Almacén", null, null, List.of())
+            .reconstitadir(3, true, false);
 
-    private final ConsultarEmpleadoService service = new ConsultarEmpleadoService(
-            id -> Optional.ofNullable(Map.of(1, ANA, 2, LUIS).get(id)));
+    private final ConsultarEmpleadoService service = new ConsultarEmpleadoService(new EmpleadoRepositoryPort() {
+        private final Map<Integer, Empleado> datos = Map.of(1, ANA, 2, LUIS, 3, CARLOS);
+
+        @Override
+        public Optional<Empleado> buscarPorId(Integer id) {
+            return id == null ? Optional.empty() : Optional.ofNullable(datos.get(id));
+        }
+
+        @Override
+        public List<Empleado> listarTodos() {
+            return List.of(ANA, LUIS, CARLOS);
+        }
+    });
 
     @Test
     @DisplayName("Devuelve el resumen del empleado con su nombre completo, puesto y estado")
@@ -35,5 +50,12 @@ class ConsultarEmpleadoServiceTest {
     void buscarPorId_inexistente() {
         assertTrue(service.buscarPorId(99).isEmpty());
         assertTrue(service.buscarPorId(null).isEmpty());
+    }
+
+    @Test
+    @DisplayName("Lista todo el personal y filtra solo los activos de almacén")
+    void listarTodos_y_listarAlmacen() {
+        assertEquals(3, service.listarTodos().size());
+        assertEquals(List.of(CARLOS), service.listarAlmacen());
     }
 }
