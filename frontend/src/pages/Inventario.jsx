@@ -62,8 +62,7 @@ export default function Inventario() {
     return (
         <Layout
             active="admin"
-            crumbs={[{ label: 'Administración', to: '/' }, { label: 'Inventario de productos' }]}
-            back="/"
+            crumbs={[{ label: 'Administración', to: '/admin' }, { label: 'Inventario de productos' }]}            back="/"
             title="Inventario de productos"
             subtitle="Existencias actuales del almacén por campus."
             actions={
