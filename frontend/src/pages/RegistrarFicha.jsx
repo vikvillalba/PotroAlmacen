@@ -292,8 +292,7 @@ export default function RegistrarFicha() {
     return (
         <Layout
             active="admin"
-            crumbs={[{ label: 'Administración', to: '/' }, { label: 'Fichas técnicas' }, { label: 'Registrar' }]}
-            back="/inventario"
+            crumbs={[{ label: 'Administración', to: '/admin' }, { label: 'Fichas técnicas' }, { label: 'Registrar' }]}            back="/inventario"
             title="Registrar ficha técnica"
             subtitle="Da de alta un nuevo producto en el catálogo."
         >
