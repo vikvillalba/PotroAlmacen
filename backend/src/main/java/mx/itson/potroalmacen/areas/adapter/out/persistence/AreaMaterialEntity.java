@@ -33,6 +33,9 @@ public class AreaMaterialEntity {
     @Column(name = "nombre_material", length = 500)
     private String nombreMaterial;
 
+    @Column(nullable = false)
+    private int cantidad = 1;
+
     protected AreaMaterialEntity() {
         // Requerido por JPA.
     }
@@ -63,5 +66,14 @@ public class AreaMaterialEntity {
 
     public void setNombreMaterial(String nombreMaterial) {
         this.nombreMaterial = nombreMaterial;
+    }
+
+    /** Cantidad máxima del material que se puede entregar al área en una solicitud. */
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 }

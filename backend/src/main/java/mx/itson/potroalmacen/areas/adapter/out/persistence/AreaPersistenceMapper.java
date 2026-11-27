@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 class AreaPersistenceMapper {
 
-    private static final int CANTIDAD_POR_DEFECTO_REFERENCIA = 1;
-
     /**
      * Transforma una entidad {@link AreaEntity} en un agregado de dominio {@link Area}.
      *
@@ -78,15 +76,14 @@ class AreaPersistenceMapper {
 
     private MaterialRef toMaterialRefDomain(AreaMaterialEntity materialEntity) {
         return new MaterialRef(
-                materialEntity.getCodigoMaterial(),
-                materialEntity.getNombreMaterial(),
-                CANTIDAD_POR_DEFECTO_REFERENCIA);
+                materialEntity.getCodigoMaterial(), materialEntity.getNombreMaterial(), materialEntity.getCantidad());
     }
 
     private AreaMaterialEntity toMaterialEntity(MaterialRef materialRef) {
         AreaMaterialEntity entity = new AreaMaterialEntity();
         entity.setCodigoMaterial(materialRef.codigoMaterial());
         entity.setNombreMaterial(materialRef.nombreMaterial());
+        entity.setCantidad(materialRef.cantidad());
         return entity;
     }
 }

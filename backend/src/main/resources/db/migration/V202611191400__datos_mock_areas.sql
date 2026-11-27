@@ -1,7 +1,6 @@
--- Datos mock de áreas (módulo Áreas): cada área con sus espacios y los materiales permitidos.
--- Los códigos de material son los del inventario de prueba (001, 007, 014, 022, 031, 040). No hay FK hacia
--- mat_material porque es otro módulo. 022 (Bolsa negra jumbo) y 031 (Guantes) no se permiten en el Edificio
--- Académico A, para poder probar "material no permitido para Aula 101".
+-- Datos mock de áreas (módulo Áreas): cada área con sus espacios.
+-- No incluye materiales permitidos (are_area_material): los materiales son del módulo Materiales y se asignan a cada
+-- área desde la aplicación (POST /api/areas/{id}/materiales) una vez que existen en el inventario.
 
 INSERT INTO are_area (nombre_area, tipo_area, metros_cuadrados) VALUES
     ('Edificio Académico A', 'ACADEMICA', 850.00),
@@ -28,29 +27,3 @@ JOIN (
     UNION ALL SELECT 'Gimnasio Universitario', 'Cancha techada', 'Cancha de usos múltiples', 'DIARIA'
     UNION ALL SELECT 'Gimnasio Universitario', 'Vestidores', 'Vestidores y regaderas', 'DOS_VECES_AL_DIA'
 ) e ON e.nombre_area = a.nombre_area;
-
--- Materiales permitidos por área
-INSERT INTO are_area_material (area_id, codigo_material, nombre_material)
-SELECT a.id, m.codigo_material, m.nombre_material
-FROM are_area a
-JOIN (
-    SELECT 'Edificio Académico A' AS nombre_area, '001' AS codigo_material, 'Limpiador multiusos' AS nombre_material
-    UNION ALL SELECT 'Edificio Académico A', '007', 'Fabuloso lavanda'
-    UNION ALL SELECT 'Edificio Académico A', '014', 'Rollo de papel higiénico'
-    UNION ALL SELECT 'Edificio Académico A', '040', 'Escoba de fibra'
-    UNION ALL SELECT 'Laboratorio de Cómputo', '001', 'Limpiador multiusos'
-    UNION ALL SELECT 'Laboratorio de Cómputo', '031', 'Guantes de limpieza'
-    UNION ALL SELECT 'Oficinas Administrativas', '001', 'Limpiador multiusos'
-    UNION ALL SELECT 'Oficinas Administrativas', '007', 'Fabuloso lavanda'
-    UNION ALL SELECT 'Oficinas Administrativas', '014', 'Rollo de papel higiénico'
-    UNION ALL SELECT 'Oficinas Administrativas', '022', 'Bolsa negra jumbo'
-    UNION ALL SELECT 'Almacén General', '001', 'Limpiador multiusos'
-    UNION ALL SELECT 'Almacén General', '022', 'Bolsa negra jumbo'
-    UNION ALL SELECT 'Almacén General', '040', 'Escoba de fibra'
-    UNION ALL SELECT 'Gimnasio Universitario', '001', 'Limpiador multiusos'
-    UNION ALL SELECT 'Gimnasio Universitario', '007', 'Fabuloso lavanda'
-    UNION ALL SELECT 'Gimnasio Universitario', '014', 'Rollo de papel higiénico'
-    UNION ALL SELECT 'Gimnasio Universitario', '022', 'Bolsa negra jumbo'
-    UNION ALL SELECT 'Gimnasio Universitario', '031', 'Guantes de limpieza'
-    UNION ALL SELECT 'Gimnasio Universitario', '040', 'Escoba de fibra'
-) m ON m.nombre_area = a.nombre_area;
