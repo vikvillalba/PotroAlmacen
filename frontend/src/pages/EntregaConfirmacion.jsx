@@ -55,10 +55,14 @@ export default function EntregaConfirmacion() {
         setEnviando(true)
         setError(null)
         try {
-            await registrarEntrega({
+            const boleta = await registrarEntrega({
                 idSolicitante: solicitante.id,
                 idEntregador: Number(idEntregador),
                 materiales: lineasDeEntrega(items),
+            })
+            navigate(`/entregas/${boleta.id}/resumen`, {
+                replace: true,
+                state: { area: solicitante.area },
             })
         } catch (e) {
             setError(e)
@@ -162,31 +166,31 @@ export default function EntregaConfirmacion() {
                             <div className="table-wrap">
                                 <table className="table">
                                     <thead>
-                                    <tr>
-                                        <th scope="col">Código</th>
-                                        <th scope="col">Producto</th>
-                                        <th scope="col">Categoría</th>
-                                        <th scope="col" className="num">Cantidad</th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col">Código</th>
+                                            <th scope="col">Producto</th>
+                                            <th scope="col">Categoría</th>
+                                            <th scope="col" className="num">Cantidad</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    {items.map((item) => {
-                                        const { material, cantidad } = item
-                                        const excedido = excede(item)
-                                        return (
-                                            <tr key={material.id} className={excedido ? 'excede' : undefined}>
-                                                <td className="muted">{material.codigo}</td>
-                                                <td><strong>{material.nombre}</strong></td>
-                                                <td>{material.categoria}</td>
-                                                <td className="num">
-                                                    <strong className={excedido ? 'red' : undefined}>
-                                                        {cantidad} {material.unidadMedida}
-                                                    </strong>
-                                                    {excedido && <small className="stock-error">{MENSAJE_EXCEDE}</small>}
-                                                </td>
-                                            </tr>
-                                        )
-                                    })}
+                                        {items.map((item) => {
+                                            const { material, cantidad } = item
+                                            const excedido = excede(item)
+                                            return (
+                                                <tr key={material.id} className={excedido ? 'excede' : undefined}>
+                                                    <td className="muted">{material.codigo}</td>
+                                                    <td><strong>{material.nombre}</strong></td>
+                                                    <td>{material.categoria}</td>
+                                                    <td className="num">
+                                                        <strong className={excedido ? 'red' : undefined}>
+                                                            {cantidad} {material.unidadMedida}
+                                                        </strong>
+                                                        {excedido && <small className="stock-error">{MENSAJE_EXCEDE}</small>}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
                                     </tbody>
                                 </table>
                             </div>

@@ -1076,6 +1076,95 @@ h1 {
   text-align: right;
 }
 
+/* Resumen de entrega registrada */
+.exito {
+  max-width: 600px;
+  margin: 40px auto 0;
+  padding: 40px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.exito-estado {
+  text-align: center;
+  margin-top: 80px;
+  color: var(--muted);
+}
+
+.exito-icono {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--green-soft);
+  display: grid;
+  place-items: center;
+}
+
+.exito-icono>span {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.exito h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.exito>p:not(.alert) {
+  max-width: 440px;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+.exito-datos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 32px;
+  margin: 0;
+  padding: 14px 20px;
+  background: var(--surface-alt);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.exito-datos dt {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.exito-datos dd {
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+
+.exito-acciones,
+.exito-enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 24px;
+}
+
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
 @media (max-width: 900px) {
   .confirm {
     grid-template-columns: 1fr;
@@ -1195,6 +1284,7 @@ h1 {
 .modal .alert-excedente {
   margin: 16px 24px 0;
 }
+
 /* Panel de Servicios Generales */
 a.tab {
   text-decoration: none;
