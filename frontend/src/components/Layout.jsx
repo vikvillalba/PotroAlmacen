@@ -47,6 +47,7 @@ export default function Layout({ active, crumbs = [], title, subtitle, back, bac
         </header>
 
         <main className="container page">
+          {crumbs.length > 0 && (
           <nav className="crumbs" aria-label="Ruta de navegación">
             {crumbs.map((c, i) => {
               const ultimo = i === crumbs.length - 1
@@ -64,6 +65,8 @@ export default function Layout({ active, crumbs = [], title, subtitle, back, bac
               )
             })}
           </nav>
+          )}
+          {title && (
           <div className="page-head">
             <div className="page-title">
               {back && (
@@ -82,6 +85,7 @@ export default function Layout({ active, crumbs = [], title, subtitle, back, bac
             </div>
             <div className="actions">{actions}</div>
           </div>
+          )}
           {children}
         </main>
       </>
